@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class RequestStatsDto {
-    private String aps;
+    private String app;
     private String uri;
     private String ip;
     private String timestamp;
