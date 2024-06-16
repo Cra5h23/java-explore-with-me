@@ -41,3 +41,10 @@ services:
 
   ewm-db:
     image: postgres:14-alpine
+    container_name: main-db
+    ports:
+      - "6542:5432"
+    environment:
+      - POSTGRES_DB=main
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
