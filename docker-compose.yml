@@ -45,8 +45,6 @@ services:
     container_name: ewm-db
     ports:
       - "6542:5432"
-    depends_on:
-      - stats-server
     environment:
       - POSTGRES_DB=main
       - POSTGRES_USER=root
