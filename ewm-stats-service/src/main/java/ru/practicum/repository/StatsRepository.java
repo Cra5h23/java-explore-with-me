@@ -41,3 +41,15 @@ public interface StatsRepository extends JpaRepository<Stats, Long> {
             "and s.uri in (?3)" +
             "group by s.app, s.uri ", nativeQuery = true)
     List<CountStats> getCountByUris(String start, String end, List<URI> uris);
+
+    @Query(value = "select " +
+            "count(distinct s.ip), " +
+            "s.app, " +
+            "s.uri " +
+            "from stats as s " +
+            "where (s.timestamp between ?1 and ?2) " +
+            "and s.uri in (?3)" +
+            "group by s.app , s.uri ", nativeQuery = true)
+    List<CountStats> getCountDistinctByUris(String start, String end, List<URI> uris);
+}
+
