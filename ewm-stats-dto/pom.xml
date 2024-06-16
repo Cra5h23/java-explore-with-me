@@ -10,7 +10,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>stats-dto</artifactId>
+    <artifactId>ewm-stats-dto</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
