@@ -25,8 +25,11 @@ import java.util.Map;
 @Service
 @Slf4j
 public class StatsClientImpl extends RestTemplate implements StatsClient {
-    @Value("${ewm-stats-service.url}")
-    private String EWM_STATS_SERVICE_URL;
+    private final String EWM_STATS_SERVICE_URL;
+
+    public StatsClientImpl(@Value("${ewm-stats-service.url}")String ewmStatsServiceUrl) {
+        EWM_STATS_SERVICE_URL = ewmStatsServiceUrl;
+    }
 
     public void saveStats(HttpServletRequest request, String appName) {
         var dto = makeDto(request, appName);
