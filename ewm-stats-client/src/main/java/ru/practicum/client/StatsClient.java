@@ -10,8 +10,6 @@ import java.util.List;
  * @author Nikolay Radzivon
  * @Date 16.06.2024
  */
-@Component
-public class StatsClient extends RestTemplate {
 public interface StatsClient {
 
     void saveStats(HttpServletRequest request, String appName);
