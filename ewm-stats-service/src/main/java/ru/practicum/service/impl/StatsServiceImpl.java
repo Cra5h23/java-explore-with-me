@@ -1,22 +1,38 @@
 package ru.practicum.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import ru.practicum.dto.RequestStatsDto;
 import ru.practicum.dto.ResponseStatsDto;
+import ru.practicum.mapper.StatsMapper;
+import ru.practicum.model.Stats;
+import ru.practicum.repository.StatsRepository;
 import ru.practicum.service.StatsService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Nikolay Radzivon
  * @Date 14.06.2024
  */
+@Service
+@RequiredArgsConstructor
+@Slf4j
 public class StatsServiceImpl implements StatsService {
+    private final StatsRepository repository;
+    private final StatsMapper mapper;
+
     /**
-     * @param requestStatsDto
+     * @param dto
      */
     @Override
-    public void addStats(RequestStatsDto requestStatsDto) {
+    public void saveStats(RequestStatsDto dto) {
+        var stats = mapper.toStats(dto);
 
+        Stats save = repository.save(stats);
+        log.info("Сохранение статистики {}", save);
     }
 
     /**
@@ -25,6 +41,32 @@ public class StatsServiceImpl implements StatsService {
      */
     @Override
     public List<ResponseStatsDto> getStats(Params params) {
-        return List.of();
+        log.info("Получение статистики с параметрами {}", params);
+
+        if (!params.isUnique()) {
+            if (params.getUris() != null) {
+                return repository.getCountByUris(params.getStart(), params.getEnd(), params.getUris())
+                        .stream()
+                        .map(mapper::toResponseStatsDto)
+                        .collect(Collectors.toList());
+            }
+
+            return repository.getCount(params.getStart(), params.getEnd())
+                    .stream()
+                    .map(mapper::toResponseStatsDto)
+                    .collect(Collectors.toList());
+        } else {
+            if (params.getUris() != null) {
+                return repository.getCountDistinctByUris(params.getStart(), params.getEnd(), params.getUris())
+                        .stream()
+                        .map(mapper::toResponseStatsDto)
+                        .collect(Collectors.toList());
+            }
+
+            return repository.getCountDistinct(params.getStart(), params.getEnd())
+                    .stream()
+                    .map(mapper::toResponseStatsDto)
+                    .collect(Collectors.toList());
+        }
     }
 }
