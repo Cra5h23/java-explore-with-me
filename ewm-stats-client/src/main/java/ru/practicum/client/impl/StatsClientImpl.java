@@ -25,17 +25,14 @@ import java.util.Map;
 @Service
 @Slf4j
 public class StatsClientImpl extends RestTemplate implements StatsClient {
-    private final String EWM_STATS_SERVICE_URL;
-
-    public StatsClientImpl(@Value("${ewm-stats-service.url}")String ewmStatsServiceUrl) {
-        EWM_STATS_SERVICE_URL = ewmStatsServiceUrl;
-    }
+    @Value("${ewm-stats-service.url}")
+    private String ewmStatsServiceUrl;
 
     public void saveStats(HttpServletRequest request, String appName) {
         var dto = makeDto(request, appName);
 
-        postForLocation(EWM_STATS_SERVICE_URL + "/hit", dto);
-        log.info("POST {}/hit body={}", EWM_STATS_SERVICE_URL, dto);
+        postForLocation(ewmStatsServiceUrl + "/hit", dto);
+        log.info("POST {}/hit body={}", ewmStatsServiceUrl, dto);
     }
 
     @Override
@@ -51,8 +48,8 @@ public class StatsClientImpl extends RestTemplate implements StatsClient {
         uriVariables.put("unique", unique);
 
         log.info("GET {}stats?start={}&end={}&uris={}&unique={}",
-                EWM_STATS_SERVICE_URL, startEncode, endEncode, uris, unique);
-        return getForEntity(EWM_STATS_SERVICE_URL + "?start={start}&end={end}&uris={uris}&unique={unique}",
+                ewmStatsServiceUrl, startEncode, endEncode, uris, unique);
+        return getForEntity(ewmStatsServiceUrl + "?start={start}&end={end}&uris={uris}&unique={unique}",
                 Object.class, uriVariables);
     }
 
