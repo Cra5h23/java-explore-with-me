@@ -25,7 +25,7 @@ public class StatsController {
     @ResponseStatus(HttpStatus.CREATED)
     public void addStats(@RequestBody RequestStatsDto requestStatsDto) {
         log.info("POST /hit body={}", requestStatsDto);
-        statsService.addStats(requestStatsDto);
+        statsService.saveStats(requestStatsDto);
     }
 
     @GetMapping("/stats")
