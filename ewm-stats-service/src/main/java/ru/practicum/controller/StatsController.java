@@ -19,7 +19,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class StatsController {
-    private StatsService statsService;
+    private final StatsService statsService;
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
