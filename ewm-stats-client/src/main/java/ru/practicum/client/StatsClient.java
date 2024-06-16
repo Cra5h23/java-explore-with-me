@@ -5,8 +5,9 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * @author Nikolay Radzivon
- * @Date 15.06.2024
+ * @Date 16.06.2024
  */
 @Component
 public class StatsClient extends RestTemplate {
+public interface StatsClient {
 }
