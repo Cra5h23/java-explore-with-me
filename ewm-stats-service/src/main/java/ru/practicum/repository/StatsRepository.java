@@ -11,8 +11,6 @@ import java.util.List;
  * @author Nikolay Radzivon
  * @Date 14.06.2024
  */
-public interface StatsRepository {
-}
 public interface StatsRepository extends JpaRepository<Stats, Long> {
     @Query(value = "select " +
             "count(distinct s.ip), " +
