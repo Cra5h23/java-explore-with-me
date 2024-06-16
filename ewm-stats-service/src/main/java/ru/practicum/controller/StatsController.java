@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.RequestStatsDto;
 import ru.practicum.service.StatsService;
 
+import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -29,17 +32,21 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
-    public ResponseEntity<Object> getStats(@RequestParam String start,
-                                           @RequestParam String end,
-                                           @RequestParam(required = false) List<String> uris,
-                                           @RequestParam(required = false, defaultValue = "false") boolean unique) {
+    public ResponseEntity<?> getStats(@RequestParam String start,
+                                      @RequestParam String end,
+                                      @RequestParam(required = false) List<URI> uris,
+                                      @RequestParam(required = false, defaultValue = "false") boolean unique
+    ) {
+        log.info("GET /stats?start={}&end={}&uris={}&unique={}", start, end, uris, unique);
+        var startDecode = URLDecoder.decode(start, StandardCharsets.UTF_8);
+        var endDecode = URLDecoder.decode(end, StandardCharsets.UTF_8);
 
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(statsService.getStats(StatsService.Params.builder()
-                        .start(start)
-                        .end(end)
+                        .start(startDecode)
+                        .end(endDecode)
                         .unique(unique)
                         .uris(uris)
                         .build()));
