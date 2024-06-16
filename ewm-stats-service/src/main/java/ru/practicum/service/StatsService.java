@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import ru.practicum.dto.RequestStatsDto;
 import ru.practicum.dto.ResponseStatsDto;
 
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  * @Date 14.06.2024
  */
 public interface StatsService {
-    void addStats(RequestStatsDto requestStatsDto);
+    void saveStats(RequestStatsDto dto);
 
     List<ResponseStatsDto> getStats(Params params);
 
@@ -25,7 +26,7 @@ public interface StatsService {
     class Params {
         private String start;
         private String end;
-        private List<String> uris;
+        private List<URI> uris;
         private boolean unique;
     }
 }
