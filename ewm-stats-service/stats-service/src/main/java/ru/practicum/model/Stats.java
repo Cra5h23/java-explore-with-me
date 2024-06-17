@@ -3,6 +3,7 @@ package ru.practicum.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.ZonedDateTime;
 
 /**
  * @author Nikolay Radzivon
@@ -30,6 +31,9 @@ public class Stats {
     @Column(name = "ip")
     private String ip;
 
+//    @Column(name = "timestamp")
+//    private String timestamp;
+
     @Column(name = "timestamp")
-    private String timestamp;
+    private ZonedDateTime timestamp;
 }
