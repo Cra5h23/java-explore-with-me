@@ -53,7 +53,7 @@ public class StatsController {
     }
 
     @GetMapping
-    public ResponseEntity<?> test(){
+    public ResponseEntity<?> test() {
         log.info("Привет");
         return ResponseEntity.ok()
                 .body("");
