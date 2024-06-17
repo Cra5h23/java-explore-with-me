@@ -6,11 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import ru.practicum.dto.RequestStatsDto;
 import ru.practicum.service.StatsService;
 
-import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -35,7 +33,7 @@ public class StatsController {
     @GetMapping("/stats")
     public ResponseEntity<?> getStats(@RequestParam String start,
                                       @RequestParam String end,
-                                      @RequestParam(required = false) List<URI> uris,
+                                      @RequestParam(required = false) List<String> uris,
                                       @RequestParam(required = false, defaultValue = "false") boolean unique
     ) {
         log.info("GET /stats?start={}&end={}&uris={}&unique={}", start, end, uris, unique);
@@ -51,12 +49,5 @@ public class StatsController {
                         .unique(unique)
                         .uris(uris)
                         .build()));
-    }
-
-    @GetMapping
-    public ResponseEntity<?> test() {
-        log.info("Привет");
-        return ResponseEntity.ok()
-                .body("");
     }
 }
