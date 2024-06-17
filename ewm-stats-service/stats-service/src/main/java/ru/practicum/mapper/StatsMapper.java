@@ -5,6 +5,10 @@ import ru.practicum.dto.RequestStatsDto;
 import ru.practicum.dto.ResponseStatsDto;
 import ru.practicum.model.Stats;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 import static ru.practicum.repository.StatsRepository.CountStats;
 
 /**
@@ -15,10 +19,15 @@ import static ru.practicum.repository.StatsRepository.CountStats;
 public class StatsMapper {
 
     public Stats toStats(RequestStatsDto dto) {
+        var parse = LocalDateTime.parse(dto.getTimestamp(),
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                .atZone(ZoneId.systemDefault());
+
         return Stats.builder()
                 .app(dto.getApp())
                 .uri(dto.getUri())
-                .timestamp(dto.getTimestamp())
+                .timestamp(parse)
+                // .timestamp(dto.getTimestamp())
                 .ip(dto.getIp())
                 .build();
     }
