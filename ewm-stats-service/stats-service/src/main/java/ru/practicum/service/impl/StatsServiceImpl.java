@@ -10,6 +10,10 @@ import ru.practicum.model.Stats;
 import ru.practicum.repository.StatsRepository;
 import ru.practicum.service.StatsService;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,30 +47,52 @@ public class StatsServiceImpl implements StatsService {
     public List<ResponseStatsDto> getStats(Params params) {
         log.info("Получение статистики с параметрами {}", params);
 
-        if (!params.isUnique()) {
-            if (params.getUris() != null) {
-                return repository.getCountByUris(params.getStart(), params.getEnd(), params.getUris())
-                        .stream()
-                        .map(mapper::toResponseStatsDto)
-                        .collect(Collectors.toList());
-            }
+//        if (!params.isUnique()) {
+//            if (params.getUris() != null) {
+//                return repository.getCountByUris(params.getStart(), params.getEnd(), params.getUris())
+//                        .stream()
+//                        .map(mapper::toResponseStatsDto)
+//                        .collect(Collectors.toList());
+//            }
+//
+//            return repository.getCount(params.getStart(), params.getEnd())
+//                    .stream()
+//                    .map(mapper::toResponseStatsDto)
+//                    .collect(Collectors.toList());
+//        } else {
+//            if (params.getUris() != null) {
+//                return repository.getCountDistinctByUris(params.getStart(), params.getEnd(), params.getUris())
+//                        .stream()
+//                        .map(mapper::toResponseStatsDto)
+//                        .collect(Collectors.toList());
+//            }
+//
+//            return repository.getCountDistinct(params.getStart(), params.getEnd())
+//                    .stream()
+//                    .map(mapper::toResponseStatsDto)
+//                    .collect(Collectors.toList());
+//        }
+        var start = toZoneDataTime(params.getStart());
+        var end = toZoneDataTime(params.getEnd());
 
-            return repository.getCount(params.getStart(), params.getEnd())
+        if (params.isUnique()) {
+            return repository.getUniqueCountHits(start, end, params.getUris())
                     .stream()
                     .map(mapper::toResponseStatsDto)
                     .collect(Collectors.toList());
         } else {
-            if (params.getUris() != null) {
-                return repository.getCountDistinctByUris(params.getStart(), params.getEnd(), params.getUris())
-                        .stream()
-                        .map(mapper::toResponseStatsDto)
-                        .collect(Collectors.toList());
-            }
+            var collect = repository.getCountHits(start, end, params.getUris());
 
-            return repository.getCountDistinct(params.getStart(), params.getEnd())
-                    .stream()
+            System.out.println(collect);
+
+            return collect.stream()
                     .map(mapper::toResponseStatsDto)
                     .collect(Collectors.toList());
         }
+    }
+
+    private ZonedDateTime toZoneDataTime(String time) {
+        return LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                .atZone(ZoneId.systemDefault());
     }
 }
