@@ -51,4 +51,11 @@ public class StatsController {
                         .uris(uris)
                         .build()));
     }
+
+    @GetMapping
+    public ResponseEntity<?> test(){
+        log.info("Привет");
+        return ResponseEntity.ok()
+                .body("");
+    }
 }
