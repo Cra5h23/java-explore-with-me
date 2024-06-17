@@ -27,7 +27,7 @@ public interface StatsService {
     class Params {
         private String start;
         private String end;
-        private List<URI> uris;
+        private List<String> uris;
         private boolean unique;
     }
 }
