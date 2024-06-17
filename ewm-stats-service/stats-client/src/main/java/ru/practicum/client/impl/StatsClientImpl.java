@@ -30,7 +30,7 @@ public class StatsClientImpl extends RestTemplate implements StatsClient {
     private String ewmStatsServiceUrl;
 
     public void saveStats(HttpServletRequest request, String appName) {
-        var dto = makeDto(request, appName);
+        RequestStatsDto dto = makeDto(request, appName);
 
         postForLocation(ewmStatsServiceUrl + "/hit", dto);
         log.info("POST {}/hit body={}", ewmStatsServiceUrl, dto);

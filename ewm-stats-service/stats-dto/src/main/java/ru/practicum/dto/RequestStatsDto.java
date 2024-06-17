@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author Nikolay Radzivon
- * @Date 14.06.2024
+ * @Date 17.06.2024
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RequestStatsDto {
-    private String app;
-    private String uri;
     private String ip;
+    private String uri;
+    private String app;
     private String timestamp;
 }
