@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.dto.RequestStatsDto;
+import ru.practicum.dto.RequestHitDto;
 import ru.practicum.dto.ResponseStatsDto;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  * @Date 14.06.2024
  */
 public interface StatsService {
-    void saveStats(RequestStatsDto dto);
+    void saveHit(RequestHitDto dto);
 
     List<ResponseStatsDto> getStats(Params params);
 
