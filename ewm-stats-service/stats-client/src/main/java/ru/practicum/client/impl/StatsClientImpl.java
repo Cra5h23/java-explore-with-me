@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.client.StatsClient;
-import ru.practicum.dto.RequestStatsDto;
+import ru.practicum.dto.RequestHitDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLEncoder;
@@ -28,7 +28,7 @@ public class StatsClientImpl extends RestTemplate implements StatsClient {
     private String ewmStatsServiceUrl;
 
     public void saveStats(HttpServletRequest request, String appName) {
-        RequestStatsDto dto = makeDto(request, appName);
+        RequestHitDto dto = makeDto(request, appName);
 
         postForLocation(ewmStatsServiceUrl + "/hit", dto);
         log.info("POST {}/hit body={}", ewmStatsServiceUrl, dto);
@@ -52,13 +52,13 @@ public class StatsClientImpl extends RestTemplate implements StatsClient {
                 Object.class, uriVariables);
     }
 
-    private RequestStatsDto makeDto(HttpServletRequest request, String appName) {
+    private RequestHitDto makeDto(HttpServletRequest request, String appName) {
         var requestURI = request.getRequestURI();
         var remoteAddr = request.getRemoteAddr();
         var timestamp = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        return RequestStatsDto.builder()
+        return RequestHitDto.builder()
                 .ip(remoteAddr)
                 .uri(requestURI)
                 .app(appName)
