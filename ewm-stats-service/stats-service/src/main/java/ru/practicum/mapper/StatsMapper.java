@@ -27,7 +27,6 @@ public class StatsMapper {
                 .app(dto.getApp())
                 .uri(dto.getUri())
                 .timestamp(parse)
-                // .timestamp(dto.getTimestamp())
                 .ip(dto.getIp())
                 .build();
     }
