@@ -14,6 +14,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
+ * Контроллер для работы Stats-service
+ *
  * @author Nikolay Radzivon
  * @Date 14.06.2024
  */
@@ -23,6 +25,11 @@ import java.util.List;
 public class StatsController {
     private final StatsService statsService;
 
+    /**
+     * Метод для эндпоинта POST /hit. Сохранение информации о том, что на uri конкретного сервиса был отправлен запрос пользователем. Название сервиса, uri и ip пользователя указаны в теле запроса.
+     *
+     * @param requestHitDto {@link RequestHitDto} данные посещения.
+     */
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
     public void addHit(@RequestBody RequestHitDto requestHitDto) {
@@ -30,6 +37,15 @@ public class StatsController {
         statsService.saveHit(requestHitDto);
     }
 
+    /**
+     * Метод для эндпоинта GET /stats. Получение статистики посещения.
+     *
+     * @param start Дата и время начала диапазона за который нужно выгрузить статистику.
+     * @param end    Дата и время конца диапазона за который нужно выгрузить статистику.
+     * @param uris   список uri для которых нужно получить статистику.
+     * @param unique учитывать уникальные посещения.
+     * @return список посещений.
+     */
     @GetMapping("/stats")
     public ResponseEntity<?> getStats(@RequestParam String start,
                                       @RequestParam String end,

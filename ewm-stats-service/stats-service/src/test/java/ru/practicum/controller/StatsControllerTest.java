@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.practicum.dto.RequestStatsDto;
+import ru.practicum.dto.RequestHitDto;
 import ru.practicum.dto.ResponseStatsDto;
 import ru.practicum.service.StatsService;
 
@@ -34,7 +34,7 @@ class StatsControllerTest {
     private StatsService statsService;
 
     @Test
-    void addStatsTestValid() throws Exception {
+    void addHitTestValid() throws Exception {
         var request = MockMvcRequestBuilders
                 .post("/hit")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -45,14 +45,14 @@ class StatsControllerTest {
                         "  \"timestamp\": \"2022-09-06 11:00:23\"\n" +
                         "}");
 
-        Mockito.doNothing().when(this.statsService).saveStats(Mockito.any(RequestStatsDto.class));
+        Mockito.doNothing().when(this.statsService).saveHit(Mockito.any(RequestHitDto.class));
 
         this.mockMvc.perform(request).andExpectAll(
                 status().isCreated()
         );
 
         Mockito.verify(this.statsService, Mockito.times(1))
-                .saveStats(Mockito.any(RequestStatsDto.class));
+                .saveHit(Mockito.any(RequestHitDto.class));
     }
 
     @Test
