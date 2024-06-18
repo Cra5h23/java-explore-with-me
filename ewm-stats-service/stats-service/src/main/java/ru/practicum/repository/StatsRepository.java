@@ -51,13 +51,6 @@ public interface StatsRepository extends JpaRepository<Stats, Long> {
 //            "group by s.app , s.uri ", nativeQuery = true)
 //    List<CountStats> getCountDistinctByUris(String start, String end, List<URI> uris);
 
-    interface CountStats {
-        Long getCount();
-
-        String getApp();
-
-        String getUri();
-    }
 
     @Query(value = "SELECT count(s.ip) as count, " +
             "s.app as app, " +
@@ -85,5 +78,12 @@ public interface StatsRepository extends JpaRepository<Stats, Long> {
                                         @Param("uris") List<String> uris
     );
 
+    interface CountStats {
+        Long getCount();
+
+        String getApp();
+
+        String getUri();
+    }
 }
 
