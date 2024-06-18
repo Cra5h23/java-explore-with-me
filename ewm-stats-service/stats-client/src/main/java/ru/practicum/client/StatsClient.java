@@ -3,7 +3,6 @@ package ru.practicum.client;
 import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
 import java.util.List;
 
 /**
