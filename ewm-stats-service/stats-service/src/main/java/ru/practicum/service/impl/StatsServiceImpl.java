@@ -81,11 +81,8 @@ public class StatsServiceImpl implements StatsService {
                     .map(mapper::toResponseStatsDto)
                     .collect(Collectors.toList());
         } else {
-            var collect = repository.getCountHits(start, end, params.getUris());
-
-            System.out.println(collect);
-
-            return collect.stream()
+            return repository.getCountHits(start, end, params.getUris())
+                    .stream()
                     .map(mapper::toResponseStatsDto)
                     .collect(Collectors.toList());
         }
