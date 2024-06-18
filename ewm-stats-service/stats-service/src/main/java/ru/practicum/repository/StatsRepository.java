@@ -3,7 +3,7 @@ package ru.practicum.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.practicum.model.Stats;
+import ru.practicum.model.Hit;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -12,34 +12,34 @@ import java.util.List;
  * @author Nikolay Radzivon
  * @Date 14.06.2024
  */
-public interface StatsRepository extends JpaRepository<Stats, Long> {
-    @Query(value = "SELECT count(s.ip) as count, " +
-            "s.app as app, " +
-            "s.uri as uri " +
-            "from Stats as s " +
-            "where ((:uris) IS NULL OR s.uri in :uris) and " +
-            "(s.timestamp between :start and :end) " +
-            "group by s.app, s.uri " +
-            "order by count(s.ip) DESC ")
-    List<CountStats> getCountHits(@Param("start") ZonedDateTime start,
-                                  @Param("end") ZonedDateTime end,
-                                  @Param("uris") List<String> uris
+public interface StatsRepository extends JpaRepository<Hit, Long> {
+    @Query(value = "SELECT count(h.ip) as count, " +
+            "h.app as app, " +
+            "h.uri as uri " +
+            "from Hit as h " +
+            "where ((:uris) IS NULL OR h.uri in :uris) and " +
+            "(h.timestamp between :start and :end) " +
+            "group by h.app, h.uri " +
+            "order by count(h.ip) DESC ")
+    List<CountHits> getCountHits(@Param("start") ZonedDateTime start,
+                                 @Param("end") ZonedDateTime end,
+                                 @Param("uris") List<String> uris
     );
 
-    @Query(value = "SELECT count(distinct s.ip) as count, " +
-            "s.app as app, " +
-            "s.uri as uri " +
-            "from Stats as s " +
-            "where ((:uris) IS NULL OR s.uri in :uris) and " +
-            "(s.timestamp between :start and :end) " +
-            "group by s.app, s.uri " +
-            "order by count(distinct s.ip) DESC ")
-    List<CountStats> getUniqueCountHits(@Param("start") ZonedDateTime start,
-                                        @Param("end") ZonedDateTime end,
-                                        @Param("uris") List<String> uris
+    @Query(value = "SELECT count(distinct h.ip) as count, " +
+            "h.app as app, " +
+            "h.uri as uri " +
+            "from Hit as h " +
+            "where ((:uris) IS NULL OR h.uri in :uris) and " +
+            "(h.timestamp between :start and :end) " +
+            "group by h.app, h.uri " +
+            "order by count(distinct h.ip) DESC ")
+    List<CountHits> getUniqueCountHits(@Param("start") ZonedDateTime start,
+                                       @Param("end") ZonedDateTime end,
+                                       @Param("uris") List<String> uris
     );
 
-    interface CountStats {
+    interface CountHits {
         Long getCount();
 
         String getApp();
