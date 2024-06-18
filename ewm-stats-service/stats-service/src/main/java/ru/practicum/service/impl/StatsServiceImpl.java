@@ -47,31 +47,6 @@ public class StatsServiceImpl implements StatsService {
     public List<ResponseStatsDto> getStats(Params params) {
         log.info("Получение статистики с параметрами {}", params);
 
-//        if (!params.isUnique()) {
-//            if (params.getUris() != null) {
-//                return repository.getCountByUris(params.getStart(), params.getEnd(), params.getUris())
-//                        .stream()
-//                        .map(mapper::toResponseStatsDto)
-//                        .collect(Collectors.toList());
-//            }
-//
-//            return repository.getCount(params.getStart(), params.getEnd())
-//                    .stream()
-//                    .map(mapper::toResponseStatsDto)
-//                    .collect(Collectors.toList());
-//        } else {
-//            if (params.getUris() != null) {
-//                return repository.getCountDistinctByUris(params.getStart(), params.getEnd(), params.getUris())
-//                        .stream()
-//                        .map(mapper::toResponseStatsDto)
-//                        .collect(Collectors.toList());
-//            }
-//
-//            return repository.getCountDistinct(params.getStart(), params.getEnd())
-//                    .stream()
-//                    .map(mapper::toResponseStatsDto)
-//                    .collect(Collectors.toList());
-//        }
         var start = toZoneDataTime(params.getStart());
         var end = toZoneDataTime(params.getEnd());
 
