@@ -8,9 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import ru.practicum.client.StatsClient;
 import ru.practicum.dto.RequestStatsDto;
 
-
 import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -37,7 +35,7 @@ public class StatsClientImpl extends RestTemplate implements StatsClient {
     }
 
     @Override
-    public ResponseEntity<Object> getStats(String start, String end, List<URI> uris, Boolean unique) {
+    public ResponseEntity<Object> getStats(String start, String end, List<String> uris, Boolean unique) {
         var startEncode = URLEncoder.encode(start, StandardCharsets.UTF_8);
         var endEncode = URLEncoder.encode(end, StandardCharsets.UTF_8);
 
