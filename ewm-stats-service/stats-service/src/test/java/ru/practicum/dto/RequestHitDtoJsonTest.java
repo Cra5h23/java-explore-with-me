@@ -15,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @Date 18.06.2024
  */
 @JsonTest
-class RequestStatsDtoJsonTest {
+class RequestHitDtoJsonTest {
     @Autowired
-    private JacksonTester<RequestStatsDto> json;
+    private JacksonTester<RequestHitDto> json;
 
     @Test
     void testSerialize() throws IOException {
-        var dto = RequestStatsDto.builder()
+        var dto = RequestHitDto.builder()
                 .ip("192.163.0.1")
                 .app("ewm-main-service")
                 .timestamp("2022-09-06 11:00:23")
@@ -56,7 +56,7 @@ class RequestStatsDtoJsonTest {
         assertThat(dto.getTimestamp()).isEqualTo("2022-09-06 11:00:23");
         assertThat(dto.getUri()).isEqualTo("/events/1");
 
-        assertThat(dto.getClass()).isEqualTo(RequestStatsDto.class);
+        assertThat(dto.getClass()).isEqualTo(RequestHitDto.class);
     }
 
 }
