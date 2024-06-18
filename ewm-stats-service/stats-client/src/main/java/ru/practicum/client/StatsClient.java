@@ -14,5 +14,5 @@ public interface StatsClient {
 
     void saveStats(HttpServletRequest request, String appName);
 
-    ResponseEntity<Object> getStats(String start, String end, List<URI> uris, Boolean unique);
+    ResponseEntity<Object> getStats(String start, String end, List<String> uris, Boolean unique);
 }
