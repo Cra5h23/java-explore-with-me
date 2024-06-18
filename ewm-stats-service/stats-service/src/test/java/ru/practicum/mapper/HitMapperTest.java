@@ -2,7 +2,7 @@ package ru.practicum.mapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.practicum.dto.RequestStatsDto;
+import ru.practicum.dto.RequestHitDto;
 import ru.practicum.repository.StatsRepository;
 
 import java.time.LocalDateTime;
@@ -15,17 +15,17 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Nikolay Radzivon
  * @Date 18.06.2024
  */
-class StatsMapperTest {
-    private StatsMapper statsMapper;
+class HitMapperTest {
+    private HitMapper hitMapper;
 
     @BeforeEach
     void setUp() {
-        statsMapper = new StatsMapper();
+        hitMapper = new HitMapper();
     }
 
     @Test
-    void toStatsTest() {
-        var test = statsMapper.toStats(RequestStatsDto.builder()
+    void toHitTest() {
+        var test = hitMapper.toHit(RequestHitDto.builder()
                 .ip("192.163.0.1")
                 .timestamp("2022-09-06 11:00:23")
                 .app("ewm-main-service")
@@ -46,7 +46,7 @@ class StatsMapperTest {
 
     @Test
     void toResponseStatsDto() throws InstantiationException, IllegalAccessException {
-        var test = statsMapper.toResponseStatsDto(new StatsRepository.CountStats() {
+        var test = hitMapper.toResponseStatsDto(new StatsRepository.CountHits() {
             @Override
             public Long getCount() {
                 return 3L;
