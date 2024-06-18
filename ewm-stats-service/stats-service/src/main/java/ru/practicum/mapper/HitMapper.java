@@ -1,29 +1,29 @@
 package ru.practicum.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.dto.RequestStatsDto;
+import ru.practicum.dto.RequestHitDto;
 import ru.practicum.dto.ResponseStatsDto;
-import ru.practicum.model.Stats;
+import ru.practicum.model.Hit;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-import static ru.practicum.repository.StatsRepository.CountStats;
+import static ru.practicum.repository.StatsRepository.CountHits;
 
 /**
  * @author Nikolay Radzivon
  * @Date 14.06.2024
  */
 @Component
-public class StatsMapper {
+public class HitMapper {
 
-    public Stats toStats(RequestStatsDto dto) {
+    public Hit toHit(RequestHitDto dto) {
         var parse = LocalDateTime.parse(dto.getTimestamp(),
                         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
                 .atZone(ZoneId.systemDefault());
 
-        return Stats.builder()
+        return Hit.builder()
                 .app(dto.getApp())
                 .uri(dto.getUri())
                 .timestamp(parse)
@@ -31,11 +31,11 @@ public class StatsMapper {
                 .build();
     }
 
-    public ResponseStatsDto toResponseStatsDto(CountStats stats) {
+    public ResponseStatsDto toResponseStatsDto(CountHits hits) {
         return ResponseStatsDto.builder()
-                .app(stats.getApp())
-                .hits(stats.getCount())
-                .uri(stats.getUri())
+                .app(hits.getApp())
+                .hits(hits.getCount())
+                .uri(hits.getUri())
                 .build();
     }
 }
