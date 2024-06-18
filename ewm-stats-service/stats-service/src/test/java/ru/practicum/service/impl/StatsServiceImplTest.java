@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import ru.practicum.dto.RequestStatsDto;
+import ru.practicum.dto.RequestHitDto;
 import ru.practicum.dto.ResponseStatsDto;
-import ru.practicum.mapper.StatsMapper;
-import ru.practicum.model.Stats;
+import ru.practicum.mapper.HitMapper;
+import ru.practicum.model.Hit;
 import ru.practicum.repository.StatsRepository;
 import ru.practicum.service.StatsService;
 
@@ -24,20 +24,20 @@ import java.util.List;
 class StatsServiceImplTest {
     private StatsService statsService;
     private StatsRepository statsRepository;
-    private StatsMapper statsMapper;
+    private HitMapper hitMapper;
 
     @BeforeEach
     void setUp() {
         statsRepository = Mockito.mock(StatsRepository.class);
-        statsMapper = new StatsMapper();
+        hitMapper = new HitMapper();
 
-        statsService = new StatsServiceImpl(statsRepository, statsMapper);
+        statsService = new StatsServiceImpl(statsRepository, hitMapper);
     }
 
     @Test
-    void saveStatsTest() {
-        Mockito.when(statsRepository.save(Mockito.any(Stats.class)))
-                .thenReturn(Stats.builder()
+    void saveHitTest() {
+        Mockito.when(statsRepository.save(Mockito.any(Hit.class)))
+                .thenReturn(Hit.builder()
                         .id(1L)
                         .ip("192.163.0.1")
                         .app("ewm-main-service")
@@ -46,7 +46,7 @@ class StatsServiceImplTest {
                                         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
                                 .atZone(ZoneId.systemDefault())).build());
 
-        statsService.saveStats(RequestStatsDto.builder()
+        statsService.saveHit(RequestHitDto.builder()
                 .uri("/events/1")
                 .app("ewm-main-service")
                 .ip("192.163.0.1")
@@ -54,7 +54,7 @@ class StatsServiceImplTest {
                 .build());
 
         Mockito.verify(statsRepository, Mockito.times(1))
-                .save(Mockito.any(Stats.class));
+                .save(Mockito.any(Hit.class));
     }
 
     @Test
@@ -62,7 +62,7 @@ class StatsServiceImplTest {
         Mockito.when(this.statsRepository.getCountHits(Mockito.any(ZonedDateTime.class),
                         Mockito.any(ZonedDateTime.class), Mockito.isNull()))
                 .thenReturn(List.of(
-                        new StatsRepository.CountStats() {
+                        new StatsRepository.CountHits() {
                             @Override
                             public Long getCount() {
                                 return 9L;
@@ -77,7 +77,7 @@ class StatsServiceImplTest {
                             public String getUri() {
                                 return "/events/1";
                             }
-                        }, new StatsRepository.CountStats() {
+                        }, new StatsRepository.CountHits() {
                             @Override
                             public Long getCount() {
                                 return 3L;
@@ -121,7 +121,7 @@ class StatsServiceImplTest {
         Mockito.when(this.statsRepository.getUniqueCountHits(Mockito.any(ZonedDateTime.class),
                         Mockito.any(ZonedDateTime.class), Mockito.isNull()))
                 .thenReturn(List.of(
-                        new StatsRepository.CountStats() {
+                        new StatsRepository.CountHits() {
                             @Override
                             public Long getCount() {
                                 return 9L;
@@ -136,7 +136,7 @@ class StatsServiceImplTest {
                             public String getUri() {
                                 return "/events/1";
                             }
-                        }, new StatsRepository.CountStats() {
+                        }, new StatsRepository.CountHits() {
                             @Override
                             public Long getCount() {
                                 return 3L;
@@ -180,7 +180,7 @@ class StatsServiceImplTest {
         Mockito.when(this.statsRepository.getUniqueCountHits(Mockito.any(ZonedDateTime.class),
                         Mockito.any(ZonedDateTime.class), Mockito.anyList()))
                 .thenReturn(List.of(
-                        new StatsRepository.CountStats() {
+                        new StatsRepository.CountHits() {
                             @Override
                             public Long getCount() {
                                 return 9L;
@@ -195,7 +195,7 @@ class StatsServiceImplTest {
                             public String getUri() {
                                 return "/events/1";
                             }
-                        }, new StatsRepository.CountStats() {
+                        }, new StatsRepository.CountHits() {
                             @Override
                             public Long getCount() {
                                 return 3L;
@@ -239,7 +239,7 @@ class StatsServiceImplTest {
         Mockito.when(this.statsRepository.getCountHits(Mockito.any(ZonedDateTime.class),
                         Mockito.any(ZonedDateTime.class), Mockito.anyList()))
                 .thenReturn(List.of(
-                        new StatsRepository.CountStats() {
+                        new StatsRepository.CountHits() {
                             @Override
                             public Long getCount() {
                                 return 9L;
@@ -254,7 +254,7 @@ class StatsServiceImplTest {
                             public String getUri() {
                                 return "/events/1";
                             }
-                        }, new StatsRepository.CountStats() {
+                        }, new StatsRepository.CountHits() {
                             @Override
                             public Long getCount() {
                                 return 3L;
