@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequestStatsDto {
+public class RequestHitDto {
     private String ip;
     private String uri;
     private String app;
