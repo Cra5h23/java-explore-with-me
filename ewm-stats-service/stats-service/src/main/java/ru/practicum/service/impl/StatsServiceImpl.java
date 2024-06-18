@@ -3,6 +3,7 @@ package ru.practicum.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.RequestStatsDto;
 import ru.practicum.dto.ResponseStatsDto;
 import ru.practicum.mapper.StatsMapper;
@@ -32,6 +33,7 @@ public class StatsServiceImpl implements StatsService {
      * @param dto
      */
     @Override
+    @Transactional
     public void saveStats(RequestStatsDto dto) {
         var stats = mapper.toStats(dto);
 
@@ -44,6 +46,7 @@ public class StatsServiceImpl implements StatsService {
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public List<ResponseStatsDto> getStats(Params params) {
         log.info("Получение статистики с параметрами {}", params);
 
