@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import ru.practicum.model.Stats;
+import ru.practicum.model.Hit;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -25,7 +25,7 @@ class StatsRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        statsRepository.save(Stats.builder()
+        statsRepository.save(Hit.builder()
                 .uri("/events/1")
                 .ip("192.163.0.1")
                 .app("ewm-main-service")
@@ -34,7 +34,7 @@ class StatsRepositoryTest {
                         .atZone(ZoneId.systemDefault()))
                 .build());
 
-        statsRepository.save(Stats.builder()
+        statsRepository.save(Hit.builder()
                 .uri("/events/1")
                 .ip("192.163.0.1")
                 .app("ewm-main-service")
@@ -43,7 +43,7 @@ class StatsRepositoryTest {
                         .atZone(ZoneId.systemDefault()))
                 .build());
 
-        statsRepository.save(Stats.builder()
+        statsRepository.save(Hit.builder()
                 .uri("/events/1")
                 .ip("192.163.0.2")
                 .app("ewm-main-service")
@@ -52,7 +52,7 @@ class StatsRepositoryTest {
                         .atZone(ZoneId.systemDefault()))
                 .build());
 
-        statsRepository.save(Stats.builder()
+        statsRepository.save(Hit.builder()
                 .uri("/events/2")
                 .ip("192.163.0.1")
                 .app("ewm-main-service")
@@ -61,7 +61,7 @@ class StatsRepositoryTest {
                         .atZone(ZoneId.systemDefault()))
                 .build());
 
-        statsRepository.save(Stats.builder()
+        statsRepository.save(Hit.builder()
                 .uri("/events/3")
                 .ip("192.163.0.1")
                 .app("ewm-main-service")
