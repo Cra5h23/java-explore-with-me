@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.RequestStatsDto;
+import ru.practicum.dto.RequestHitDto;
 import ru.practicum.service.StatsService;
 
 import java.net.URLDecoder;
@@ -25,9 +25,9 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addStats(@RequestBody RequestStatsDto requestStatsDto) {
-        log.info("POST /hit body={}", requestStatsDto);
-        statsService.saveStats(requestStatsDto);
+    public void addHit(@RequestBody RequestHitDto requestHitDto) {
+        log.info("POST /hit body={}", requestHitDto);
+        statsService.saveHit(requestHitDto);
     }
 
     @GetMapping("/stats")
