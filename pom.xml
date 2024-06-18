@@ -14,10 +14,6 @@
     <modules>
         <module>ewm-main-service</module>
         <module>ewm-stats-service</module>
-
-<!--        <module>ewm-stats-service/stats-client</module>-->
-<!--        <module>ewm-stats-service/stats-service</module>-->
-
     </modules>
 
     <groupId>ru.practicum</groupId>
@@ -81,20 +77,6 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <excludes>-->
-<!--                        <exclude>-->
-<!--                            <groupId>org.projectlombok</groupId>-->
-<!--                            <artifactId>lombok</artifactId>-->
-<!--                        </exclude>-->
-<!--                    </excludes>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
         <pluginManagement>
             <plugins>
                 <plugin>
