@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.dto.RequestStatsDto;
+import ru.practicum.dto.RequestHitDto;
 import ru.practicum.dto.ResponseStatsDto;
-import ru.practicum.mapper.StatsMapper;
-import ru.practicum.model.Stats;
+import ru.practicum.mapper.HitMapper;
+import ru.practicum.model.Hit;
 import ru.practicum.repository.StatsRepository;
 import ru.practicum.service.StatsService;
 
@@ -27,18 +27,18 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StatsServiceImpl implements StatsService {
     private final StatsRepository repository;
-    private final StatsMapper mapper;
+    private final HitMapper mapper;
 
     /**
      * @param dto
      */
     @Override
     @Transactional
-    public void saveStats(RequestStatsDto dto) {
-        var stats = mapper.toStats(dto);
+    public void saveHit(RequestHitDto dto) {
+        var stats = mapper.toHit(dto);
 
-        Stats save = repository.save(stats);
-        log.info("Сохранение статистики {}", save);
+        Hit save = repository.save(stats);
+        log.info("Сохранение посещения {}", save);
     }
 
     /**
