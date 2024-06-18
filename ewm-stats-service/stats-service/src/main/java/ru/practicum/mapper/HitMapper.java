@@ -12,12 +12,19 @@ import java.time.format.DateTimeFormatter;
 import static ru.practicum.repository.StatsRepository.CountHits;
 
 /**
+ * Маппер для преобразования Dto {@link RequestHitDto} в сущность {@link Hit} и сущность {@link CountHits} в Dto {@link ResponseStatsDto}.
+ *
  * @author Nikolay Radzivon
  * @Date 14.06.2024
  */
 @Component
 public class HitMapper {
-
+    /**
+     * Метод преобразования Dto {@link RequestHitDto} в сущность {@link Hit}.
+     *
+     * @param dto данные посещения.
+     * @return объект {@link Hit}, представляющий сущность посещения.
+     */
     public Hit toHit(RequestHitDto dto) {
         var parse = LocalDateTime.parse(dto.getTimestamp(),
                         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
@@ -31,6 +38,12 @@ public class HitMapper {
                 .build();
     }
 
+    /**
+     * Метод преобразования сущности {@link CountHits} в Dto {@link ResponseStatsDto}.
+     *
+     * @param hits данные о количестве посещений
+     * @return объект {@link ResponseStatsDto}, содержащий данные количестве посещений.
+     */
     public ResponseStatsDto toResponseStatsDto(CountHits hits) {
         return ResponseStatsDto.builder()
                 .app(hits.getApp())
