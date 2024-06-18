@@ -6,6 +6,8 @@ import javax.persistence.*;
 import java.time.ZonedDateTime;
 
 /**
+ * Класс сущности {@link Hit}, содержащий данные о посещении.
+ *
  * @author Nikolay Radzivon
  * @Date 14.06.2024
  */
@@ -18,19 +20,34 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(name = "hits")
 public class Hit {
+    /**
+     * Идентификационный номер посещения.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Идентификатор сервиса для которого записывается информация.
+     */
     @Column(name = "app")
     private String app;
 
+    /**
+     * URI для которого был осуществлен запрос.
+     */
     @Column(name = "uri")
     private String uri;
 
+    /**
+     * IP-адрес пользователя, осуществившего запрос.
+     */
     @Column(name = "ip")
     private String ip;
 
+    /**
+     * Дата и время посещения.
+     */
     @Column(name = "timestamp")
     private ZonedDateTime timestamp;
 }
