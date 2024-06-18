@@ -31,9 +31,6 @@ public class Stats {
     @Column(name = "ip")
     private String ip;
 
-//    @Column(name = "timestamp")
-//    private String timestamp;
-
     @Column(name = "timestamp")
     private ZonedDateTime timestamp;
 }
