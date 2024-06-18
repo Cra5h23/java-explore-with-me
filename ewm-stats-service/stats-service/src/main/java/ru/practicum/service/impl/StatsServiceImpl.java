@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * Сервис для сохранения и получения статистики посещений.
+ * Реализует {@link StatsService}.
+ *
  * @author Nikolay Radzivon
  * @Date 14.06.2024
  */
@@ -30,7 +33,9 @@ public class StatsServiceImpl implements StatsService {
     private final HitMapper mapper;
 
     /**
-     * @param dto
+     * Метод сохранения информацию о посещении в базу данных.
+     *
+     * @param dto {@link RequestHitDto} объект передачи данных посещения.
      */
     @Override
     @Transactional
@@ -42,8 +47,10 @@ public class StatsServiceImpl implements StatsService {
     }
 
     /**
-     * @param params
-     * @return
+     * Метод получения статистики посещений за определенный период времени.
+     *
+     * @param params параметры запроса статистики, включает дату начала и конца периода, а так же флаг уникальности.
+     * @return список {@link ResponseStatsDto} статистика посещений.
      */
     @Override
     @Transactional(readOnly = true)
