@@ -1,5 +1,6 @@
 package ru.practicum.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -47,8 +48,8 @@ public class StatsController {
      * @return список посещений.
      */
     @GetMapping("/stats")
-    public ResponseEntity<?> getStats(@RequestParam String start,
-                                      @RequestParam String end,
+    public ResponseEntity<?> getStats(@RequestParam @JsonFormat(timezone = "${date.time.format}") String start,
+                                      @RequestParam @JsonFormat(timezone = "${date.time.format}") String end,
                                       @RequestParam(required = false) List<String> uris,
                                       @RequestParam(required = false, defaultValue = "false") boolean unique
     ) {
