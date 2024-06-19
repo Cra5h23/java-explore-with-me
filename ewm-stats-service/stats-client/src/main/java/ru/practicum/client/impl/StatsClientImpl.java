@@ -36,17 +36,19 @@ public class StatsClientImpl extends RestTemplate implements StatsClient {
 
     @Override
     public ResponseEntity<Object> getStats(String start, String end, List<String> uris, Boolean unique) {
-        var url = new StringBuilder(ewmStatsServiceUrl + "/stats?start={start}&end={end}");
+        var url = new StringBuilder(ewmStatsServiceUrl + "/stats?");
         Map<String, Object> uriVariables = new HashMap<>();
 
         if (start != null) {
             var startEncode = URLEncoder.encode(start, StandardCharsets.UTF_8);
             uriVariables.put("start", startEncode);
+            url.append("start={start}");
         }
 
         if (end != null) {
             var endEncode = URLEncoder.encode(end, StandardCharsets.UTF_8);
             uriVariables.put("end", endEncode);
+            url.append("&end={end}");
         }
 
         if (uris != null) {
