@@ -4,11 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.client.StatsClient;
 import ru.practicum.dto.RequestHitDto;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -31,25 +33,32 @@ public class StatsClientImpl extends RestTemplate implements StatsClient {
         RequestHitDto dto = makeDto(request, appName);
 
         postForLocation(ewmStatsServiceUrl + "/hit", dto);
-        log.info("POST {}/hit body={}", ewmStatsServiceUrl, dto);
+        log.info("Создан запрос: POST {}/hit body={}", ewmStatsServiceUrl, dto);
     }
 
     @Override
-    public ResponseEntity<Object> getStats(String start, String end, List<String> uris, Boolean unique) {
+    @Validated
+    public ResponseEntity<Object> getStats(@NotNull String start, @NotNull String end, List<String> uris, Boolean unique) {
         var startEncode = URLEncoder.encode(start, StandardCharsets.UTF_8);
         var endEncode = URLEncoder.encode(end, StandardCharsets.UTF_8);
-
+        var url = new StringBuilder(ewmStatsServiceUrl + "/stats?start={start}&end={end}");
         Map<String, Object> uriVariables = new HashMap<>();
 
         uriVariables.put("start", startEncode);
         uriVariables.put("end", endEncode);
-        uriVariables.put("uris", uris.toArray());
-        uriVariables.put("unique", unique);
 
-        log.info("GET {}stats?start={}&end={}&uris={}&unique={}",
-                ewmStatsServiceUrl, startEncode, endEncode, uris, unique);
-        return getForEntity(ewmStatsServiceUrl + "?start={start}&end={end}&uris={uris}&unique={unique}",
-                Object.class, uriVariables);
+        if (uris != null) {
+            uriVariables.put("uris", uris.toArray());
+            url.append("&uris={uris}");
+        }
+
+        if (unique != null) {
+            uriVariables.put("unique", unique);
+            url.append("&unique={unique}");
+        }
+        log.info("Создан запрос: GET {}", url);
+
+        return getForEntity(url.toString(), Object.class, uriVariables);
     }
 
     private RequestHitDto makeDto(HttpServletRequest request, String appName) {
