@@ -4,13 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.client.StatsClient;
 import ru.practicum.dto.RequestHitDto;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -37,15 +35,19 @@ public class StatsClientImpl extends RestTemplate implements StatsClient {
     }
 
     @Override
-    @Validated
-    public ResponseEntity<Object> getStats(@NotNull String start, @NotNull String end, List<String> uris, Boolean unique) {
-        var startEncode = URLEncoder.encode(start, StandardCharsets.UTF_8);
-        var endEncode = URLEncoder.encode(end, StandardCharsets.UTF_8);
+    public ResponseEntity<Object> getStats(String start, String end, List<String> uris, Boolean unique) {
         var url = new StringBuilder(ewmStatsServiceUrl + "/stats?start={start}&end={end}");
         Map<String, Object> uriVariables = new HashMap<>();
 
-        uriVariables.put("start", startEncode);
-        uriVariables.put("end", endEncode);
+        if (start != null) {
+            var startEncode = URLEncoder.encode(start, StandardCharsets.UTF_8);
+            uriVariables.put("start", startEncode);
+        }
+
+        if (end != null) {
+            var endEncode = URLEncoder.encode(end, StandardCharsets.UTF_8);
+            uriVariables.put("end", endEncode);
+        }
 
         if (uris != null) {
             uriVariables.put("uris", uris.toArray());
