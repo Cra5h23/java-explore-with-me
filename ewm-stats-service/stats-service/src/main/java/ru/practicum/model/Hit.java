@@ -30,24 +30,24 @@ public class Hit {
     /**
      * Идентификатор сервиса для которого записывается информация.
      */
-    @Column(name = "app")
+    @Column(name = "app", nullable = false)
     private String app;
 
     /**
      * URI для которого был осуществлен запрос.
      */
-    @Column(name = "uri")
+    @Column(name = "uri", nullable = false)
     private String uri;
 
     /**
      * IP-адрес пользователя, осуществившего запрос.
      */
-    @Column(name = "ip")
+    @Column(name = "ip", length = 15, nullable = false)
     private String ip;
 
     /**
      * Дата и время посещения.
      */
-    @Column(name = "timestamp")
+    @Column(name = "timestamp", nullable = false)
     private ZonedDateTime timestamp;
 }
