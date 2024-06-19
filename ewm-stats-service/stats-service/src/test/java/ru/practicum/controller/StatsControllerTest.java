@@ -16,8 +16,7 @@ import ru.practicum.service.StatsService;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * @author Nikolay Radzivon
@@ -172,5 +171,76 @@ class StatsControllerTest {
 
         Mockito.verify(this.statsService, Mockito.times(1))
                 .getStats(Mockito.any(StatsService.Params.class));
+    }
+
+    @Test
+    void getStatsTestNotValidStartNotExists() throws Exception {
+        var request = MockMvcRequestBuilders
+                .get("/stats")
+                .param("end", "2024-01-20 20:20:20")
+                .param("unique", "true");
+
+        this.mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                content().contentType(MediaType.APPLICATION_JSON),
+                jsonPath("reason").value("Bad Request"),
+                jsonPath("status").value("BAD_REQUEST"),
+                jsonPath("message").value("Required request parameter 'start' for method parameter type String is not present"),
+                jsonPath("timestamp").exists()
+        );
+    }
+
+    @Test
+    void getStatsTestNotValidEndNotExists() throws Exception {
+        var request = MockMvcRequestBuilders
+                .get("/stats")
+                .param("start", "2024-01-20 20:20:20")
+//                .param("end", "2024-01-20 20:20:20")
+                .param("unique", "true");
+
+        this.mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                content().contentType(MediaType.APPLICATION_JSON),
+                jsonPath("reason").value("Bad Request"),
+                jsonPath("status").value("BAD_REQUEST"),
+                jsonPath("message").value("Required request parameter 'end' for method parameter type String is not present"),
+                jsonPath("timestamp").exists()
+        );
+    }
+
+    @Test
+    void getStatsTestNotValidStartIsBad() throws Exception {
+        var request = MockMvcRequestBuilders
+                .get("/stats")
+                .param("start", "asddad")
+                .param("end", "2024-01-20 20:20:20")
+                .param("unique", "true");
+
+        this.mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                content().contentType(MediaType.APPLICATION_JSON),
+                jsonPath("reason").value("Bad Request"),
+                jsonPath("status").value("BAD_REQUEST"),
+                jsonPath("message").value("getStats.start: Параметр start должен соответствовать формату даты yyyy-MM-dd HH:mm:ss"),
+                jsonPath("timestamp").exists()
+        );
+    }
+
+    @Test
+    void getStatsTestNotValidEndIsBad() throws Exception {
+        var request = MockMvcRequestBuilders
+                .get("/stats")
+                .param("start", "2024-01-20 20:20:20")
+                .param("end", "ad12")
+                .param("unique", "true");
+
+        this.mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                content().contentType(MediaType.APPLICATION_JSON),
+                jsonPath("reason").value("Bad Request"),
+                jsonPath("status").value("BAD_REQUEST"),
+                jsonPath("message").value("getStats.end: Параметр end должен соответствовать формату даты yyyy-MM-dd HH:mm:ss"),
+                jsonPath("timestamp").exists()
+        );
     }
 }
