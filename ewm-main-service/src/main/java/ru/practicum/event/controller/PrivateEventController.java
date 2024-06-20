@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.event.EventDtoRequest;
+import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.event.service.PrivateEventService;
 
 import javax.validation.Valid;
