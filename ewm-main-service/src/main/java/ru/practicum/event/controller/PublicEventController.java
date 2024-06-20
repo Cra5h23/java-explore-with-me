@@ -1,4 +1,4 @@
-package ru.practicum.events.controller;
+package ru.practicum.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/events")
 @Slf4j
 @RequiredArgsConstructor
-public class PublicEventsController {
+public class PublicEventController {
     private final StatsClient statsClient;
     private String appName = "ewm-main-service";
 
