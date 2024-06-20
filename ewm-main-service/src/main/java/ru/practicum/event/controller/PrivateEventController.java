@@ -70,5 +70,27 @@ public class PrivateEventController {
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(privateEventService.getUserEvent(userId, eventId));
+
+        //todo Возвращает 400 код если запрос создан некорректно, 404 если событие не найдено или недоступно
     }
+
+    @PatchMapping("/{eventId}")
+    public ResponseEntity<Object> updateUserEvent(
+            @PathVariable Long userId,
+            @PathVariable Long eventId,
+            @RequestBody @Validated() UpdateEventUserRequest event
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(privateEventService.updateUserEvent(userId, eventId, event));
+
+//        todo изменить можно только отмененные события или события в состоянии ожидания модерации (Ожидается код ошибки 409)
+//         дата и время на которые намечено событие не может быть раньше, чем через два часа от текущего момента (Ожидается код ошибки 409)
+//         400 код если запрос составлен не корректно
+//         404 событие не найдено или недоступно
+//         409 событие не удовлетворяет правилам редактирования
+
+    }
+
 }
