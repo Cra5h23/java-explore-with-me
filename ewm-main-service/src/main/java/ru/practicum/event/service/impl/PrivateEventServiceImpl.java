@@ -1,9 +1,13 @@
 package ru.practicum.event.service.impl;
 
 import org.springframework.stereotype.Service;
+import ru.practicum.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.dto.EventRequestStatusUpdateResult;
+import ru.practicum.dto.ParticipationRequestDto;
 import ru.practicum.dto.event.EventDtoRequest;
 import ru.practicum.dto.event.EventFullDtoResponse;
 import ru.practicum.dto.event.EventShortDto;
+import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.event.service.PrivateEventService;
 
 import java.util.List;
@@ -31,7 +35,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
      * @return
      */
     @Override
-    public Object addEvent(Long userId, EventDtoRequest event) {
+    public EventFullDtoResponse addEvent(Long userId, EventDtoRequest event) {
         return null;
     }
 
@@ -42,6 +46,38 @@ public class PrivateEventServiceImpl implements PrivateEventService {
      */
     @Override
     public EventFullDtoResponse getUserEvent(Long userId, Long eventId) {
+        return null;
+    }
+
+    /**
+     * @param userId
+     * @param eventId
+     * @param event
+     * @return
+     */
+    @Override
+    public EventFullDtoResponse updateUserEvent(Long userId, Long eventId, UpdateEventUserRequest event) {
+        return null;
+    }
+
+    /**
+     * @param userId
+     * @param eventId
+     * @return
+     */
+    @Override
+    public ParticipationRequestDto getEventRequests(Long userId, Long eventId) {
+        return null;
+    }
+
+    /**
+     * @param userId
+     * @param eventId
+     * @param request
+     * @return
+     */
+    @Override
+    public EventRequestStatusUpdateResult confirmUserRequests(Long userId, Long eventId, EventRequestStatusUpdateRequest request) {
         return null;
     }
 }
