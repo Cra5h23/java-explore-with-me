@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.event.EventDtoRequest;
 import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.event.service.PrivateEventService;
@@ -81,6 +82,7 @@ public class PrivateEventController {
             @PathVariable Long eventId,
             @RequestBody @Validated() UpdateEventUserRequest event
     ) {
+        log.info("PATCH /users/{}/events/{} body={}", userId, eventId, event);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -94,4 +96,37 @@ public class PrivateEventController {
 
     }
 
+    @GetMapping("{eventId}/requests")
+    public ResponseEntity<Object> getEventRequests(
+            @PathVariable Long userId,
+            @PathVariable Long eventId
+    ) {
+        log.info("GET /users/{}/events/{}/requests", userId, eventId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(privateEventService.getEventRequests(userId, eventId));
+
+        // todo 400 код когда запрос составлен некорректно. пустой список если ничего не найдено
+    }
+
+    @PatchMapping("{eventId}/requests")
+    public ResponseEntity<Object> confirmUserRequests(
+            @PathVariable Long userId,
+            @PathVariable Long eventId,
+            @RequestBody EventRequestStatusUpdateRequest request
+    ) {
+        log.info("PATCH /users/{}/events/{}/requests body={}", userId, eventId, request);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(privateEventService.confirmUserRequests(userId,eventId,request));
+        //todo Обратите внимание:
+        // если для события лимит заявок равен 0 или отключена пре-модерация заявок, то подтверждение заявок не требуется
+        // нельзя подтвердить заявку, если уже достигнут лимит по заявкам на данное событие (Ожидается код ошибки 409)
+        // статус можно изменить только у заявок, находящихся в состоянии ожидания (Ожидается код ошибки 409)
+        // если при подтверждении данной заявки, лимит заявок для события исчерпан, то все неподтверждённые заявки необходимо отклонить
+    }
 }
