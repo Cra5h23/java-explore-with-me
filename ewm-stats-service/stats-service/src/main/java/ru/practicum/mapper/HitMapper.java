@@ -20,7 +20,7 @@ import static ru.practicum.repository.StatsRepository.CountHits;
  */
 @Component
 public class HitMapper {
-    @Value("${datetime.format}")
+    @Value("${datetime.format:yyyy-MM-dd HH:mm:ss}")
     private String dateTimeFormat;
 
     /**
