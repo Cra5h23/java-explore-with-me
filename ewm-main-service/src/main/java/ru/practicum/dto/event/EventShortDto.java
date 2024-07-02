@@ -1,11 +1,15 @@
 package ru.practicum.dto.event;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.dto.category.CategoryDtoResponse;
 import ru.practicum.dto.user.UserShortDto;
+import ru.practicum.json.CustomLocalDateTimeSerializer;
+
+import java.time.LocalDateTime;
 
 /**
  * Dto события.
@@ -36,7 +40,8 @@ public class EventShortDto {
     /**
      * Дата и время на которое назначено событие.
      */
-    private String eventDate;
+    @JsonSerialize(using = CustomLocalDateTimeSerializer.class)
+    private LocalDateTime eventDate;
 
     /**
      * Идентификационный номер события.
