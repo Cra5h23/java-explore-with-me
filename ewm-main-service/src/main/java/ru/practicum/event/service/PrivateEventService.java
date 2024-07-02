@@ -15,15 +15,15 @@ import java.util.List;
  * @Date 20.06.2024
  */
 public interface PrivateEventService {
-    List<EventShortDto> getUserEvents(Long userId, long from, long size);
+    List<EventShortDto> getUserEvents(Long userId, int from, int size);
 
-    EventFullDtoResponse addEvent(Long userId, EventDtoRequest event);
+    EventFullDtoResponse addEvent(Long userId, EventDtoRequest dto);
 
     EventFullDtoResponse getUserEvent(Long userId, Long eventId);
 
-    EventFullDtoResponse updateUserEvent(Long userId, Long eventId, UpdateEventUserRequest event);
+    EventFullDtoResponse updateUserEvent(Long userId, Long eventId, UpdateEventUserRequest dto);
 
-    ParticipationRequestDto getEventRequests(Long userId, Long eventId);
+    List<ParticipationRequestDto> getEventRequests(Long userId, Long eventId);
 
     EventRequestStatusUpdateResult confirmUserRequests(Long userId, Long eventId, EventRequestStatusUpdateRequest request);
 }
