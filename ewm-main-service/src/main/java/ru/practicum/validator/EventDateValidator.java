@@ -1,5 +1,7 @@
 package ru.practicum.validator;
 
+import ru.practicum.exception.EventDateValidateException;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDateTime;
@@ -10,14 +12,24 @@ import java.time.LocalDateTime;
  */
 public class EventDateValidator implements ConstraintValidator<EventDate, LocalDateTime> {
     private LocalDateTime data;
+    private long time;
 
     @Override
     public void initialize(EventDate constraintAnnotation) {
+        time = constraintAnnotation.value();
         data = LocalDateTime.now().plusHours(constraintAnnotation.value());
     }
 
     @Override
     public boolean isValid(LocalDateTime value, ConstraintValidatorContext context) {
-        return value.isBefore(data);
+        if (value == null) {
+            return true;
+        }
+
+        if (value.isBefore(data)) {
+            throw new EventDateValidateException(String.format(
+                    "Дата и время начала события не должно быть раньше чем за %d часа от текущего времени", time));
+        }
+        return true;
     }
 }
