@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.RequestHitDto;
 import ru.practicum.service.StatsService;
 
-import javax.validation.constraints.Pattern;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
+import javax.validation.Valid;
 
 /**
  * Контроллер для работы Stats-service
@@ -50,26 +47,14 @@ public class StatsController {
      * @return список посещений.
      */
     @GetMapping("/stats")
-    public ResponseEntity<?> getStats(
-            @RequestParam @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}",
-                    message = "Параметр start должен соответствовать формату даты yyyy-MM-dd HH:mm:ss") String start,
-            @RequestParam @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}",
-                    message = "Параметр end должен соответствовать формату даты yyyy-MM-dd HH:mm:ss") String end,
-            @RequestParam(required = false) List<String> uris,
-            @RequestParam(required = false, defaultValue = "false") boolean unique
-    ) {
-        log.info("GET /stats?start={}&end={}&uris={}&unique={}", start, end, uris, unique);
-        var startDecode = URLDecoder.decode(start, StandardCharsets.UTF_8);
-        var endDecode = URLDecoder.decode(end, StandardCharsets.UTF_8);
-
+    public ResponseEntity<?> getStats(@ModelAttribute @Valid StatsService.Params params) {
+        log.info("GET /stats?start={}&end={}&uris={}&unique={}", params.getStart(), params.getEnd(),
+                params.getUris(), params.isUnique());
+//        var startDecode = URLDecoder.decode(start, StandardCharsets.UTF_8);
+//        var endDecode = URLDecoder.decode(end, StandardCharsets.UTF_8);
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(statsService.getStats(StatsService.Params.builder()
-                        .start(startDecode)
-                        .end(endDecode)
-                        .unique(unique)
-                        .uris(uris)
-                        .build()));
+                .body(statsService.getStats(params));
     }
 }
