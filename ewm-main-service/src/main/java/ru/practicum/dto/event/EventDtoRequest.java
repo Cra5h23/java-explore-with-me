@@ -10,7 +10,9 @@ import ru.practicum.json.CustomLocalDateTimeDeserializer;
 import ru.practicum.json.CustomLocalDateTimeSerializer;
 import ru.practicum.validator.EventDate;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -28,6 +30,7 @@ public class EventDtoRequest {
     /**
      * Краткое описание события.
      */
+    @NotBlank
     @Size(min = 20, max = 2000, message = "Краткое описание события не может быть меньше {min} и больше {max} символов")
     private String annotation;
 
@@ -40,7 +43,8 @@ public class EventDtoRequest {
     /**
      * Полное описание события.
      */
-    @Size(min = 20, max= 7000, message = "Полное описание события не может быть меньше {min} и больше {max} символов")
+    @NotBlank
+    @Size(min = 20, max = 7000, message = "Полное описание события не может быть меньше {min} и больше {max} символов")
     private String description;
 
     /**
@@ -68,6 +72,7 @@ public class EventDtoRequest {
      * Ограничение на количество участников. (0 - отсутствие ограничений)
      */
     @Builder.Default
+    @PositiveOrZero
     private int participantLimit = 0;
 
     /**
@@ -79,6 +84,7 @@ public class EventDtoRequest {
     /**
      * Заголовок события.
      */
+    @NotBlank
     @Size(min = 3, max = 120, message = "Заголовок события не должен быть меньше {min} и больше {max} символов")
     private String title;
 }
