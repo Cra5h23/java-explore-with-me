@@ -3,6 +3,7 @@ package ru.practicum.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,6 +32,12 @@ public class StatsErrorHandler {
     @ExceptionHandler
     public ResponseEntity<?> handlerMissingServletRequestParameterException(MissingServletRequestParameterException e,
                                                                             WebRequest webRequest) {
+        log.info("Не указан параметр запроса: ", e);
+        return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handlerBindException(BindException e, WebRequest webRequest) {
         log.info("Не указан параметр запроса: ", e);
         return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST);
     }
