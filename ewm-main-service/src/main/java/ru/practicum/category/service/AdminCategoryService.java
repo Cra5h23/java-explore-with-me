@@ -8,9 +8,9 @@ import ru.practicum.dto.category.CategoryDtoResponse;
  * @Date 19.06.2024
  */
 public interface AdminCategoryService {
-    CategoryDtoResponse addCategory(CategoryDtoRequest category);
+    CategoryDtoResponse addCategory(CategoryDtoRequest dto);
 
     void deleteCategory(Long catId);
 
-    CategoryDtoResponse updateCategory(Long catId, CategoryDtoRequest category);
+    CategoryDtoResponse updateCategory(Long catId, CategoryDtoRequest dto);
 }
