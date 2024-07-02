@@ -31,7 +31,6 @@ public class EventServiceImpl implements EventService {
     private final EventMapper eventMapper;
     private static final String URI_PATCH = "/events/";
 
-
     @Override
     public Event checkEvent(Long eventId) {
         return eventRepository.findById(eventId)
@@ -61,7 +60,6 @@ public class EventServiceImpl implements EventService {
                         ResponseStatsDto::getHits)) : Map.of();
     }
 
-
     @Override
     public void saveStats(HttpServletRequest request, List<String> uris, String appName) {
         var ip = request.getRemoteAddr();
@@ -82,15 +80,7 @@ public class EventServiceImpl implements EventService {
             return 0;
         }
 
-        log.info("Просмотры = {}", views);
-
-        log.info(" key {}", uri.substring(uri.lastIndexOf("/") + 1));
-
-        Long orDefault = views.getOrDefault(Long.parseLong(uri.substring(uri.lastIndexOf("/") + 1)), 0L);
-
-        log.info(" пр = {}", orDefault);
-
-        return orDefault;
+        return views.getOrDefault(Long.parseLong(uri.substring(uri.lastIndexOf("/") + 1)), 0L);
     }
 
     @Override
