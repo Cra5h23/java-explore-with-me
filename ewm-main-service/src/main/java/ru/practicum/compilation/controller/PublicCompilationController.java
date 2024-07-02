@@ -1,11 +1,11 @@
-package ru.practicum.event.controller;
+package ru.practicum.compilation.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.event.service.PublicCompilationService;
+import ru.practicum.compilation.service.PublicCompilationService;
 
 /**
  * @author Nikolay Radzivon
@@ -21,8 +21,8 @@ public class PublicCompilationController {
     @GetMapping
     public ResponseEntity<Object> getCompilations(
             @RequestParam(required = false) Boolean pinned,
-            @RequestParam(required = false, defaultValue = "0") Integer from,
-            @RequestParam(required = false, defaultValue = "10") Integer size
+            @RequestParam(required = false, defaultValue = "0") int from,
+            @RequestParam(required = false, defaultValue = "10") int size
     ) {
         log.info("GET /compilations?pinned={}&from={}&size={}", pinned, from, size);
 
@@ -34,7 +34,7 @@ public class PublicCompilationController {
 
     @GetMapping("/{compId}")
     public ResponseEntity<Object> getCompilation(@PathVariable Long compId) {
-        log.info("GET /compilations/{}",compId);
+        log.info("GET /compilations/{}", compId);
 
         return ResponseEntity
                 .ok()
