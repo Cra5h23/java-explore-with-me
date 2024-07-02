@@ -18,8 +18,7 @@ import java.util.Objects;
  * @author Nikolay Radzivon
  * @Date 19.06.2024
  */
-@ControllerAdvice()
-
+@ControllerAdvice
 @Slf4j
 public class StatsErrorHandler {
 
