@@ -1,11 +1,20 @@
 package ru.practicum.dto.category;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * Dto категории.
  *
  * @author Nikolay Radzivon
  * @Date 19.06.2024
  */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CategoryDtoResponse {
     /**
      * Идентификационный номер категории.
