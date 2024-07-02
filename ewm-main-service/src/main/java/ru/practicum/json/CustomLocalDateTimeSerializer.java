@@ -14,16 +14,15 @@ import java.time.format.DateTimeFormatter;
  * @Date 20.06.2024
  */
 public class CustomLocalDateTimeSerializer extends StdSerializer<LocalDateTime> {
-    @Value("$.{data.time.format}")
-    private String dateTimeFormat;
+    private final DateTimeFormatter formatter;
 
-    public CustomLocalDateTimeSerializer() {
+    public CustomLocalDateTimeSerializer(String dateTimeFormat) {
         super(LocalDateTime.class);
+        formatter = DateTimeFormatter.ofPattern(dateTimeFormat);
     }
 
     @Override
     public void serialize(LocalDateTime value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        //gen.writeString(value.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
-        gen.writeString(value.format(DateTimeFormatter.ofPattern(dateTimeFormat)));
+        gen.writeString(value.format(formatter));
     }
 }
