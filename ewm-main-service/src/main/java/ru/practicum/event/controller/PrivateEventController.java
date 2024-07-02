@@ -32,10 +32,10 @@ public class PrivateEventController {
     public ResponseEntity<Object> getUserEvents(
             @PathVariable Long userId,
             @RequestParam(required = false, defaultValue = "0")
-            @Min(value = 0, message = "Параметр from не может быть меньше 0") long from,
+            @Min(value = 0, message = "Параметр from не может быть меньше {value}") int from,
             @RequestParam(required = false, defaultValue = "10")
-            @Min(value = 1, message = "Параметр size не может быть меньше 1")
-            @Max(value = 100, message = "Параметр size не может быть больше 100") long size
+            @Min(value = 1, message = "Параметр size не может быть меньше {value}")
+            @Max(value = 1000, message = "Параметр size не может быть больше {value}") int size
     ) {
         log.info("GET /users/{}/events?from={}&size={}", userId, from, size);
 
@@ -66,7 +66,7 @@ public class PrivateEventController {
             @PathVariable Long userId,
             @PathVariable Long eventId
     ) {
-        log.info("GET /users/{}/events{}", userId, eventId);
+        log.info("GET /users/{}/events/{}", userId, eventId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -96,7 +96,7 @@ public class PrivateEventController {
 
     }
 
-    @GetMapping("{eventId}/requests")
+    @GetMapping("/{eventId}/requests")
     public ResponseEntity<Object> getEventRequests(
             @PathVariable Long userId,
             @PathVariable Long eventId
@@ -111,18 +111,20 @@ public class PrivateEventController {
         // todo 400 код когда запрос составлен некорректно. пустой список если ничего не найдено
     }
 
-    @PatchMapping("{eventId}/requests")
+    @PatchMapping("/{eventId}/requests")
     public ResponseEntity<Object> confirmUserRequests(
             @PathVariable Long userId,
             @PathVariable Long eventId,
-            @RequestBody EventRequestStatusUpdateRequest request
+            @RequestBody(required = false) EventRequestStatusUpdateRequest request
     ) {
         log.info("PATCH /users/{}/events/{}/requests body={}", userId, eventId, request);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(privateEventService.confirmUserRequests(userId,eventId,request));
+                .body(privateEventService.confirmUserRequests(userId, eventId, request));
+
+
         //todo Обратите внимание:
         // если для события лимит заявок равен 0 или отключена пре-модерация заявок, то подтверждение заявок не требуется
         // нельзя подтвердить заявку, если уже достигнут лимит по заявкам на данное событие (Ожидается код ошибки 409)
