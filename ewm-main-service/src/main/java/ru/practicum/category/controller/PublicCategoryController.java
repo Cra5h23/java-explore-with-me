@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.category.service.PublicCategoryService;
 
 import javax.validation.constraints.Max;
@@ -19,18 +16,19 @@ import javax.validation.constraints.Min;
  * @Date 22.06.2024
  */
 @RequiredArgsConstructor
-@RestController("/categories")
+@RequestMapping("/categories")
+@RestController
 @Slf4j
 public class PublicCategoryController {
-    private PublicCategoryService publicCategoryService;
+    private final PublicCategoryService publicCategoryService;
 
     @GetMapping
     public ResponseEntity<Object> getCategories(
             @RequestParam(required = false, defaultValue = "0")
-            @Min(value = 0, message = "Параметр from не может быть меньше 0") long from,
+            @Min(value = 0, message = "Параметр from не может быть меньше 0") int from,
             @RequestParam(required = false, defaultValue = "10")
             @Min(value = 1, message = "Параметр size не может быть меньше 1")
-            @Max(value = 100, message = "Параметр size не может быть больше 100") long size
+            @Max(value = 100, message = "Параметр size не может быть больше 100") int size
     ) {
         log.info("GET /categories?from={}&size={}", from, size);
 
