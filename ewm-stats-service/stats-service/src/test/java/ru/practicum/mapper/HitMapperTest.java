@@ -1,7 +1,8 @@
 package ru.practicum.mapper;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.practicum.dto.RequestHitDto;
 import ru.practicum.repository.StatsRepository;
 
@@ -15,13 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Nikolay Radzivon
  * @Date 18.06.2024
  */
+@SpringBootTest
 class HitMapperTest {
+    @Autowired
     private HitMapper hitMapper;
-
-    @BeforeEach
-    void setUp() {
-        hitMapper = new HitMapper();
-    }
 
     @Test
     void toHitTest() {
