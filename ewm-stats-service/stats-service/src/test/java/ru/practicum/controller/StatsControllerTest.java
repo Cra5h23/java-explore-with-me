@@ -185,7 +185,7 @@ class StatsControllerTest {
                 content().contentType(MediaType.APPLICATION_JSON),
                 jsonPath("reason").value("Bad Request"),
                 jsonPath("status").value("BAD_REQUEST"),
-                jsonPath("message").value("Required request parameter 'start' for method parameter type String is not present"),
+                jsonPath("message").value("org.springframework.validation.BeanPropertyBindingResult: 1 errors\nField error in object 'params' on field 'start': rejected value [null]; codes [NotNull.params.start,NotNull.start,NotNull.java.time.LocalDateTime,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [params.start,start]; arguments []; default message [start]]; default message [Параметр start должен быть указан]"),
                 jsonPath("timestamp").exists()
         );
     }
@@ -195,7 +195,6 @@ class StatsControllerTest {
         var request = MockMvcRequestBuilders
                 .get("/stats")
                 .param("start", "2024-01-20 20:20:20")
-//                .param("end", "2024-01-20 20:20:20")
                 .param("unique", "true");
 
         this.mockMvc.perform(request).andExpectAll(
@@ -203,7 +202,7 @@ class StatsControllerTest {
                 content().contentType(MediaType.APPLICATION_JSON),
                 jsonPath("reason").value("Bad Request"),
                 jsonPath("status").value("BAD_REQUEST"),
-                jsonPath("message").value("Required request parameter 'end' for method parameter type String is not present"),
+                jsonPath("message").value("org.springframework.validation.BeanPropertyBindingResult: 1 errors\nField error in object 'params' on field 'end': rejected value [null]; codes [NotNull.params.end,NotNull.end,NotNull.java.time.LocalDateTime,NotNull]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [params.end,end]; arguments []; default message [end]]; default message [Параметр end должен быть указан]"),
                 jsonPath("timestamp").exists()
         );
     }
@@ -221,7 +220,7 @@ class StatsControllerTest {
                 content().contentType(MediaType.APPLICATION_JSON),
                 jsonPath("reason").value("Bad Request"),
                 jsonPath("status").value("BAD_REQUEST"),
-                jsonPath("message").value("getStats.start: Параметр start должен соответствовать формату даты yyyy-MM-dd HH:mm:ss"),
+                jsonPath("message").value("org.springframework.validation.BeanPropertyBindingResult: 1 errors\nField error in object 'params' on field 'start': rejected value [asddad]; codes [typeMismatch.params.start,typeMismatch.start,typeMismatch.java.time.LocalDateTime,typeMismatch]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [params.start,start]; arguments []; default message [start]]; default message [Failed to convert property value of type 'java.lang.String' to required type 'java.time.LocalDateTime' for property 'start'; nested exception is org.springframework.core.convert.ConversionFailedException: Failed to convert from type [java.lang.String] to type [@javax.validation.constraints.NotNull java.time.LocalDateTime] for value 'asddad'; nested exception is java.time.format.DateTimeParseException: Text 'asddad' could not be parsed at index 0]"),
                 jsonPath("timestamp").exists()
         );
     }
@@ -239,7 +238,7 @@ class StatsControllerTest {
                 content().contentType(MediaType.APPLICATION_JSON),
                 jsonPath("reason").value("Bad Request"),
                 jsonPath("status").value("BAD_REQUEST"),
-                jsonPath("message").value("getStats.end: Параметр end должен соответствовать формату даты yyyy-MM-dd HH:mm:ss"),
+                jsonPath("message").value("org.springframework.validation.BeanPropertyBindingResult: 1 errors\nField error in object 'params' on field 'end': rejected value [ad12]; codes [typeMismatch.params.end,typeMismatch.end,typeMismatch.java.time.LocalDateTime,typeMismatch]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [params.end,end]; arguments []; default message [end]]; default message [Failed to convert property value of type 'java.lang.String' to required type 'java.time.LocalDateTime' for property 'end'; nested exception is org.springframework.core.convert.ConversionFailedException: Failed to convert from type [java.lang.String] to type [@javax.validation.constraints.NotNull java.time.LocalDateTime] for value 'ad12'; nested exception is java.time.format.DateTimeParseException: Text 'ad12' could not be parsed at index 0]"),
                 jsonPath("timestamp").exists()
         );
     }
