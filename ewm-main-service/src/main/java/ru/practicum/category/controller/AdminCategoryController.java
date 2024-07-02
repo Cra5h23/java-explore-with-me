@@ -17,11 +17,12 @@ import javax.validation.Valid;
  * @Date 19.06.2024
  */
 @RequiredArgsConstructor
-@RestController("/admin/categories")
+@RequestMapping("/admin/categories")
+@RestController
 @Slf4j
 @Validated
 public class AdminCategoryController {
-    private AdminCategoryService adminCategoryService;
+    private final AdminCategoryService adminCategoryService;
 
     @PostMapping
     public ResponseEntity<Object> addCategory(@RequestBody @Valid CategoryDtoRequest category) {
