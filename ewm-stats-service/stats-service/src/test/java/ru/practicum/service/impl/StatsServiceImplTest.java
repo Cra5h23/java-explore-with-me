@@ -1,9 +1,11 @@
 package ru.practicum.service.impl;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.practicum.dto.RequestHitDto;
 import ru.practicum.dto.ResponseStatsDto;
 import ru.practicum.mapper.HitMapper;
@@ -14,37 +16,42 @@ import ru.practicum.service.StatsService;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
  * @author Nikolay Radzivon
  * @Date 18.06.2024
  */
+@SpringBootTest
 class StatsServiceImplTest {
-    private StatsService statsService;
+    @Mock
     private StatsRepository statsRepository;
+
+    @Mock
     private HitMapper hitMapper;
 
-    @BeforeEach
-    void setUp() {
-        statsRepository = Mockito.mock(StatsRepository.class);
-        hitMapper = new HitMapper();
-
-        statsService = new StatsServiceImpl(statsRepository, hitMapper);
-    }
+    @InjectMocks
+    private StatsServiceImpl statsService;
 
     @Test
     void saveHitTest() {
+        Mockito.when(hitMapper.toHit(Mockito.any(RequestHitDto.class)))
+                .thenReturn(Hit.builder()
+                        .ip("192.163.0.1")
+                        .app("ewm-main-service")
+                        .uri("/events/1")
+                        .timestamp(ZonedDateTime.of(
+                                2022, 9, 6, 11, 0, 23, 0, ZoneId.systemDefault()))
+                        .build());
         Mockito.when(statsRepository.save(Mockito.any(Hit.class)))
                 .thenReturn(Hit.builder()
                         .id(1L)
                         .ip("192.163.0.1")
                         .app("ewm-main-service")
                         .uri("/events/1")
-                        .timestamp(LocalDateTime.parse("2022-09-06 11:00:23",
-                                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-                                .atZone(ZoneId.systemDefault())).build());
+                        .timestamp(ZonedDateTime.of(
+                                2022, 9, 6, 11, 0, 23, 0, ZoneId.systemDefault()))
+                        .build());
 
         statsService.saveHit(RequestHitDto.builder()
                 .uri("/events/1")
@@ -55,6 +62,8 @@ class StatsServiceImplTest {
 
         Mockito.verify(statsRepository, Mockito.times(1))
                 .save(Mockito.any(Hit.class));
+        Mockito.verify(hitMapper, Mockito.times(1))
+                .toHit(Mockito.any(RequestHitDto.class));
     }
 
     @Test
@@ -95,15 +104,25 @@ class StatsServiceImplTest {
                         }
                 ));
 
+        Mockito.when(hitMapper.toResponseStatsDto(Mockito.any(StatsRepository.CountHits.class)))
+                .thenAnswer(invocation -> {
+                    StatsRepository.CountHits argument = invocation.getArgument(0);
+                    ResponseStatsDto dto = new ResponseStatsDto();
+                    dto.setHits(argument.getCount());
+                    dto.setApp(argument.getApp());
+                    dto.setUri(argument.getUri());
+                    return dto;
+                });
+
         List<ResponseStatsDto> stats = statsService.getStats(StatsService.Params.builder()
                 .uris(null)
                 .unique(false)
-                .start("2021-01-01 20:20:20")
-                .end("2025-01-01 20:20:20")
+                .start(LocalDateTime.of(2021, 1, 1, 20, 20, 20))
+                .end(LocalDateTime.of(2025, 1, 1, 20, 20, 20))
                 .build());
 
         Assertions.assertNotNull(stats);
-        Assertions.assertNotNull(stats.get(0));
+        Assertions.assertEquals(2, stats.size()); // Проверка размера списка
         Assertions.assertEquals(9L, stats.get(0).getHits());
         Assertions.assertEquals("ewm-main-service", stats.get(0).getApp());
         Assertions.assertEquals("/events/1", stats.get(0).getUri());
@@ -111,10 +130,15 @@ class StatsServiceImplTest {
         Assertions.assertEquals("ewm-main-service", stats.get(1).getApp());
         Assertions.assertEquals("/events/2", stats.get(1).getUri());
 
+        // Проверка вызовов моков
         Mockito.verify(statsRepository, Mockito.times(1))
                 .getCountHits(Mockito.any(ZonedDateTime.class),
                         Mockito.any(ZonedDateTime.class), Mockito.isNull());
+
+        Mockito.verify(hitMapper, Mockito.times(2))
+                .toResponseStatsDto(Mockito.any(StatsRepository.CountHits.class));
     }
+
 
     @Test
     void getStatsTestValidUniqueTrueUrisNull() {
@@ -154,11 +178,21 @@ class StatsServiceImplTest {
                         }
                 ));
 
+        Mockito.when(hitMapper.toResponseStatsDto(Mockito.any(StatsRepository.CountHits.class)))
+                .thenAnswer(invocation -> {
+                    StatsRepository.CountHits argument = invocation.getArgument(0);
+                    ResponseStatsDto dto = new ResponseStatsDto();
+                    dto.setHits(argument.getCount());
+                    dto.setApp(argument.getApp());
+                    dto.setUri(argument.getUri());
+                    return dto;
+                });
+
         List<ResponseStatsDto> stats = statsService.getStats(StatsService.Params.builder()
                 .uris(null)
                 .unique(true)
-                .start("2021-01-01 20:20:20")
-                .end("2025-01-01 20:20:20")
+                .start(LocalDateTime.of(2021, 1, 1, 20, 20, 20))
+                .end(LocalDateTime.of(2025, 1, 1, 20, 20, 20))
                 .build());
 
         Assertions.assertNotNull(stats);
@@ -173,6 +207,8 @@ class StatsServiceImplTest {
         Mockito.verify(statsRepository, Mockito.times(1))
                 .getUniqueCountHits(Mockito.any(ZonedDateTime.class),
                         Mockito.any(ZonedDateTime.class), Mockito.isNull());
+        Mockito.verify(hitMapper, Mockito.times(2))
+                .toResponseStatsDto(Mockito.any(StatsRepository.CountHits.class));
     }
 
     @Test
@@ -213,11 +249,21 @@ class StatsServiceImplTest {
                         }
                 ));
 
+        Mockito.when(hitMapper.toResponseStatsDto(Mockito.any(StatsRepository.CountHits.class)))
+                .thenAnswer(invocation -> {
+                    StatsRepository.CountHits argument = invocation.getArgument(0);
+                    ResponseStatsDto dto = new ResponseStatsDto();
+                    dto.setHits(argument.getCount());
+                    dto.setApp(argument.getApp());
+                    dto.setUri(argument.getUri());
+                    return dto;
+                });
+
         List<ResponseStatsDto> stats = statsService.getStats(StatsService.Params.builder()
                 .uris(List.of("/events/1"))
                 .unique(true)
-                .start("2021-01-01 20:20:20")
-                .end("2025-01-01 20:20:20")
+                .start(LocalDateTime.of(2021, 1, 1, 20, 20, 20))
+                .end(LocalDateTime.of(2025, 1, 1, 20, 20, 20))
                 .build());
 
         Assertions.assertNotNull(stats);
@@ -232,6 +278,9 @@ class StatsServiceImplTest {
         Mockito.verify(statsRepository, Mockito.times(1))
                 .getUniqueCountHits(Mockito.any(ZonedDateTime.class),
                         Mockito.any(ZonedDateTime.class), Mockito.anyList());
+
+        Mockito.verify(hitMapper, Mockito.times(2))
+                .toResponseStatsDto(Mockito.any(StatsRepository.CountHits.class));
     }
 
     @Test
@@ -272,11 +321,21 @@ class StatsServiceImplTest {
                         }
                 ));
 
+        Mockito.when(hitMapper.toResponseStatsDto(Mockito.any(StatsRepository.CountHits.class)))
+                .thenAnswer(invocation -> {
+                    StatsRepository.CountHits argument = invocation.getArgument(0);
+                    ResponseStatsDto dto = new ResponseStatsDto();
+                    dto.setHits(argument.getCount());
+                    dto.setApp(argument.getApp());
+                    dto.setUri(argument.getUri());
+                    return dto;
+                });
+
         List<ResponseStatsDto> stats = statsService.getStats(StatsService.Params.builder()
                 .uris(List.of("/events/1"))
                 .unique(false)
-                .start("2021-01-01 20:20:20")
-                .end("2025-01-01 20:20:20")
+                .start(LocalDateTime.of(2021, 1, 1, 20, 20, 20))
+                .end(LocalDateTime.of(2025, 1, 1, 20, 20, 20))
                 .build());
 
         Assertions.assertNotNull(stats);
@@ -291,5 +350,8 @@ class StatsServiceImplTest {
         Mockito.verify(statsRepository, Mockito.times(1))
                 .getCountHits(Mockito.any(ZonedDateTime.class),
                         Mockito.any(ZonedDateTime.class), Mockito.anyList());
+
+        Mockito.verify(hitMapper, Mockito.times(2))
+                .toResponseStatsDto(Mockito.any(StatsRepository.CountHits.class));
     }
 }
