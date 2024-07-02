@@ -1,5 +1,6 @@
 package ru.practicum.mapper;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.practicum.dto.RequestHitDto;
 import ru.practicum.dto.ResponseStatsDto;
@@ -19,6 +20,9 @@ import static ru.practicum.repository.StatsRepository.CountHits;
  */
 @Component
 public class HitMapper {
+    @Value("${datetime.format}")
+    private String dateTimeFormat;
+
     /**
      * Метод преобразования Dto {@link RequestHitDto} в сущность {@link Hit}.
      *
@@ -27,7 +31,7 @@ public class HitMapper {
      */
     public Hit toHit(RequestHitDto dto) {
         var parse = LocalDateTime.parse(dto.getTimestamp(),
-                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                        DateTimeFormatter.ofPattern(dateTimeFormat))
                 .atZone(ZoneId.systemDefault());
 
         return Hit.builder()
