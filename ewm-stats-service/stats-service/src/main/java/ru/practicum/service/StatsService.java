@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import ru.practicum.dto.RequestHitDto;
 import ru.practicum.dto.ResponseStatsDto;
 
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -23,10 +25,16 @@ public interface StatsService {
     @NoArgsConstructor
     @AllArgsConstructor
     class Params {
-        private String start;
-        private String end;
+        @NotNull(message = "Параметр start должен быть указан")
+        private LocalDateTime start;
+        @NotNull(message = "Параметр end должен быть указан")
+        private LocalDateTime end;
         private List<String> uris;
         private boolean unique;
+
+        {
+            unique = false;
+        }
     }
 }
 
