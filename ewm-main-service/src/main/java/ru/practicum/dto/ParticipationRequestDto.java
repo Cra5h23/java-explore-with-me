@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.dto.event.EventState;
 
 import java.time.LocalDateTime;
 
@@ -42,5 +41,5 @@ public class ParticipationRequestDto {
     /**
      * Статус заявки.
      */
-    private EventState status;
+    private EventRequestStatus status;
 }
