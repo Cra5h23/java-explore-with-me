@@ -11,10 +11,7 @@ import ru.practicum.model.Hit;
 import ru.practicum.repository.StatsRepository;
 import ru.practicum.service.StatsService;
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,8 +54,8 @@ public class StatsServiceImpl implements StatsService {
     public List<ResponseStatsDto> getStats(Params params) {
         log.info("Получение статистики с параметрами {}", params);
 
-        var start = toZoneDataTime(params.getStart());
-        var end = toZoneDataTime(params.getEnd());
+        var start = params.getStart().atZone(ZoneId.systemDefault());
+        var end = params.getEnd().atZone(ZoneId.systemDefault());
 
         if (params.isUnique()) {
             return repository.getUniqueCountHits(start, end, params.getUris())
@@ -71,10 +68,5 @@ public class StatsServiceImpl implements StatsService {
                     .map(mapper::toResponseStatsDto)
                     .collect(Collectors.toList());
         }
-    }
-
-    private ZonedDateTime toZoneDataTime(String time) {
-        return LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-                .atZone(ZoneId.systemDefault());
     }
 }
