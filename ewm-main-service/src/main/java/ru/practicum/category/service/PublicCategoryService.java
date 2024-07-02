@@ -9,7 +9,7 @@ import java.util.List;
  * @Date 22.06.2024
  */
 public interface PublicCategoryService {
-    List<CategoryDtoResponse> getCategories(long from, long size);
+    List<CategoryDtoResponse> getCategories(int from, int size);
 
     CategoryDtoResponse getCategory(Long catId);
 }
