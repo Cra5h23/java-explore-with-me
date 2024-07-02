@@ -7,6 +7,8 @@ package ru.practicum.dto;
  * @Date 22.06.2024
  */
 public enum EventRequestStatus {
+    PENDING,
+
     /**
      * Запрос подтверждён.
      */
@@ -15,5 +17,7 @@ public enum EventRequestStatus {
     /**
      * Запрос отклонён.
      */
-    REJECTED
+    REJECTED,
+
+    CANCELED
 }
