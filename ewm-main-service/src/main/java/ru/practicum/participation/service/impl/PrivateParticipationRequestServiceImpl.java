@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.EventRequestStatus;
-import ru.practicum.dto.ParticipationRequestDto;
+import ru.practicum.participation.dto.ParticipationRequestDto;
 import ru.practicum.dto.event.EventState;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.service.EventService;
