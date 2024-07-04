@@ -32,29 +32,24 @@ public class AdminCategoryController {
                 .status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(adminCategoryService.addCategory(category));
-
-        //todo должен быть 400 код когда не прошла валидацию дто, 409 код когда имя категории не уникально(добавить в бд то что поле name должно быть уникальным)
     }
 
-    @DeleteMapping("/{catId:\\d+}")
+    @DeleteMapping("/{catId}")
     public ResponseEntity<Object> deleteCategory(@PathVariable Long catId) {
         log.info("DELETE /admin/categories/{}", catId);
 
         adminCategoryService.deleteCategory(catId);
         return ResponseEntity.noContent().build();
-
-        //todo должен возвращать 404 когда категория не найдена и 409 когда с категорией связано хотя бы одно событие.
     }
 
-    @PatchMapping("/{catId:\\d+}")
-    public ResponseEntity<Object> updateCategory(@PathVariable Long catId, @RequestBody @Valid CategoryDtoRequest category) {
+    @PatchMapping("/{catId}")
+    public ResponseEntity<Object> updateCategory(@PathVariable Long catId,
+                                                 @RequestBody @Valid CategoryDtoRequest category) {
         log.info("PATCH /admin/categories/{} body={}", catId, category);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(adminCategoryService.updateCategory(catId, category));
-
-        //todo должен быть 400 код когда не прошлла валидацию дто, 409 код когда имя категории не уникально(добавить в бд то что поле name должно быть уникальным)
     }
 }
