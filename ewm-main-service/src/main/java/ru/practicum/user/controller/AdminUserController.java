@@ -36,7 +36,7 @@ public class AdminUserController {
             @Min(value = 1, message = "Параметр size не может быть меньше {value}")
             @Max(value = 100000, message = "Параметр size не может быть больше {value}") int size
     ) {
-        log.info("GET /admin/users?ids={}&from={}&size={}", ids, from, size);
+        log.info("Получен запрос: GET /admin/users?ids={}&from={}&size={}", ids, from, size);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -46,7 +46,7 @@ public class AdminUserController {
 
     @PostMapping
     public ResponseEntity<Object> addUser(@RequestBody @Valid NewUserRequest user) {
-        log.info("POST /admin/users body={}", user);
+        log.info("Получен запрос: POST /admin/users body={}", user);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -56,7 +56,7 @@ public class AdminUserController {
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Object> deleteUser(@PathVariable Long userId) {
-        log.info("DELETE /admin/users/{}", userId);
+        log.info("Получен запрос: DELETE /admin/users/{}", userId);
 
         adminUserService.deleteUser(userId);
         return ResponseEntity.noContent().build();
