@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @WebMvcTest(controllers = AdminUserController.class)
 @AutoConfigureMockMvc(printOnlyOnFailure = false)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class AdminUserControllerTest {
     @Autowired
     MockMvc mockMvc;
