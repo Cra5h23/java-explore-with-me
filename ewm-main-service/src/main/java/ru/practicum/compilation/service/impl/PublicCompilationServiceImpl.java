@@ -11,7 +11,7 @@ import ru.practicum.compilation.model.QCompilation;
 import ru.practicum.compilation.repository.CompilationRepository;
 import ru.practicum.compilation.service.CompilationService;
 import ru.practicum.compilation.service.PublicCompilationService;
-import ru.practicum.dto.compilation.CompilationDtoResponse;
+import ru.practicum.compilation.dto.CompilationDtoResponse;
 import ru.practicum.event.service.EventService;
 
 import java.util.HashMap;

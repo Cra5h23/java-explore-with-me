@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.compilation.service.AdminCompilationService;
-import ru.practicum.dto.compilation.NewCompilationDto;
-import ru.practicum.dto.compilation.UpdateCompilationRequest;
+import ru.practicum.compilation.dto.NewCompilationDto;
+import ru.practicum.compilation.dto.UpdateCompilationRequest;
 
 import javax.validation.Valid;
 
