@@ -41,20 +41,6 @@ public class HitMapper {
                 .build();
     }
 
-//    /**
-//     * Метод преобразования сущности {@link CountHits} в Dto {@link ResponseStatsDto}.
-//     *
-//     * @param hits данные о количестве посещений
-//     * @return объект {@link ResponseStatsDto}, содержащий данные количестве посещений.
-//     */
-//    public ResponseStatsDto toResponseStatsDto(CountHits hits) {
-//        return ResponseStatsDto.builder()
-//                .app(hits.getApp())
-//                .hits(hits.getCount())
-//                .uri(hits.getUri())
-//                .build();
-//    }
-
     public ResponseStatsDto toResponseStatsDto(CountHitProjection hits) {
         return ResponseStatsDto.builder()
                 .app(hits.getApp())
