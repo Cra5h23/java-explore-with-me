@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.compilation.dto.CompilationDtoResponse;
 import ru.practicum.compilation.dto.NewCompilationDto;
-import ru.practicum.dto.event.EventShortDto;
+import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.model.Event;
 
 import java.util.List;

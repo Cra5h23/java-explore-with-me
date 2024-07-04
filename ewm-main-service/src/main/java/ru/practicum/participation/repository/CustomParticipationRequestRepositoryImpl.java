@@ -1,7 +1,7 @@
 package ru.practicum.participation.repository;
 
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.dto.EventRequestStatus;
+import ru.practicum.event.dto.EventRequestStatus;
 import ru.practicum.exception.ConflictParticipationRequestException;
 import ru.practicum.participation.model.ParticipationRequest;
 

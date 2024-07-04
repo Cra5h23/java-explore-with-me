@@ -1,4 +1,4 @@
-package ru.practicum.dto.event;
+package ru.practicum.event.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
@@ -13,16 +13,14 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 /**
- * Dto для класса сущности событие. Используется при обновлении события.
- *
  * @author Nikolay Radzivon
- * @Date 20.06.2024
+ * @Date 22.06.2024
  */
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class UpdateEventUserRequest {
+public class UpdateEventAdminRequest {
     /**
      * Новое краткое описание события.
      */
@@ -32,17 +30,20 @@ public class UpdateEventUserRequest {
     /**
      * Новая категория события.
      */
+
     private Long category;
 
     /**
      * Новое полное описание события.
      */
+
     @Size(min = 20, max = 7000, message = "Полное описание должно быть не меньше {min} и не больше {max} символов")
     private String description;
 
     /**
      * Новая дата и время события.
      */
+
     @EventDate
     @JsonDeserialize(using = CustomLocalDateTimeDeserializer.class)
     private LocalDateTime eventDate;
@@ -50,11 +51,13 @@ public class UpdateEventUserRequest {
     /**
      * Новые координаты локации.
      */
+
     private Location location;
 
     /**
      * Новое значение флага платности мероприятия.
      */
+
     private Boolean paid;
 
     /**
@@ -66,18 +69,18 @@ public class UpdateEventUserRequest {
     /**
      * Новое значение флага нужна ли пре-модерация заявок на участие.
      */
+
     private Boolean requestModeration;
 
     /**
      * Изменение состояния события
      */
-    private StateReview stateAction;
+
+    private EventPublisedState stateAction;
 
     /**
      * Новый заголовок события.
      */
     @Size(min = 3, max = 120, message = "Новый заголовок не может быть меньше {min} и больше {max} символов")
     private String title;
-
-    //todo поиграть с группами валидации для полей которые могут быть нулл и должны валидироваться
 }

@@ -2,9 +2,9 @@ package ru.practicum.participation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.dto.EventRequestStatus;
-import ru.practicum.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.dto.EventRequestStatusUpdateResult;
+import ru.practicum.event.dto.EventRequestStatus;
+import ru.practicum.event.dto.EventRequestStatusUpdateRequest;
+import ru.practicum.event.dto.EventRequestStatusUpdateResult;
 import ru.practicum.participation.dto.ParticipationRequestDto;
 import ru.practicum.exception.NotFoundParticipationRequestException;
 import ru.practicum.participation.mapper.ParticipationRequestMapper;

@@ -1,4 +1,4 @@
-package ru.practicum.dto;
+package ru.practicum.event.dto;
 
 /**
  * Список статусов подтверждения запроса к событию.

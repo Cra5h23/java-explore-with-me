@@ -4,7 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Formula;
 import ru.practicum.category.model.Category;
-import ru.practicum.dto.event.EventState;
+import ru.practicum.event.dto.EventState;
 import ru.practicum.user.model.User;
 
 import javax.persistence.*;

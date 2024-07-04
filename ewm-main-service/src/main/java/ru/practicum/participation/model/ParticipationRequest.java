@@ -2,7 +2,7 @@ package ru.practicum.participation.model;
 
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
-import ru.practicum.dto.EventRequestStatus;
+import ru.practicum.event.dto.EventRequestStatus;
 import ru.practicum.event.model.Event;
 import ru.practicum.user.model.User;
 
