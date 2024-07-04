@@ -30,7 +30,7 @@ public class PublicCategoryController {
             @Min(value = 1, message = "Параметр size не может быть меньше 1")
             @Max(value = 100, message = "Параметр size не может быть больше 100") int size
     ) {
-        log.info("GET /categories?from={}&size={}", from, size);
+        log.info("Получен запрос: GET /categories?from={}&size={}", from, size);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -40,7 +40,7 @@ public class PublicCategoryController {
 
     @GetMapping("/{catId}")
     public ResponseEntity<Object> getCategory(@PathVariable Long catId) {
-        log.info("GET /categories/{}", catId);
+        log.info("Получен запрос: GET /categories/{}", catId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

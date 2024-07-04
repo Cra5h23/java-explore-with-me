@@ -26,7 +26,7 @@ public class AdminCategoryController {
 
     @PostMapping
     public ResponseEntity<Object> addCategory(@RequestBody @Valid CategoryDtoRequest category) {
-        log.info("POST /admin/categories body={}", category);
+        log.info("Получен запрос: POST /admin/categories body={}", category);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -36,7 +36,7 @@ public class AdminCategoryController {
 
     @DeleteMapping("/{catId}")
     public ResponseEntity<Object> deleteCategory(@PathVariable Long catId) {
-        log.info("DELETE /admin/categories/{}", catId);
+        log.info("Получен запрос: DELETE /admin/categories/{}", catId);
 
         adminCategoryService.deleteCategory(catId);
         return ResponseEntity.noContent().build();
@@ -45,7 +45,7 @@ public class AdminCategoryController {
     @PatchMapping("/{catId}")
     public ResponseEntity<Object> updateCategory(@PathVariable Long catId,
                                                  @RequestBody @Valid CategoryDtoRequest category) {
-        log.info("PATCH /admin/categories/{} body={}", catId, category);
+        log.info("Получен запрос: PATCH /admin/categories/{} body={}", catId, category);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

@@ -24,7 +24,7 @@ public class PublicCompilationController {
             @RequestParam(required = false, defaultValue = "0") int from,
             @RequestParam(required = false, defaultValue = "10") int size
     ) {
-        log.info("GET /compilations?pinned={}&from={}&size={}", pinned, from, size);
+        log.info("Получен запрос: GET /compilations?pinned={}&from={}&size={}", pinned, from, size);
 
         return ResponseEntity
                 .ok()
@@ -34,7 +34,7 @@ public class PublicCompilationController {
 
     @GetMapping("/{compId}")
     public ResponseEntity<Object> getCompilation(@PathVariable Long compId) {
-        log.info("GET /compilations/{}", compId);
+        log.info("Получен запрос: GET /compilations/{}", compId);
 
         return ResponseEntity
                 .ok()
