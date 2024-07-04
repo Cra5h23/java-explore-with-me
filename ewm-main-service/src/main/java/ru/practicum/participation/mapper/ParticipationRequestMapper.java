@@ -2,7 +2,7 @@ package ru.practicum.participation.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.dto.EventRequestStatus;
-import ru.practicum.dto.ParticipationRequestDto;
+import ru.practicum.participation.dto.ParticipationRequestDto;
 import ru.practicum.event.model.Event;
 import ru.practicum.participation.model.ParticipationRequest;
 import ru.practicum.user.model.User;

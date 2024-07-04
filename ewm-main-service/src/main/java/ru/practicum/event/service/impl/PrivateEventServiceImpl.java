@@ -9,7 +9,7 @@ import ru.practicum.category.model.Category;
 import ru.practicum.category.service.CategoryService;
 import ru.practicum.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.EventRequestStatusUpdateResult;
-import ru.practicum.dto.ParticipationRequestDto;
+import ru.practicum.participation.dto.ParticipationRequestDto;
 import ru.practicum.dto.event.*;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.repository.EventRepository;

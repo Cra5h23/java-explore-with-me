@@ -2,7 +2,7 @@ package ru.practicum.event.service;
 
 import ru.practicum.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.EventRequestStatusUpdateResult;
-import ru.practicum.dto.ParticipationRequestDto;
+import ru.practicum.participation.dto.ParticipationRequestDto;
 import ru.practicum.dto.event.EventDtoRequest;
 import ru.practicum.dto.event.EventFullDtoResponse;
 import ru.practicum.dto.event.EventShortDto;

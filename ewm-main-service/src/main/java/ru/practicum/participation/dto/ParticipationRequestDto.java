@@ -1,9 +1,10 @@
-package ru.practicum.dto;
+package ru.practicum.participation.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.dto.EventRequestStatus;
 
 import java.time.LocalDateTime;
 
