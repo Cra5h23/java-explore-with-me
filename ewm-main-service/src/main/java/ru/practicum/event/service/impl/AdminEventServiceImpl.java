@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.model.Category;
 import ru.practicum.event.dto.EventFullDtoResponse;
 import ru.practicum.event.dto.EventPublishedState;
@@ -47,6 +48,7 @@ public class AdminEventServiceImpl implements AdminEventService {
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public List<EventFullDtoResponse> getEvents(GetEventsParams params) {
         if (params == null) {
             return List.of();
@@ -114,6 +116,7 @@ public class AdminEventServiceImpl implements AdminEventService {
      * @return
      */
     @Override
+    @Transactional
     public EventFullDtoResponse updateEvent(Long eventId, UpdateEventAdminRequest event) {
         log.info("Попытка обновить событие с id {}, новые данные {}", eventId, event);
         var updatedEvent = eventService.checkEvent(eventId);
