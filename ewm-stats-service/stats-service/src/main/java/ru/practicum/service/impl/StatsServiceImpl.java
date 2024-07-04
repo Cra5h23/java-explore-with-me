@@ -11,7 +11,6 @@ import ru.practicum.model.Hit;
 import ru.practicum.repository.StatsRepository;
 import ru.practicum.service.StatsService;
 
-import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,19 +53,24 @@ public class StatsServiceImpl implements StatsService {
     public List<ResponseStatsDto> getStats(Params params) {
         log.info("Получение статистики с параметрами {}", params);
 
-        var start = params.getStart().atZone(ZoneId.systemDefault());
-        var end = params.getEnd().atZone(ZoneId.systemDefault());
+//        var start = params.getStart().atZone(ZoneId.systemDefault());
+//        var end = params.getEnd().atZone(ZoneId.systemDefault());
+//
+//        if (params.isUnique()) {
+//            return repository.getUniqueCountHits(start, end, params.getUris())
+//                    .stream()
+//                    .map(mapper::toResponseStatsDto)
+//                    .collect(Collectors.toList());
+//        } else {
+//            return repository.getCountHits(start, end, params.getUris())
+//                    .stream()
+//                    .map(mapper::toResponseStatsDto)
+//                    .collect(Collectors.toList());
+//        }
 
-        if (params.isUnique()) {
-            return repository.getUniqueCountHits(start, end, params.getUris())
-                    .stream()
-                    .map(mapper::toResponseStatsDto)
-                    .collect(Collectors.toList());
-        } else {
-            return repository.getCountHits(start, end, params.getUris())
-                    .stream()
-                    .map(mapper::toResponseStatsDto)
-                    .collect(Collectors.toList());
-        }
+        return repository.getCountHit(params)
+                .stream()
+                .map(mapper::toResponseStatsDto)
+                .collect(Collectors.toList());
     }
 }
