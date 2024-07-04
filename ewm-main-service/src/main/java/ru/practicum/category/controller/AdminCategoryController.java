@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.category.service.AdminCategoryService;
-import ru.practicum.dto.category.CategoryDtoRequest;
+import ru.practicum.category.dto.CategoryDtoRequest;
 
 import javax.validation.Valid;
 

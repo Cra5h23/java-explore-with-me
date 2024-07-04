@@ -8,8 +8,8 @@ import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.category.service.AdminCategoryService;
 import ru.practicum.category.service.CategoryService;
-import ru.practicum.dto.category.CategoryDtoRequest;
-import ru.practicum.dto.category.CategoryDtoResponse;
+import ru.practicum.category.dto.CategoryDtoRequest;
+import ru.practicum.category.dto.CategoryDtoResponse;
 
 /**
  * Сервис для управления категориями от имени администратора.

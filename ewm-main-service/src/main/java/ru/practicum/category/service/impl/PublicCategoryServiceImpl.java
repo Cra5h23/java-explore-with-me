@@ -9,7 +9,7 @@ import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.category.service.CategoryService;
 import ru.practicum.category.service.PublicCategoryService;
-import ru.practicum.dto.category.CategoryDtoResponse;
+import ru.practicum.category.dto.CategoryDtoResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;

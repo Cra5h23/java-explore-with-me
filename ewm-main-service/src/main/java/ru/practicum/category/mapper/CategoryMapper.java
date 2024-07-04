@@ -2,8 +2,8 @@ package ru.practicum.category.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.category.model.Category;
-import ru.practicum.dto.category.CategoryDtoRequest;
-import ru.practicum.dto.category.CategoryDtoResponse;
+import ru.practicum.category.dto.CategoryDtoRequest;
+import ru.practicum.category.dto.CategoryDtoResponse;
 
 /**
  * @author Nikolay Radzivon
