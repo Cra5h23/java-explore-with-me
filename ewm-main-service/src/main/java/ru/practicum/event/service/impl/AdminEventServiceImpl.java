@@ -118,7 +118,6 @@ public class AdminEventServiceImpl implements AdminEventService {
         var updatedEvent = eventService.checkEvent(eventId);
         var stateAction = event.getStateAction();
 
-
         if (stateAction != null) {
             var eventState = updatedEvent.getState();
 
@@ -153,7 +152,7 @@ public class AdminEventServiceImpl implements AdminEventService {
             updatedEvent.setAnnotation(event.getAnnotation());
         }
 
-        if (event.getCategory() != null && !updatedEvent.getCategory().equals(event.getCategory())) {
+        if (event.getCategory() != null && !updatedEvent.getCategory().getId().equals(event.getCategory())) {
             updatedEvent.setCategory(Category.builder()
                     .id(event.getCategory())
                     .build());
@@ -163,7 +162,7 @@ public class AdminEventServiceImpl implements AdminEventService {
             updatedEvent.setDescription(event.getDescription());
         }
 
-        if (event.getEventDate() != null && !updatedEvent.getEventDate().equals(event.getEventDate())) {
+        if (event.getEventDate() != null) {
             updatedEvent.setEventDate(event.getEventDate().atZone(ZoneId.systemDefault()));
         }
 
