@@ -1,6 +1,7 @@
 package ru.practicum.event.model;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -16,7 +17,11 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Table(name = "locations")
+@DynamicUpdate
 public class Location {
+    /**
+     * Идентификационный номер локации проведения события.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
