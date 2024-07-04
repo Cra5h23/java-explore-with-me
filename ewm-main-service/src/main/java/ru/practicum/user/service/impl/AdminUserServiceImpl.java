@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.user.dto.NewUserRequest;
 import ru.practicum.user.dto.UserDtoResponse;
 import ru.practicum.user.mapper.UserMapper;
@@ -33,6 +34,7 @@ public class AdminUserServiceImpl implements AdminUserService {
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public List<UserDtoResponse> getUsers(List<Long> ids, int from, int size) {
         var page = PageRequest.of(from < 0 ? from / size : 0, size);
         log.info("Запрошен список пользователей с параметрами ids={}, from={}, size={}", ids, from, size);
@@ -55,6 +57,7 @@ public class AdminUserServiceImpl implements AdminUserService {
      * @return
      */
     @Override
+    @Transactional
     public UserDtoResponse addUser(NewUserRequest user) {
         var u = userMapper.toUser(user);
         var save = userRepository.save(u);
@@ -67,6 +70,7 @@ public class AdminUserServiceImpl implements AdminUserService {
      * @param userId
      */
     @Override
+    @Transactional
     public void deleteUser(Long userId) {
         var user = userChecker.checkUser(userId);
 
