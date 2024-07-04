@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.dto.RequestHitDto;
 import ru.practicum.dto.ResponseStatsDto;
 import ru.practicum.model.Hit;
+import ru.practicum.repository.projection.CountHitProjection;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -49,6 +50,14 @@ public class HitMapper {
      * @return объект {@link ResponseStatsDto}, содержащий данные количестве посещений.
      */
     public ResponseStatsDto toResponseStatsDto(CountHits hits) {
+        return ResponseStatsDto.builder()
+                .app(hits.getApp())
+                .hits(hits.getCount())
+                .uri(hits.getUri())
+                .build();
+    }
+
+    public ResponseStatsDto toResponseStatsDto(CountHitProjection hits) {
         return ResponseStatsDto.builder()
                 .app(hits.getApp())
                 .hits(hits.getCount())
