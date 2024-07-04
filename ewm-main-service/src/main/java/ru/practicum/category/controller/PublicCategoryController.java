@@ -36,23 +36,15 @@ public class PublicCategoryController {
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(publicCategoryService.getCategories(from, size));
-
-        // todo В случае, если по заданным фильтрам не найдено ни одной категории, возвращает пустой список
-        //  400 код если запрос составлен некорректно.
     }
 
     @GetMapping("/{catId}")
-    public ResponseEntity<Object> getCategory(
-            @PathVariable Long catId
-    ) {
+    public ResponseEntity<Object> getCategory(@PathVariable Long catId) {
         log.info("GET /categories/{}", catId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(publicCategoryService.getCategory(catId));
-
-        // todo В случае, если категории с заданным id не найдено, возвращает статус код 404, 400
-        //  Запрос составлен некорректно
     }
 }
