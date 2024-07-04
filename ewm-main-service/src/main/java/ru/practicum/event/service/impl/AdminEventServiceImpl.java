@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.category.model.Category;
 import ru.practicum.event.dto.EventFullDtoResponse;
-import ru.practicum.event.dto.EventPublisedState;
+import ru.practicum.event.dto.EventPublishedState;
 import ru.practicum.event.dto.EventState;
 import ru.practicum.event.dto.UpdateEventAdminRequest;
 import ru.practicum.event.mapper.EventMapper;
@@ -121,17 +121,17 @@ public class AdminEventServiceImpl implements AdminEventService {
         if (stateAction != null) {
             var eventState = updatedEvent.getState();
 
-            if (eventState.equals(EventState.PUBLISHED) && stateAction.equals(EventPublisedState.PUBLISH_EVENT)) {
+            if (eventState.equals(EventState.PUBLISHED) && stateAction.equals(EventPublishedState.PUBLISH_EVENT)) {
                 throw new ConflictEventException(String.format(
                         "Нельзя опубликовать событие, событие с id %d уже опубликовано", eventId));
             }
 
-            if (eventState.equals(EventState.CANCELED) && stateAction.equals(EventPublisedState.PUBLISH_EVENT)) {
+            if (eventState.equals(EventState.CANCELED) && stateAction.equals(EventPublishedState.PUBLISH_EVENT)) {
                 throw new ConflictEventException(String.format(
                         "Нельзя опубликовать событие, событие с id %d отменено", eventId));
             }
 
-            if (eventState.equals(EventState.PUBLISHED) && stateAction.equals(EventPublisedState.REJECT_EVENT)) {
+            if (eventState.equals(EventState.PUBLISHED) && stateAction.equals(EventPublishedState.REJECT_EVENT)) {
                 throw new ConflictEventException(String.format(
                         "Нельзя отменить событие, событие с id %d опубликовано", eventId));
             }
