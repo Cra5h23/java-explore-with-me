@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.dto.EventFullDtoResponse;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.EventState;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PublicEventServiceImpl implements PublicEventService {
     private final EventRepository eventRepository;
     private final EventService eventService;
@@ -45,6 +47,7 @@ public class PublicEventServiceImpl implements PublicEventService {
      */
     @Override
     public List<EventShortDto> getEvents(GetEventsParams params, HttpServletRequest request) {
+        log.info("Запрос списка событий с параметрами поиска {}", params);
         var query = QEvent.event.state.eq(EventState.PUBLISHED);
         var text = params.getText();
         var categories = params.getCategories();
@@ -97,7 +100,6 @@ public class PublicEventServiceImpl implements PublicEventService {
                 .peek(e -> uris.add(URI_PATCH + e.getId()))
                 .collect(Collectors.toList());
 
-//        eventService.saveStats(request, uris, APP_NAME);
         Map<Long, Long> views = Map.of();
         if (rangeStart != null && rangeEnd != null) {
             views = eventService.getViews(rangeStart, rangeEnd, uris);
@@ -128,11 +130,10 @@ public class PublicEventServiceImpl implements PublicEventService {
      */
     @Override
     public EventFullDtoResponse getEvent(Long id, HttpServletRequest request) {
+        log.info("Запрос события с id {}", id);
         var event = eventService.checkEvent(id);
 
         if (event.getState().equals(EventState.PUBLISHED)) {
-            //  eventService.saveStats(request, URI_PATCH + id, APP_NAME);
-
             long views = eventService.getViews(event.getPublishedOn().toLocalDateTime(), LocalDateTime.now(), URI_PATCH + id);
             eventService.saveStats(request, URI_PATCH + id, APP_NAME);
             return eventMapper.toEventFullDtoResponse(event, views);
