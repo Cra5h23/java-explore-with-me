@@ -2,7 +2,7 @@ package ru.practicum.event.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.category.model.Category;
-import ru.practicum.dto.category.CategoryDtoResponse;
+import ru.practicum.category.dto.CategoryDtoResponse;
 import ru.practicum.dto.event.EventDtoRequest;
 import ru.practicum.dto.event.EventFullDtoResponse;
 import ru.practicum.dto.event.EventShortDto;
