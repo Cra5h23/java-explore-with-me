@@ -52,8 +52,8 @@ public class AdminEventServiceImpl implements AdminEventService {
             return List.of();
         }
 
+        log.info("Запрошен список событий с параметрами поиска {}", params);
         BooleanExpression query = Expressions.asBoolean(true).isTrue();
-        ;
 
         var users = params.getUsers();
         if (users != null) {
@@ -115,7 +115,9 @@ public class AdminEventServiceImpl implements AdminEventService {
      */
     @Override
     public EventFullDtoResponse updateEvent(Long eventId, UpdateEventAdminRequest event) {
+        log.info("Попытка обновить событие с id {}, новые данные {}", eventId, event);
         var updatedEvent = eventService.checkEvent(eventId);
+        log.info("Старые данные {}", updatedEvent);
         var stateAction = event.getStateAction();
 
         if (stateAction != null) {
@@ -146,7 +148,6 @@ public class AdminEventServiceImpl implements AdminEventService {
                     break;
             }
         }
-
 
         if (event.getAnnotation() != null && !updatedEvent.getAnnotation().equals(event.getAnnotation())) {
             updatedEvent.setAnnotation(event.getAnnotation());
