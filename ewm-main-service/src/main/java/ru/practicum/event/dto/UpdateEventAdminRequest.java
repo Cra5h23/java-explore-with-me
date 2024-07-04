@@ -30,20 +30,17 @@ public class UpdateEventAdminRequest {
     /**
      * Новая категория события.
      */
-
     private Long category;
 
     /**
      * Новое полное описание события.
      */
-
     @Size(min = 20, max = 7000, message = "Полное описание должно быть не меньше {min} и не больше {max} символов")
     private String description;
 
     /**
      * Новая дата и время события.
      */
-
     @EventDate
     @JsonDeserialize(using = CustomLocalDateTimeDeserializer.class)
     private LocalDateTime eventDate;
@@ -51,13 +48,11 @@ public class UpdateEventAdminRequest {
     /**
      * Новые координаты локации.
      */
-
     private Location location;
 
     /**
      * Новое значение флага платности мероприятия.
      */
-
     private Boolean paid;
 
     /**
@@ -69,14 +64,12 @@ public class UpdateEventAdminRequest {
     /**
      * Новое значение флага нужна ли пре-модерация заявок на участие.
      */
-
     private Boolean requestModeration;
 
     /**
      * Изменение состояния события
      */
-
-    private EventPublisedState stateAction;
+    private EventPublishedState stateAction;
 
     /**
      * Новый заголовок события.
