@@ -78,6 +78,4 @@ public class UpdateEventUserRequest {
      */
     @Size(min = 3, max = 120, message = "Новый заголовок не может быть меньше {min} и больше {max} символов")
     private String title;
-
-    //todo поиграть с группами валидации для полей которые могут быть нулл и должны валидироваться
 }
