@@ -55,7 +55,6 @@ class RequestHitDtoJsonTest {
         assertThat(dto.getIp()).isEqualTo("192.163.0.1");
         assertThat(dto.getTimestamp()).isEqualTo("2022-09-06 11:00:23");
         assertThat(dto.getUri()).isEqualTo("/events/1");
-
         assertThat(dto.getClass()).isEqualTo(RequestHitDto.class);
     }
 
