@@ -1,6 +1,5 @@
 package ru.practicum.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,14 +14,11 @@ import java.time.LocalDateTime;
  */
 @Configuration
 public class JacksonConfig {
-    @Value("${datetime.format}")
-    private String dataTimeFormat;
-
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
         return builder -> {
-            builder.deserializerByType(LocalDateTime.class, new CustomLocalDateTimeDeserializer(dataTimeFormat));
-            builder.serializerByType(LocalDateTime.class, new CustomLocalDateTimeSerializer(dataTimeFormat));
+            builder.deserializerByType(LocalDateTime.class, new CustomLocalDateTimeDeserializer());
+            builder.serializerByType(LocalDateTime.class, new CustomLocalDateTimeSerializer());
         };
     }
 }

@@ -10,15 +10,9 @@ import java.time.format.DateTimeFormatter;
  * @Date 28.06.2024
  */
 public class CustomStringToLocalDateTimeConverter implements Converter<String, LocalDateTime> {
-    private final DateTimeFormatter formatter;
-
-    public CustomStringToLocalDateTimeConverter(String dateTimeFormat) {
-        this.formatter = DateTimeFormatter.ofPattern(dateTimeFormat);
-    }
-
     @Override
     public LocalDateTime convert(String source) {
-        return LocalDateTime.parse(source, formatter);
+        return LocalDateTime.parse(source, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }
 

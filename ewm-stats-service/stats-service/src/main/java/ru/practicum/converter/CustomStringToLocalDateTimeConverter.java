@@ -2,6 +2,8 @@ package ru.practicum.converter;
 
 import org.springframework.core.convert.converter.Converter;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -10,14 +12,10 @@ import java.time.format.DateTimeFormatter;
  * @Date 02.07.2024
  */
 public class CustomStringToLocalDateTimeConverter implements Converter<String, LocalDateTime> {
-    private final DateTimeFormatter formatter;
-
-    public CustomStringToLocalDateTimeConverter(String dateTimeFormat) {
-        this.formatter = DateTimeFormatter.ofPattern(dateTimeFormat);
-    }
-
     @Override
     public LocalDateTime convert(String source) {
-        return LocalDateTime.parse(source, formatter);
+        var decode = URLDecoder.decode(source, StandardCharsets.UTF_8);
+
+        return LocalDateTime.parse(decode, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }
