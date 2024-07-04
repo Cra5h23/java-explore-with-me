@@ -11,7 +11,6 @@ import ru.practicum.client.StatsClient;
 import ru.practicum.dto.RequestHitDto;
 import ru.practicum.dto.ResponseStatsDto;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -48,7 +47,8 @@ public class StatsClientImpl extends RestTemplate implements StatsClient {
     }
 
     @Override
-    public ResponseEntity<List<ResponseStatsDto>> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+    public ResponseEntity<List<ResponseStatsDto>> getStats(LocalDateTime start, LocalDateTime end,
+                                                           List<String> uris, Boolean unique) {
         log.info("start = {}, end={}, uris ={}, unique = {}", start, end, uris, unique);
 
         var url = new StringBuilder(ewmStatsServiceUrl + "/stats?");
@@ -63,8 +63,6 @@ public class StatsClientImpl extends RestTemplate implements StatsClient {
         }
 
         if (end != null) {
-//            var endEncode = URLEncoder.encode(end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-//                    StandardCharsets.UTF_8);
             var endEncode = URLEncoder.encode(end.format(DateTimeFormatter.ofPattern(dateTimeFormat)),
                     StandardCharsets.UTF_8);
             uriVariables.put("end", endEncode);
@@ -80,25 +78,12 @@ public class StatsClientImpl extends RestTemplate implements StatsClient {
             uriVariables.put("unique", unique);
             url.append("&unique={unique}");
         }
-        log.info("Создан запрос: GET {}/stats?start={}&end={}&uris={}&unique={}", ewmStatsServiceUrl,
-                uriVariables.get("start"), uriVariables.get("end"), uriVariables.get("uris"), uriVariables.get("unique"));
+        log.info("Создан запрос: GET {}/stats?start={}&end={}&uris={}&unique={}",
+                ewmStatsServiceUrl, uriVariables.get("start"), uriVariables.get("end"),
+                uriVariables.get("uris"), uriVariables.get("unique"));
 
         return exchange(url.toString(), HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<ResponseStatsDto>>() {
                 }, uriVariables);
-    }
-
-    private RequestHitDto makeDto(HttpServletRequest request, String appName) {
-        var requestURI = request.getRequestURI();
-        var remoteAddr = request.getRemoteAddr();
-        var timestamp = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-
-        return RequestHitDto.builder()
-                .ip(remoteAddr)
-                .uri(requestURI)
-                .app(appName)
-                .timestamp(timestamp)
-                .build();
     }
 }
