@@ -1,16 +1,16 @@
 package ru.practicum.event.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.category.model.Category;
 import ru.practicum.category.dto.CategoryDtoResponse;
+import ru.practicum.category.model.Category;
 import ru.practicum.event.dto.EventDtoRequest;
 import ru.practicum.event.dto.EventFullDtoResponse;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.EventState;
-import ru.practicum.user.dto.UserShortDto;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.Location;
 import ru.practicum.event.repository.EventRepository;
+import ru.practicum.user.dto.UserShortDto;
 import ru.practicum.user.model.User;
 
 import java.time.ZoneId;
