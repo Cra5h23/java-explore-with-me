@@ -3,6 +3,7 @@ package ru.practicum.category.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.category.service.AdminCategoryService;
@@ -11,20 +12,25 @@ import ru.practicum.dto.category.CategoryDtoRequest;
 import ru.practicum.dto.category.CategoryDtoResponse;
 
 /**
+ * Сервис для управления категориями от имени администратора.
+ *
  * @author Nikolay Radzivon
  * @Date 20.06.2024
  */
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class AdminCategoryServiceImpl implements AdminCategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
     private final CategoryService categoryChecker;
 
     /**
-     * @param dto
-     * @return
+     * Метод добавления новой категории на основе переданного DTO.
+     *
+     * @param dto DTO категории для добавления
+     * @return DTO ответа с данными добавленной категории
      */
     @Override
     public CategoryDtoResponse addCategory(CategoryDtoRequest dto) {
@@ -36,7 +42,9 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     }
 
     /**
-     * @param catId
+     * Метод удаления категорию по идентификационному номеру.
+     *
+     * @param catId Идентификационный номер категории для удаления
      */
     @Override
     public void deleteCategory(Long catId) {
@@ -47,9 +55,11 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     }
 
     /**
-     * @param catId
-     * @param dto
-     * @return
+     * Метод обновления данных категории на основе переданного DTO.
+     *
+     * @param catId Идентификационный номер категории для обновления
+     * @param dto   DTO категории с новыми данными
+     * @return DTO ответа с обновленными данными категории
      */
     @Override
     public CategoryDtoResponse updateCategory(Long catId, CategoryDtoRequest dto) {

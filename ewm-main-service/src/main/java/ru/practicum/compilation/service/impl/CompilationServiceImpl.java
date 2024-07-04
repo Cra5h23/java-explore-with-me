@@ -25,6 +25,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public Compilation checkCompilation(Long compId) {
+        log.info("Проверка на то что подборка событий с id {} существует", compId);
         return compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundCompilationException(
                         String.format("Подборка событий с id %d не найдена или не доступна", compId)));

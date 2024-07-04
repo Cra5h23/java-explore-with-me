@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.compilation.mapper.CompilationMapper;
 import ru.practicum.compilation.model.QCompilation;
 import ru.practicum.compilation.repository.CompilationRepository;
@@ -38,7 +39,9 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public List<CompilationDtoResponse> getCompilations(Boolean pinned, int from, int size) {
+        log.info("Запрошен список подборок событий с параметрами поиска pinned={}, from={}, size={}", pinned, from, size);
         var query = Expressions.asBoolean(true).isTrue();
         var page = PageRequest.of(from / size, size);
         Map<Long, List<Long>> compilationsEvents = new HashMap<>();
@@ -60,7 +63,9 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public CompilationDtoResponse getCompilation(Long compId) {
+        log.info("Запрошена подборка событий с id {}", compId);
         var compilation = compilationService.checkCompilation(compId);
         var eventIds = compilationService.getEventIds(compilation.getEvents());
         var events = eventService.getEvents(eventIds);

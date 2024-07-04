@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.category.service.CategoryService;
@@ -32,6 +33,7 @@ public class PublicCategoryServiceImpl implements PublicCategoryService {
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public List<CategoryDtoResponse> getCategories(int from, int size) {
         var page = PageRequest.of(from / size, size);
         log.info("Запрошен список всех категорий с параметрами запроса from={} size={}", from, size);
@@ -47,6 +49,7 @@ public class PublicCategoryServiceImpl implements PublicCategoryService {
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public CategoryDtoResponse getCategory(Long catId) {
         log.info("Запрошена категория с id {}", catId);
         var category = categoryChecker.checkCategory(catId);
