@@ -50,8 +50,6 @@ public class StatsController {
     public ResponseEntity<?> getStats(@ModelAttribute @Valid StatsService.Params params) {
         log.info("GET /stats?start={}&end={}&uris={}&unique={}", params.getStart(), params.getEnd(),
                 params.getUris(), params.isUnique());
-//        var startDecode = URLDecoder.decode(start, StandardCharsets.UTF_8);
-//        var endDecode = URLDecoder.decode(end, StandardCharsets.UTF_8);
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
