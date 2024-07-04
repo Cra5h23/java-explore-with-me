@@ -178,7 +178,6 @@ class AdminUserControllerTest {
                 .post("/admin/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
-                        // "  \"email\": \"ivan.petrov@practicummail.ru\",\n" +
                         "  \"name\": \"Иван Петров\"\n" +
                         "}");
 
@@ -207,8 +206,7 @@ class AdminUserControllerTest {
                 content().contentType(MediaType.APPLICATION_JSON),
                 jsonPath("reason").value("Bad Request"),
                 jsonPath("status").value("BAD_REQUEST"),
-                //todo сделать
-                //  jsonPath("message").value("Validation failed for argument [0] in public org.springframework.http.ResponseEntity<java.lang.Object> ru.practicum.user.controller.AdminUserController.addUser(ru.practicum.dto.user.NewUserRequest): [Field error in object 'newUserRequest' on field 'email': rejected value [ivan.petrovpracticummail.ru]; codes [Email.newUserRequest.email,Email.email,Email.java.lang.String,Email]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [newUserRequest.email,email]; arguments []; default message [email],[Ljavax.validation.constraints.Pattern$Flag;@69ffdaa8,.*]; default message [must be a well-formed email address]] "),
+                jsonPath("message").exists(),
                 jsonPath("timestamp").exists());
     }
 
@@ -231,7 +229,52 @@ class AdminUserControllerTest {
                 jsonPath("timestamp").exists());
     }
 
-    //todo добавить тест когда email больше 254 символов
+    @Test
+    void addUserTestNotValidName251() throws Exception {
+        String nameWith255Chars = "a".repeat(251);
+
+        var request = MockMvcRequestBuilders
+                .post("/admin/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "  \"email\": \"ivan.petrovpracticummail.ru\",\n" +
+                        "  \"name\": \"" + nameWith255Chars + "\"\n" +
+                        "}");
+
+        this.mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                content().contentType(MediaType.APPLICATION_JSON),
+                jsonPath("reason").value("Bad Request"),
+                jsonPath("status").value("BAD_REQUEST"),
+                jsonPath("message").exists(),
+                jsonPath("timestamp").exists());
+    }
+
+
+    @Test
+    void addUserTestNotValidEmail255() throws Exception {
+        StringBuilder emailWith255Chars = new StringBuilder("ivan");
+        String s = "a".repeat(242);
+        emailWith255Chars.append(s);
+        emailWith255Chars.append("@test.com");
+
+        var request = MockMvcRequestBuilders
+                .post("/admin/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "  \"email\": \"" + emailWith255Chars + "\",\n" +
+                        "  \"name\": \"Иван Петров\"\n" +
+                        "}");
+
+        this.mockMvc.perform(request).andExpectAll(
+                status().isBadRequest(),
+                content().contentType(MediaType.APPLICATION_JSON),
+                jsonPath("reason").value("Bad Request"),
+                jsonPath("status").value("BAD_REQUEST"),
+                jsonPath("message").exists(),
+                jsonPath("timestamp").exists());
+    }
+
     @Test
     void addUserTestNotValidEmailDuplicate() throws Exception {
         var request = MockMvcRequestBuilders
@@ -296,7 +339,7 @@ class AdminUserControllerTest {
                 jsonPath("message").value("Validation failed for argument [0] in public org.springframework.http.ResponseEntity<java.lang.Object> ru.practicum.user.controller.AdminUserController.addUser(ru.practicum.dto.user.NewUserRequest): [Field error in object 'newUserRequest' on field 'name': rejected value [a]; codes [Size.newUserRequest.name,Size.name,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [newUserRequest.name,name]; arguments []; default message [name],250,2]; default message [Имя пользователя не может быть меньше 2 и больше 250 символов]] "),
                 jsonPath("timestamp").exists());
     }
-//todo добавить тест когда имя больше 250 символов
+
 
     @Test
     void deleteUserValid() throws Exception {
