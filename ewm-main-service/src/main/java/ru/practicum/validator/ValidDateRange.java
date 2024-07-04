@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = DateRangeValidator.class)
+@Constraint(validatedBy = {PublicGetEventParamsDateRangeValidator.class, AdminGetEventParamsDataRangeValidator.class})
 public @interface ValidDateRange {
     String message() default "Дата окончания поиска должна быть позже даты начала поиска";
 
