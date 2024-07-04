@@ -30,11 +30,8 @@ public interface StatsService {
         @NotNull(message = "Параметр end должен быть указан")
         private LocalDateTime end;
         private List<String> uris;
-        private boolean unique;
-
-        {
-            unique = false;
-        }
+        @Builder.Default
+        private boolean unique = false;
     }
 }
 
