@@ -2,9 +2,9 @@ package ru.practicum.event.service;
 
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.dto.event.EventFullDtoResponse;
-import ru.practicum.dto.event.EventState;
-import ru.practicum.dto.event.UpdateEventAdminRequest;
+import ru.practicum.event.dto.EventFullDtoResponse;
+import ru.practicum.event.dto.EventState;
+import ru.practicum.event.dto.UpdateEventAdminRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;

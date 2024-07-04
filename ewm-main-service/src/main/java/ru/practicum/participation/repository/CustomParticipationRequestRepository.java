@@ -1,6 +1,6 @@
 package ru.practicum.participation.repository;
 
-import ru.practicum.dto.EventRequestStatus;
+import ru.practicum.event.dto.EventRequestStatus;
 
 import java.util.List;
 

@@ -11,7 +11,7 @@ import ru.practicum.compilation.service.CompilationService;
 import ru.practicum.compilation.dto.CompilationDtoResponse;
 import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.dto.UpdateCompilationRequest;
-import ru.practicum.dto.event.EventShortDto;
+import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.service.EventService;
 

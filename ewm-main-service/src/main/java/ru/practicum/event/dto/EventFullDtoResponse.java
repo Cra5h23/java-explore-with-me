@@ -1,4 +1,4 @@
-package ru.practicum.dto.event;
+package ru.practicum.event.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;

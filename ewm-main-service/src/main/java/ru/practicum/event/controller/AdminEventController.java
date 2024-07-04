@@ -7,8 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.event.EventState;
-import ru.practicum.dto.event.UpdateEventAdminRequest;
+import ru.practicum.event.dto.EventState;
+import ru.practicum.event.dto.UpdateEventAdminRequest;
 import ru.practicum.event.service.AdminEventService;
 
 import javax.validation.Valid;

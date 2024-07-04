@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.dto.event.EventFullDtoResponse;
-import ru.practicum.dto.event.EventShortDto;
-import ru.practicum.dto.event.EventSort;
+import ru.practicum.event.dto.EventFullDtoResponse;
+import ru.practicum.event.dto.EventShortDto;
+import ru.practicum.event.dto.EventSort;
 import ru.practicum.validator.ValidDateRange;
 
 import javax.servlet.http.HttpServletRequest;

@@ -3,10 +3,10 @@ package ru.practicum.event.mapper;
 import org.springframework.stereotype.Component;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.dto.CategoryDtoResponse;
-import ru.practicum.dto.event.EventDtoRequest;
-import ru.practicum.dto.event.EventFullDtoResponse;
-import ru.practicum.dto.event.EventShortDto;
-import ru.practicum.dto.event.EventState;
+import ru.practicum.event.dto.EventDtoRequest;
+import ru.practicum.event.dto.EventFullDtoResponse;
+import ru.practicum.event.dto.EventShortDto;
+import ru.practicum.event.dto.EventState;
 import ru.practicum.user.dto.UserShortDto;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.Location;
@@ -49,7 +49,7 @@ public class EventMapper {
 
     public EventFullDtoResponse toEventFullDtoResponse(Event event, long views) {
         return EventFullDtoResponse.builder()
-                .location(ru.practicum.dto.event.Location.builder()
+                .location(ru.practicum.event.dto.Location.builder()
                         .lat(event.getLocation().getLat())
                         .lon(event.getLocation().getLon())
                         .build())
