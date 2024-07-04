@@ -44,10 +44,5 @@ public interface PublicEventService {
         @Max(value = 1000, message = "Параметр size не может быть больше {value}")
         @Builder.Default
         private int size = 10;
-
-//        {
-//            this.from = 0;
-//            this.size = 10;
-//        }
     }
 }
