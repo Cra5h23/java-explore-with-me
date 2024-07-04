@@ -170,9 +170,8 @@ class AdminUserServiceImplTest {
     @Test
     void deleteUserTestNotValid() {
         Mockito.when(userService.checkUser(Mockito.anyLong()))
-                        .thenThrow( new NotFoundUserException("Пользователь с id 1 не существует или не доступен"));
-
-     assertThrows(NotFoundUserException.class, ()->  adminUserService.deleteUser(1L));
+                .thenThrow(new NotFoundUserException("Пользователь с id 1 не существует или не доступен"));
+        assertThrows(NotFoundUserException.class, () -> adminUserService.deleteUser(1L));
 
         Mockito.verify(userService, Mockito.times(1))
                 .checkUser(Mockito.anyLong());
