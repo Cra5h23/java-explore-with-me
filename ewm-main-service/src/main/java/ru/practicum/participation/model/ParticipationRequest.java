@@ -37,23 +37,23 @@ public class ParticipationRequest {
     private ZonedDateTime created;
 
     /**
-     *
+     * Событие, к которому относится запрос.
      */
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Event.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Event.class)
     @JoinColumn(name = "event_id")
     @ToString.Exclude
     private Event event;
 
     /**
-     *
+     * Пользователь, создавший запрос.
      */
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "requester_id")
     @ToString.Exclude
     private User requester;
 
     /**
-     *
+     * Статус запроса на участие.
      */
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
