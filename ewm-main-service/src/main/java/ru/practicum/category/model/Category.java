@@ -1,6 +1,7 @@
 package ru.practicum.category.model;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -16,6 +17,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "categories")
+@DynamicUpdate
 public class Category {
     /**
      * Идентификационный номер категории.
