@@ -8,12 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.service.CategoryService;
 import ru.practicum.event.dto.*;
-import ru.practicum.participation.dto.ParticipationRequestDto;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.event.service.EventService;
 import ru.practicum.event.service.PrivateEventService;
 import ru.practicum.exception.ConflictEventException;
+import ru.practicum.participation.dto.ParticipationRequestDto;
 import ru.practicum.participation.service.ParticipationRequestService;
 import ru.practicum.user.service.UserService;
 
@@ -48,6 +48,8 @@ public class PrivateEventServiceImpl implements PrivateEventService {
     @Override
     @Transactional(readOnly = true)
     public List<EventShortDto> getUserEvents(Long userId, int from, int size) {
+        log.info("Запрошен список событий для пользователя инициатора событий с id {} и параметрами from={}, size={}",
+                userId, from, size);
         var page = PageRequest.of(from / size, size);
         List<String> uris = new ArrayList<>();
 
@@ -82,10 +84,12 @@ public class PrivateEventServiceImpl implements PrivateEventService {
     @Override
     @Transactional
     public EventFullDtoResponse addEvent(Long userId, EventDtoRequest dto) {
+        log.info("Попытка добавить новое событие {} для пользователя с id {}", dto, userId);
         var user = userService.checkUser(userId);
         var category = categoryService.checkCategory(dto.getCategory());
         var event = eventMapper.toEvent(user, category, dto);
         var save = eventRepository.save(event);
+        log.info("Добавлено событие {}", save);
 
         return eventMapper.toEventFullDtoResponse(save, 0);
     }
@@ -98,6 +102,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
     @Override
     @Transactional(readOnly = true)
     public EventFullDtoResponse getUserEvent(Long userId, Long eventId) {
+        log.info("Запрос события с id {} для пользователя с id {}", eventId, userId);
         var event = eventService.checkEvent(eventId, userId);
         long views = 0;
         if (event.getState().equals(EventState.PUBLISHED)) {
@@ -106,7 +111,6 @@ public class PrivateEventServiceImpl implements PrivateEventService {
 
         return eventMapper.toEventFullDtoResponse(event, views);
     }
-
 
     /**
      * @param userId
@@ -117,7 +121,9 @@ public class PrivateEventServiceImpl implements PrivateEventService {
     @Override
     @Transactional
     public EventFullDtoResponse updateUserEvent(Long userId, Long eventId, UpdateEventUserRequest dto) {
+        log.info("Попытка обновить событие с id {} для пользователя с id {} , новые данные {}", eventId, userId, dto);
         var event = eventService.checkEvent(eventId, userId);
+        log.info("Старые данные {}", event);
 
         if (event.getState().equals(EventState.PUBLISHED)) {
             throw new ConflictEventException(String.format(
@@ -185,6 +191,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
     @Override
     @Transactional(readOnly = true)
     public List<ParticipationRequestDto> getEventRequests(Long userId, Long eventId) {
+        log.info("Получение запросов на участие в событии с id {} для пользователя инициатора с id {}", eventId, userId);
         return participationRequestService.getEventRequests(userId, eventId);
     }
 
@@ -196,7 +203,12 @@ public class PrivateEventServiceImpl implements PrivateEventService {
      */
     @Override
     @Transactional
-    public EventRequestStatusUpdateResult confirmUserRequests(Long userId, Long eventId, EventRequestStatusUpdateRequest request) {
+    public EventRequestStatusUpdateResult confirmUserRequests(Long userId, Long eventId,
+                                                              EventRequestStatusUpdateRequest request) {
+        log.info("{} запросов c id {} на участие в событии с id {} для инициатора с id {}",
+                request.getStatus().equals(EventRequestStatus.CONFIRMED) ? "Подтверждение" : "Отклонение",
+                request.getRequestIds(), eventId, userId);
+
         return participationRequestService.confirmUserRequests(userId, eventId, request);
     }
 }
