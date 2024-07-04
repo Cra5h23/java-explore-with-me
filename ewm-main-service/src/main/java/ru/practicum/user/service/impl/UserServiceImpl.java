@@ -2,6 +2,7 @@ package ru.practicum.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.NotFoundUserException;
 import ru.practicum.user.model.User;
 import ru.practicum.user.repository.UserRepository;
@@ -13,6 +14,7 @@ import ru.practicum.user.service.UserService;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
