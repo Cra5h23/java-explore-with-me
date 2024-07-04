@@ -6,11 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.dto.EventRequestStatus;
-import ru.practicum.participation.dto.ParticipationRequestDto;
 import ru.practicum.event.dto.EventState;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.service.EventService;
 import ru.practicum.exception.ConflictParticipationRequestException;
+import ru.practicum.participation.dto.ParticipationRequestDto;
 import ru.practicum.participation.mapper.ParticipationRequestMapper;
 import ru.practicum.participation.repository.ParticipationRequestRepository;
 import ru.practicum.participation.service.ParticipationRequestService;
@@ -39,7 +39,9 @@ public class PrivateParticipationRequestServiceImpl implements PrivateParticipat
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public List<ParticipationRequestDto> getParticipationRequests(Long userId) {
+        log.info("Получение списка запросов на участие для пользователя с id {}", userId);
         userService.checkUser(userId);
         return participationRequestRepository.findAllByRequesterId(userId)
                 .stream()
@@ -55,6 +57,7 @@ public class PrivateParticipationRequestServiceImpl implements PrivateParticipat
     @Override
     @Transactional
     public ParticipationRequestDto addParticipationRequest(Long userId, Long eventId) {
+        log.info("Добавление запроса на участие в событии с id {} от пользователя с id {}", eventId, userId);
         var event = eventService.checkEvent(eventId);
 
         if (event.getInitiator().getId().equals(userId)) {
@@ -87,8 +90,6 @@ public class PrivateParticipationRequestServiceImpl implements PrivateParticipat
     private void extracted(Long eventId, Event event) {
         if (event.getParticipantLimit() != 0) {
             long l = event.getConfirmedRequests();
-
-//            long l = participationRequestRepository.countByEventId(eventId);
             if (l >= event.getParticipantLimit()) {
                 throw new ConflictParticipationRequestException(String.format(
                         "Нельзя добавить запрос на участие в событии с id %d превышен лимит участников", eventId));
@@ -104,6 +105,7 @@ public class PrivateParticipationRequestServiceImpl implements PrivateParticipat
     @Override
     @Transactional
     public ParticipationRequestDto cancelParticipationRequest(Long userId, Long requestId) {
+        log.info("Отмена запроса на участие с id {} от пользователя с id {}", requestId, userId);
         var participationRequest = participationRequestService.checkParticipationRequest(requestId, userId);
 
         participationRequest.setStatus(EventRequestStatus.CANCELED);
