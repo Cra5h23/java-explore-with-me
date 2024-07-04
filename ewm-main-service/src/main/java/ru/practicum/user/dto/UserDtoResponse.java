@@ -1,4 +1,4 @@
-package ru.practicum.dto.user;
+package ru.practicum.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,16 +6,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Dto пользователя.
+ * Dto для сущности пользователь. Используется в качестве ответа.
  *
  * @author Nikolay Radzivon
- * @Date 19.06.2024
+ * @Date 22.06.2024
  */
-@AllArgsConstructor
+@Data
 @Builder
 @NoArgsConstructor
-@Data
-public class UserShortDto {
+@AllArgsConstructor
+public class UserDtoResponse {
+    /**
+     * Электронная почта пользователя.
+     */
+    private String email;
+
     /**
      * Идентификационный номер пользователя.
      */
