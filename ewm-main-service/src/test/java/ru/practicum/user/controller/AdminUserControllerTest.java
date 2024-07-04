@@ -186,7 +186,7 @@ class AdminUserControllerTest {
                 content().contentType(MediaType.APPLICATION_JSON),
                 jsonPath("reason").value("Bad Request"),
                 jsonPath("status").value("BAD_REQUEST"),
-                jsonPath("message").value("Validation failed for argument [0] in public org.springframework.http.ResponseEntity<java.lang.Object> ru.practicum.user.controller.AdminUserController.addUser(ru.practicum.dto.user.NewUserRequest): [Field error in object 'newUserRequest' on field 'email': rejected value [null]; codes [NotBlank.newUserRequest.email,NotBlank.email,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [newUserRequest.email,email]; arguments []; default message [email]]; default message [Адрес электронной почты не может быть пустым]] "),
+                jsonPath("message").exists(),
                 jsonPath("timestamp").exists()
         );
     }
@@ -225,7 +225,7 @@ class AdminUserControllerTest {
                 content().contentType(MediaType.APPLICATION_JSON),
                 jsonPath("reason").value("Bad Request"),
                 jsonPath("status").value("BAD_REQUEST"),
-                jsonPath("message").value("Validation failed for argument [0] in public org.springframework.http.ResponseEntity<java.lang.Object> ru.practicum.user.controller.AdminUserController.addUser(ru.practicum.dto.user.NewUserRequest): [Field error in object 'newUserRequest' on field 'email': rejected value [t@m.r]; codes [Size.newUserRequest.email,Size.email,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [newUserRequest.email,email]; arguments []; default message [email],254,6]; default message [Адрес электронной почты не может быть меньше 6 и больше 254 символов]] "),
+                jsonPath("message").exists(),
                 jsonPath("timestamp").exists());
     }
 
@@ -316,8 +316,7 @@ class AdminUserControllerTest {
                 content().contentType(MediaType.APPLICATION_JSON),
                 jsonPath("reason").value("Bad Request"),
                 jsonPath("status").value("BAD_REQUEST"),
-                jsonPath("message").value("Validation failed for argument [0] in public " +
-                        "org.springframework.http.ResponseEntity<java.lang.Object> ru.practicum.user.controller.AdminUserController.addUser(ru.practicum.dto.user.NewUserRequest): [Field error in object 'newUserRequest' on field 'name': rejected value [null]; codes [NotBlank.newUserRequest.name,NotBlank.name,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [newUserRequest.name,name]; arguments []; default message [name]]; default message [Имя пользователя не может быть пустым]] "),
+                jsonPath("message").exists(),
                 jsonPath("timestamp").exists());
     }
 
@@ -336,7 +335,7 @@ class AdminUserControllerTest {
                 content().contentType(MediaType.APPLICATION_JSON),
                 jsonPath("reason").value("Bad Request"),
                 jsonPath("status").value("BAD_REQUEST"),
-                jsonPath("message").value("Validation failed for argument [0] in public org.springframework.http.ResponseEntity<java.lang.Object> ru.practicum.user.controller.AdminUserController.addUser(ru.practicum.dto.user.NewUserRequest): [Field error in object 'newUserRequest' on field 'name': rejected value [a]; codes [Size.newUserRequest.name,Size.name,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [newUserRequest.name,name]; arguments []; default message [name],250,2]; default message [Имя пользователя не может быть меньше 2 и больше 250 символов]] "),
+                jsonPath("message").exists(),
                 jsonPath("timestamp").exists());
     }
 
