@@ -1,8 +1,8 @@
 package ru.practicum.compilation.service;
 
-import ru.practicum.dto.compilation.CompilationDtoResponse;
-import ru.practicum.dto.compilation.NewCompilationDto;
-import ru.practicum.dto.compilation.UpdateCompilationRequest;
+import ru.practicum.compilation.dto.CompilationDtoResponse;
+import ru.practicum.compilation.dto.NewCompilationDto;
+import ru.practicum.compilation.dto.UpdateCompilationRequest;
 
 /**
  * @author Nikolay Radzivon

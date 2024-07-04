@@ -2,8 +2,8 @@ package ru.practicum.compilation.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.compilation.model.Compilation;
-import ru.practicum.dto.compilation.CompilationDtoResponse;
-import ru.practicum.dto.compilation.NewCompilationDto;
+import ru.practicum.compilation.dto.CompilationDtoResponse;
+import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.event.model.Event;
 
