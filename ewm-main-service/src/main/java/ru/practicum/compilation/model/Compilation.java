@@ -1,6 +1,7 @@
 package ru.practicum.compilation.model;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import ru.practicum.event.model.Event;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "compilations")
+@DynamicUpdate
 public class Compilation {
     /**
      * Идентификационный номер подборки событий
