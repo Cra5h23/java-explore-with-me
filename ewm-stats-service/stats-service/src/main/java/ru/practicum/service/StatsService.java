@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.dto.RequestHitDto;
 import ru.practicum.dto.ResponseStatsDto;
+import ru.practicum.validator.ValidDateRange;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ public interface StatsService {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
+    @ValidDateRange
     class Params {
         @NotNull(message = "Параметр start должен быть указан")
         private LocalDateTime start;
