@@ -27,29 +27,25 @@ public class AdminCompilationController {
 
     @PostMapping
     public ResponseEntity<Object> addCompilation(@RequestBody @Valid NewCompilationDto compilation) {
-        log.info("POST /admin/compilations");
+        log.info("Получен запрос: POST /admin/compilations");
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(adminCompilationService.addCompilation(compilation));
-
-        //todo 400 Запрос составлен некорректно 409 Нарушение целостности данных
     }
 
     @DeleteMapping("/{compId}")
     public ResponseEntity<Object> deleteCompilation(@PathVariable Long compId) {
-        log.info("DELETE /admin/compilations/{}", compId);
+        log.info("Получен запрос: DELETE /admin/compilations/{}", compId);
 
         adminCompilationService.deleteCompilation(compId);
         return ResponseEntity.noContent().build();
-
-        //todo 404 Подборка не найдена или недоступна
     }
 
     @PatchMapping("/{compId}")
     public ResponseEntity<Object> updateCompilation(@PathVariable Long compId, @RequestBody @Valid UpdateCompilationRequest compilation) {
-        log.info("PATCH /admin/compilations/{} body={}", compId, compilation);
+        log.info("Получен запрос: PATCH /admin/compilations/{} body={}", compId, compilation);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
