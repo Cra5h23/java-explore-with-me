@@ -60,8 +60,9 @@ public class Event {
     /**
      *
      */
-    @OneToOne(targetEntity = Location.class, cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = Location.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
+    @ToString.Exclude
     private Location location;
 
     /**
@@ -115,6 +116,9 @@ public class Event {
     @Column(name = "published_on")
     private ZonedDateTime publishedOn;
 
+    /**
+     * Количество подтверждённых заявок на участие
+     */
     @Formula("(SELECT COUNT(*) FROM participation_requests pr WHERE pr.event_id = id and pr.status = 'CONFIRMED')")
     private long confirmedRequests;
 
