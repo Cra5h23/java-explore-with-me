@@ -24,12 +24,12 @@ public interface PublicEventService {
 
     EventFullDtoResponse getEvent(Long id, HttpServletRequest request);
 
-    @Builder
+   @Builder
     @Data
     @ValidDateRange
     @NoArgsConstructor
     @AllArgsConstructor
-    class GetEventsParams {
+class GetEventsParams {
         private String text;
         private List<Long> categories;
         private Boolean paid;
@@ -38,14 +38,16 @@ public interface PublicEventService {
         private Boolean onlyAvailable;
         private EventSort sort;
         @Min(value = 0, message = "Параметр from не может быть меньше {value}")
-        private int from;
+        @Builder.Default
+        private int from = 0;
         @Min(value = 1, message = "Параметр size не может быть меньше {value}")
         @Max(value = 1000, message = "Параметр size не может быть больше {value}")
-        private int size;
+        @Builder.Default
+        private int size = 10;
 
-        {
-            this.from = 0;
-            this.size = 10;
-        }
+//        {
+//            this.from = 0;
+//            this.size = 10;
+//        }
     }
 }
