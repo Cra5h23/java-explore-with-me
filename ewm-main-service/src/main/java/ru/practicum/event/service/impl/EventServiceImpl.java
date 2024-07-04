@@ -33,6 +33,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event checkEvent(Long eventId) {
+        log.info("Проверка на то что событие с id {} существует", eventId);
         return eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundEventException(
                         String.format("Событие с id %d не найдено или не доступно", eventId)));
@@ -40,6 +41,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event checkEvent(Long eventId, Long initiatorId) {
+        log.info("Проверка на то что пользователь с id {} является инициатором события с id {}", initiatorId, eventId);
         return eventRepository.findByIdAndInitiatorId(eventId, initiatorId)
                 .orElseThrow(() -> new NotFoundEventException(String.format(
                         "Событие с id %d для пользователя с id %d не найдено или не доступно", eventId, initiatorId)));
@@ -47,6 +49,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Map<Long, Long> getViews(LocalDateTime rangeStart, LocalDateTime rangeEnd, List<String> uris) {
+        log.info("Запрос просмотров с параметрами поиска дата и время начала {} , дата и время окончания {} , список uri {}",
+                rangeStart, rangeEnd, uris);
         if (rangeStart == null && rangeEnd == null) {
             return Map.of();
         }
@@ -63,6 +67,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public void saveStats(HttpServletRequest request, List<String> uris, String appName) {
         var ip = request.getRemoteAddr();
+        log.info("Сохранение просмотров с параметрами ip = {}, uris={}, appName={}", ip, uris, appName);
         uris.forEach(uri -> statsClient.saveStats(ip, uri, appName));
     }
 
@@ -70,7 +75,6 @@ public class EventServiceImpl implements EventService {
     public void saveStats(HttpServletRequest request, String uri, String appName) {
         saveStats(request, List.of(uri), appName);
     }
-
 
     @Override
     public long getViews(LocalDateTime rangeStart, LocalDateTime rangeEnd, String uri) {
@@ -85,6 +89,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventShortDto> getEvents(Collection<Long> events) {
+        log.info("Запрошен список событий по списку id {}", events);
         List<Event> allById = eventRepository.findAllById(events);
         List<String> uris = new ArrayList<>();
 
