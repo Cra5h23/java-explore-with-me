@@ -24,12 +24,12 @@ public interface PublicEventService {
 
     EventFullDtoResponse getEvent(Long id, HttpServletRequest request);
 
-   @Builder
+    @Builder
     @Data
     @ValidDateRange
     @NoArgsConstructor
     @AllArgsConstructor
-class GetEventsParams {
+    class GetEventsParams {
         private String text;
         private List<Long> categories;
         private Boolean paid;
