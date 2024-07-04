@@ -13,16 +13,13 @@ import java.time.format.DateTimeFormatter;
  * @Date 20.06.2024
  */
 public class CustomLocalDateTimeDeserializer extends StdDeserializer<LocalDateTime> {
-    private final DateTimeFormatter formatter;
-
-    public CustomLocalDateTimeDeserializer(String dateTimeFormat) {
+    public CustomLocalDateTimeDeserializer() {
         super(LocalDateTime.class);
-        this.formatter = DateTimeFormatter.ofPattern(dateTimeFormat);
     }
 
     @Override
     public LocalDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         String date = jsonParser.getText();
-        return LocalDateTime.parse(date, formatter);
+        return LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }
