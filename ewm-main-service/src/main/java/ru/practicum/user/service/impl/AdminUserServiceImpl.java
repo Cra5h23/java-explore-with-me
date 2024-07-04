@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class AdminUserServiceImpl implements AdminUserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final UserService userChecker;
+    private final UserService userService;
 
     /**
      * @param ids
@@ -72,7 +72,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Override
     @Transactional
     public void deleteUser(Long userId) {
-        var user = userChecker.checkUser(userId);
+        var user = userService.checkUser(userId);
 
         log.info("Удалён пользователь {}", user);
         userRepository.delete(user);
