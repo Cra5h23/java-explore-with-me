@@ -21,11 +21,11 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PublicCategoryServiceImpl implements PublicCategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryService categoryChecker;
     private final CategoryMapper categoryMapper;
-
 
     /**
      * @param from
@@ -33,7 +33,6 @@ public class PublicCategoryServiceImpl implements PublicCategoryService {
      * @return
      */
     @Override
-    @Transactional(readOnly = true)
     public List<CategoryDtoResponse> getCategories(int from, int size) {
         var page = PageRequest.of(from / size, size);
         log.info("Запрошен список всех категорий с параметрами запроса from={} size={}", from, size);
@@ -49,7 +48,6 @@ public class PublicCategoryServiceImpl implements PublicCategoryService {
      * @return
      */
     @Override
-    @Transactional(readOnly = true)
     public CategoryDtoResponse getCategory(Long catId) {
         log.info("Запрошена категория с id {}", catId);
         var category = categoryChecker.checkCategory(catId);

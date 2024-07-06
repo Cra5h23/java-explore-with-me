@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final StatsClient statsClient;
@@ -34,6 +33,7 @@ public class EventServiceImpl implements EventService {
     private static final String URI_PATCH = "/events/";
 
     @Override
+    @Transactional(readOnly = true)
     public Event checkEvent(Long eventId) {
         log.info("Проверка на то что событие с id {} существует", eventId);
         return eventRepository.findById(eventId)
@@ -42,6 +42,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Event checkEvent(Long eventId, Long initiatorId) {
         log.info("Проверка на то что пользователь с id {} является инициатором события с id {}", initiatorId, eventId);
         return eventRepository.findByIdAndInitiatorId(eventId, initiatorId)
@@ -50,6 +51,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Map<Long, Long> getViews(LocalDateTime rangeStart, LocalDateTime rangeEnd, List<String> uris) {
         log.info("Запрос просмотров с параметрами поиска дата и время начала {} , дата и время окончания {} , список uri {}",
                 rangeStart, rangeEnd, uris);
@@ -67,6 +69,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public void saveStats(HttpServletRequest request, List<String> uris, String appName) {
         var ip = request.getRemoteAddr();
         log.info("Сохранение просмотров с параметрами ip = {}, uris={}, appName={}", ip, uris, appName);
@@ -74,11 +77,13 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public void saveStats(HttpServletRequest request, String uri, String appName) {
         saveStats(request, List.of(uri), appName);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public long getViews(LocalDateTime rangeStart, LocalDateTime rangeEnd, String uri) {
         var views = getViews(rangeStart, rangeEnd, List.of(uri));
 
@@ -90,6 +95,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventShortDto> getEvents(Collection<Long> events) {
         log.info("Запрошен список событий по списку id {}", events);
         List<Event> allById = eventRepository.findAllById(events);
@@ -108,6 +114,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Map<Long, List<EventShortDto>> getEvents(Map<Long, List<Long>> compilationsEvents) {
         Map<Long, List<EventShortDto>> eventsMap = new HashMap<>();
 

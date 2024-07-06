@@ -23,13 +23,13 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-@Transactional
 @Slf4j
 public class ParticipationRequestServiceImpl implements ParticipationRequestService {
     private final ParticipationRequestRepository participationRequestRepository;
     private final ParticipationRequestMapper participationRequestMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public ParticipationRequest checkParticipationRequest(Long partId) {
         log.info("Проверка на то что запрос на участие с id {} существует", partId);
         return participationRequestRepository.findById(partId)
@@ -38,6 +38,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ParticipationRequest checkParticipationRequest(Long partId, Long userId) {
         log.info("Проверка на то что запрос на участие с id {} существует у пользователя с id {}", partId, userId);
         return participationRequestRepository.findByIdAndRequesterId(partId, userId)
@@ -46,6 +47,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ParticipationRequestDto> getEventRequests(Long userId, Long eventId) {
         log.info("Получение списка запросов на участие для события с id {} и инициатора {}", eventId, userId);
         return participationRequestRepository.findAllByEventInitiatorIdAndEventId(userId, eventId)
@@ -55,6 +57,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     }
 
     @Override
+    @Transactional
     public EventRequestStatusUpdateResult confirmUserRequests(Long userId, Long eventId,
                                                               EventRequestStatusUpdateRequest request) {
         log.info("Подтверждение запросов на участие для события с id {} и инициатора с id {}, {}", eventId, userId, request);
