@@ -7,10 +7,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.category.service.AdminCategoryService;
 import ru.practicum.category.dto.CategoryDtoRequest;
+import ru.practicum.category.service.AdminCategoryService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 /**
  * @author Nikolay Radzivon
@@ -35,7 +37,7 @@ public class AdminCategoryController {
     }
 
     @DeleteMapping("/{catId}")
-    public ResponseEntity<Object> deleteCategory(@PathVariable Long catId) {
+    public ResponseEntity<Object> deleteCategory(@PathVariable @NotNull @Positive Long catId) {
         log.info("Получен запрос: DELETE /admin/categories/{}", catId);
 
         adminCategoryService.deleteCategory(catId);
@@ -43,7 +45,7 @@ public class AdminCategoryController {
     }
 
     @PatchMapping("/{catId}")
-    public ResponseEntity<Object> updateCategory(@PathVariable Long catId,
+    public ResponseEntity<Object> updateCategory(@PathVariable @NotNull @Positive Long catId,
                                                  @RequestBody @Valid CategoryDtoRequest category) {
         log.info("Получен запрос: PATCH /admin/categories/{} body={}", catId, category);
 

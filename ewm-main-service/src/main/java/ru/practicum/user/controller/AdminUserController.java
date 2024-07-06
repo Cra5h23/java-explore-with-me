@@ -13,6 +13,8 @@ import ru.practicum.user.service.AdminUserService;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 /**
@@ -55,7 +57,7 @@ public class AdminUserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Object> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<Object> deleteUser(@PathVariable @NotNull @Positive Long userId) {
         log.info("Получен запрос: DELETE /admin/users/{}", userId);
 
         adminUserService.deleteUser(userId);

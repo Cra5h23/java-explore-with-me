@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.participation.service.PrivateParticipationRequestService;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 /**
  * @author Nikolay Radzivon
  * @Date 22.06.2024
@@ -20,7 +23,7 @@ public class PrivateParticipationRequestController {
     private final PrivateParticipationRequestService privateParticipationRequestService;
 
     @GetMapping
-    public ResponseEntity<Object> getParticipationRequests(@PathVariable Long userId) {
+    public ResponseEntity<Object> getParticipationRequests(@PathVariable @NotNull @Positive Long userId) {
         log.info("Получен запрос: GET /users/{}/requests", userId);
 
         return ResponseEntity
@@ -30,7 +33,8 @@ public class PrivateParticipationRequestController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addParticipationRequest(@PathVariable Long userId, @RequestParam Long eventId) {
+    public ResponseEntity<Object> addParticipationRequest(@PathVariable @NotNull @Positive Long userId,
+                                                          @RequestParam @NotNull @Positive Long eventId) {
         log.info("Получен запрос: POST /users/{}/requests?eventId={}", userId, eventId);
 
         return ResponseEntity
@@ -40,7 +44,8 @@ public class PrivateParticipationRequestController {
     }
 
     @PatchMapping("{requestId}/cancel")
-    public ResponseEntity<Object> cancelParticipationRequest(@PathVariable Long userId, @PathVariable Long requestId) {
+    public ResponseEntity<Object> cancelParticipationRequest(@PathVariable @NotNull @Positive Long userId,
+                                                             @PathVariable @NotNull @Positive Long requestId) {
         log.info("Получен запрос: PATCH /users/{}/requests/{}/cancel", userId, requestId);
 
         return ResponseEntity

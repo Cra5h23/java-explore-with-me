@@ -10,6 +10,8 @@ import ru.practicum.category.service.PublicCategoryService;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 /**
  * @author Nikolay Radzivon
@@ -25,10 +27,10 @@ public class PublicCategoryController {
     @GetMapping
     public ResponseEntity<Object> getCategories(
             @RequestParam(required = false, defaultValue = "0")
-            @Min(value = 0, message = "Параметр from не может быть меньше 0") int from,
+            @Min(value = 0, message = "Параметр from не может быть меньше {value}") int from,
             @RequestParam(required = false, defaultValue = "10")
-            @Min(value = 1, message = "Параметр size не может быть меньше 1")
-            @Max(value = 100, message = "Параметр size не может быть больше 100") int size
+            @Min(value = 1, message = "Параметр size не может быть меньше {value}")
+            @Max(value = 100, message = "Параметр size не может быть больше {value}") int size
     ) {
         log.info("Получен запрос: GET /categories?from={}&size={}", from, size);
 
@@ -39,7 +41,7 @@ public class PublicCategoryController {
     }
 
     @GetMapping("/{catId}")
-    public ResponseEntity<Object> getCategory(@PathVariable Long catId) {
+    public ResponseEntity<Object> getCategory(@PathVariable @NotNull @Positive Long catId) {
         log.info("Получен запрос: GET /categories/{}", catId);
 
         return ResponseEntity

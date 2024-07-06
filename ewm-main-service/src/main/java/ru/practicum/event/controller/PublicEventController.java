@@ -11,6 +11,8 @@ import ru.practicum.event.service.PublicEventService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 /**
  * @author Nikolay Radzivon
@@ -43,7 +45,7 @@ public class PublicEventController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getEvent(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseEntity<Object> getEvent(@PathVariable @NotNull @Positive Long id, HttpServletRequest request) {
         log.info("Получен запрос: GET /events/{}", id);
 
         return ResponseEntity

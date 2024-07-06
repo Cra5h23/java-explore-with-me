@@ -11,6 +11,8 @@ import ru.practicum.event.dto.UpdateEventAdminRequest;
 import ru.practicum.event.service.AdminEventService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 /**
  * Контроллер для работы с событиями от имени администратора.
@@ -42,9 +44,8 @@ public class AdminEventController {
     }
 
     @PatchMapping("/{eventId}")
-    public ResponseEntity<Object> updateEvent(
-            @PathVariable Long eventId,
-            @RequestBody @Valid UpdateEventAdminRequest event
+    public ResponseEntity<Object> updateEvent(@PathVariable @NotNull @Positive Long eventId,
+                                              @RequestBody @Valid UpdateEventAdminRequest event
     ) {
         log.info("Получен запрос: PATCH admin/events/{} body={}", eventId, event);
 
