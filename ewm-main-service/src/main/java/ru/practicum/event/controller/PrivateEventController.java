@@ -7,14 +7,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.event.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.event.dto.EventDtoRequest;
+import ru.practicum.event.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.event.dto.UpdateEventUserRequest;
 import ru.practicum.event.service.PrivateEventService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 /**
  * @author Nikolay Radzivon
@@ -30,7 +32,7 @@ public class PrivateEventController {
 
     @GetMapping
     public ResponseEntity<Object> getUserEvents(
-            @PathVariable Long userId,
+            @PathVariable @NotNull @Positive Long userId,
             @RequestParam(required = false, defaultValue = "0")
             @Min(value = 0, message = "Параметр from не может быть меньше {value}") int from,
             @RequestParam(required = false, defaultValue = "10")
@@ -46,7 +48,8 @@ public class PrivateEventController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addEvent(@PathVariable Long userId, @RequestBody @Valid EventDtoRequest event) {
+    public ResponseEntity<Object> addEvent(@PathVariable @NotNull @Positive Long userId,
+                                           @RequestBody @Valid EventDtoRequest event) {
         log.info("Получен запрос: POST /users/{}/events body={}", userId, event);
 
         return ResponseEntity
@@ -56,7 +59,8 @@ public class PrivateEventController {
     }
 
     @GetMapping("/{eventId}")
-    public ResponseEntity<Object> getUserEvent(@PathVariable Long userId, @PathVariable Long eventId) {
+    public ResponseEntity<Object> getUserEvent(@PathVariable @NotNull @Positive Long userId,
+                                               @PathVariable @NotNull @Positive Long eventId) {
         log.info("Получен запрос: GET /users/{}/events/{}", userId, eventId);
 
         return ResponseEntity
@@ -67,8 +71,8 @@ public class PrivateEventController {
 
     @PatchMapping("/{eventId}")
     public ResponseEntity<Object> updateUserEvent(
-            @PathVariable Long userId,
-            @PathVariable Long eventId,
+            @PathVariable @NotNull @Positive Long userId,
+            @PathVariable @NotNull @Positive Long eventId,
             @RequestBody @Validated UpdateEventUserRequest event
     ) {
         log.info("Получен запрос: PATCH /users/{}/events/{} body={}", userId, eventId, event);
@@ -79,7 +83,8 @@ public class PrivateEventController {
     }
 
     @GetMapping("/{eventId}/requests")
-    public ResponseEntity<Object> getEventRequests(@PathVariable Long userId, @PathVariable Long eventId) {
+    public ResponseEntity<Object> getEventRequests(@PathVariable @NotNull @Positive Long userId,
+                                                   @PathVariable @NotNull @Positive Long eventId) {
         log.info("Получен запрос: GET /users/{}/events/{}/requests", userId, eventId);
 
         return ResponseEntity
@@ -90,8 +95,8 @@ public class PrivateEventController {
 
     @PatchMapping("/{eventId}/requests")
     public ResponseEntity<Object> confirmUserRequests(
-            @PathVariable Long userId,
-            @PathVariable Long eventId,
+            @PathVariable @NotNull @Positive Long userId,
+            @PathVariable @NotNull @Positive Long eventId,
             @RequestBody(required = false) EventRequestStatusUpdateRequest request
     ) {
         log.info("Получен запрос: PATCH /users/{}/events/{}/requests body={}", userId, eventId, request);

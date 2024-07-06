@@ -7,11 +7,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.compilation.service.AdminCompilationService;
 import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.dto.UpdateCompilationRequest;
+import ru.practicum.compilation.service.AdminCompilationService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 /**
  * @author Nikolay Radzivon
@@ -36,7 +38,7 @@ public class AdminCompilationController {
     }
 
     @DeleteMapping("/{compId}")
-    public ResponseEntity<Object> deleteCompilation(@PathVariable Long compId) {
+    public ResponseEntity<Object> deleteCompilation(@PathVariable @NotNull @Positive Long compId) {
         log.info("Получен запрос: DELETE /admin/compilations/{}", compId);
 
         adminCompilationService.deleteCompilation(compId);
@@ -44,7 +46,8 @@ public class AdminCompilationController {
     }
 
     @PatchMapping("/{compId}")
-    public ResponseEntity<Object> updateCompilation(@PathVariable Long compId, @RequestBody @Valid UpdateCompilationRequest compilation) {
+    public ResponseEntity<Object> updateCompilation(@PathVariable @NotNull @Positive Long compId,
+                                                    @RequestBody @Valid UpdateCompilationRequest compilation) {
         log.info("Получен запрос: PATCH /admin/compilations/{} body={}", compId, compilation);
 
         return ResponseEntity
