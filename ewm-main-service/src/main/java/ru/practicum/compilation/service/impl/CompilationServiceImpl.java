@@ -3,6 +3,7 @@ package ru.practicum.compilation.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.compilation.repository.CompilationRepository;
 import ru.practicum.compilation.service.CompilationService;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class CompilationServiceImpl implements CompilationService {
     private final CompilationRepository compilationRepository;
 

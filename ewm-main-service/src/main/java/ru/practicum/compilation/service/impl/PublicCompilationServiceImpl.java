@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class PublicCompilationServiceImpl implements PublicCompilationService {
     private final CompilationRepository compilationRepository;
     private final CompilationMapper compilationMapper;
@@ -39,7 +40,6 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
      * @return
      */
     @Override
-    @Transactional(readOnly = true)
     public List<CompilationDtoResponse> getCompilations(Boolean pinned, int from, int size) {
         log.info("Запрошен список подборок событий с параметрами поиска pinned={}, from={}, size={}", pinned, from, size);
         var query = Expressions.asBoolean(true).isTrue();
@@ -63,7 +63,6 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
      * @return
      */
     @Override
-    @Transactional(readOnly = true)
     public CompilationDtoResponse getCompilation(Long compId) {
         log.info("Запрошена подборка событий с id {}", compId);
         var compilation = compilationService.checkCompilation(compId);

@@ -86,7 +86,6 @@ public class PrivateParticipationRequestServiceImpl implements PrivateParticipat
         return participationRequestMapper.toParticipationRequestDto(save);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     private void extracted(Long eventId, Event event) {
         if (event.getParticipantLimit() != 0) {
             long l = event.getConfirmedRequests();
