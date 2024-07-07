@@ -14,15 +14,13 @@ import java.time.ZonedDateTime;
  * @author Nikolay Radzivon
  * @Date 25.06.2024
  */
-@ToString
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
 @Table(name = "events")
 @DynamicUpdate
+@Data
 public class Event {
     /**
      * Идентификационный номер события.
@@ -121,17 +119,4 @@ public class Event {
      */
     @Formula("(SELECT COUNT(*) FROM participation_requests pr WHERE pr.event_id = id and pr.status = 'CONFIRMED')")
     private long confirmedRequests;
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Event)) return false;
-        return id != null && id.equals(((Event) o).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

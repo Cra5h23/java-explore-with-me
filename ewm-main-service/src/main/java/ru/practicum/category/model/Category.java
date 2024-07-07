@@ -1,6 +1,9 @@
 package ru.practicum.category.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -9,9 +12,7 @@ import javax.persistence.*;
  * @author Nikolay Radzivon
  * @Date 25.06.2024
  */
-@ToString
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -31,16 +32,4 @@ public class Category {
      */
     @Column(name = "name", length = 50, nullable = false, unique = true)
     private String name;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Category)) return false;
-        return id != null && id.equals(((Category) o).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }
