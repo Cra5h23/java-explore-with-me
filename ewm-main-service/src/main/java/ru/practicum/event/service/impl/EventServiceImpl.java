@@ -127,4 +127,10 @@ public class EventServiceImpl implements EventService {
 
         return eventsMap;
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Event> getEventsByLocation(double lat, double lon, double radius) {
+        return eventRepository.findEventsWithinRadius(lat,lon, radius);
+    }
 }
