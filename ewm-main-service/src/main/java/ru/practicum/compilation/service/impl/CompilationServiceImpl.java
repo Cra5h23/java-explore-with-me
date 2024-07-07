@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
+@Transactional(readOnly = true)
 public class CompilationServiceImpl implements CompilationService {
     private final CompilationRepository compilationRepository;
 
@@ -43,6 +43,4 @@ public class CompilationServiceImpl implements CompilationService {
                 .map(Event::getId)
                 .collect(Collectors.toList());
     }
-
-
 }
