@@ -11,10 +11,8 @@ import java.util.Set;
  * @author Nikolay Radzivon
  * @Date 02.07.2024
  */
-@Getter
-@Setter
+@Data
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -31,7 +29,7 @@ public class Compilation {
     /**
      * Список событий входящих в подборку.
      */
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "compilations_events", joinColumns = @JoinColumn(name = "compilation_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id"))
     @ToString.Exclude
@@ -49,16 +47,4 @@ public class Compilation {
      */
     @Column(name = "title", length = 50, nullable = false)
     private String title;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Compilation)) return false;
-        return id != null && id.equals(((Compilation) o).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

@@ -1,6 +1,9 @@
 package ru.practicum.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -11,10 +14,8 @@ import java.time.ZonedDateTime;
  * @author Nikolay Radzivon
  * @Date 14.06.2024
  */
-@Getter
-@Setter
+@Data
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -50,16 +51,4 @@ public class Hit {
      */
     @Column(name = "timestamp", nullable = false)
     private ZonedDateTime timestamp;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Hit)) return false;
-        return id != null && id.equals(((Hit) o).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

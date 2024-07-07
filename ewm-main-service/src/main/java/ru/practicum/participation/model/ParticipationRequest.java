@@ -13,9 +13,7 @@ import java.time.ZonedDateTime;
  * @author Nikolay Radzivon
  * @Date 26.06.2024
  */
-@ToString
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

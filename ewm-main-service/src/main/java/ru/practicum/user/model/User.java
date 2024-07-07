@@ -1,6 +1,9 @@
 package ru.practicum.user.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -10,9 +13,7 @@ import javax.persistence.*;
  * @author Nikolay Radzivon
  * @Date 23.06.2024
  */
-@Getter
-@Setter
-@ToString
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,16 +38,4 @@ public class User {
      */
     @Column(name = "name", nullable = false, length = 250)
     private String name;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        return id != null && id.equals(((User) o).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }
