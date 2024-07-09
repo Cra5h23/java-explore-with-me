@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Location {
+public class Location { // todo переименовать перенести сделать наследника с дополнительными полями
     /**
      * Широта.
      */

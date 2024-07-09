@@ -29,4 +29,6 @@ public interface EventService {
     List<EventShortDto> getEvents(Collection<Long> events);
 
     Map<Long, List<EventShortDto>> getEvents(Map<Long, List<Long>> compilationsEvents);
+
+    List<EventShortDto> getEventsByLocation(double lat, double lon, double radius);
 }
