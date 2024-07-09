@@ -1,6 +1,5 @@
 package ru.practicum.event.service;
 
-import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.model.Event;
 
@@ -31,6 +30,5 @@ public interface EventService {
 
     Map<Long, List<EventShortDto>> getEvents(Map<Long, List<Long>> compilationsEvents);
 
-    @Transactional(readOnly = true)
-    List<Event> getEventsByLocation(double lat, double lon, double radius);
+    List<EventShortDto> getEventsByLocation(double lat, double lon, double radius);
 }

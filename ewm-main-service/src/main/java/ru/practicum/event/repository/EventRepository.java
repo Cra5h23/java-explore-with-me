@@ -17,7 +17,7 @@ import java.util.Optional;
  * @author Nikolay Radzivon
  * @Date 25.06.2024
  */
-public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPredicateExecutor<Event> {
+public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPredicateExecutor<Event> , CustomEventRepository{
 
     Page<EventShort> findAllByInitiatorId(Long initiatorId, Pageable page);
 
@@ -43,12 +43,7 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
         ZonedDateTime getPublishedOn();
     }
 
-    @Query("SELECT e FROM Event e WHERE distance(:lat, :lon, e.location.lat, e.location.lon) <= :radius")
-    List<Event> findEventsWithinRadius(double lat, double lon, double radius);
-
-    interface EventFromAdminLocation {
-        Long getId();
-
-        String getName();
-    }
+//    @Query("SELECT e FROM Event e WHERE distance(:lat, :lon, e.location.lat, e.location.lon) <= :radius " +
+//            "AND e.state = PUBLISHED")
+//    List<EventShort> findEventsWithinRadius(double lat, double lon, double radius);
 }

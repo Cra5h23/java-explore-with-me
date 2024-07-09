@@ -1,9 +1,16 @@
 package ru.practicum.location.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.dto.AdminLocationDtoResponse;
+import ru.practicum.event.dto.EventShortDto;
+import ru.practicum.event.repository.EventRepository;
+import ru.practicum.location.dto.AdminLocationDtoResponse;
 import ru.practicum.location.dto.LocationDtoRequest;
+import ru.practicum.location.dto.LocationDtoResponse;
 import ru.practicum.location.model.AdminLocation;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Nikolay Radzivon
@@ -30,5 +37,19 @@ public class LocationMapper {
                 .lon(save.getLon())
                 .radius(save.getRadius())
                 .build();
+    }
+
+    public List<LocationDtoResponse> toListLocationDtoResponse(List<AdminLocation> locations, Map<Long, List<EventShortDto>> events) {
+        return locations.stream()
+                .map(l -> LocationDtoResponse.builder()
+                        .id(l.getId())
+                        .lat(l.getLat())
+                        .lon(l.getLon())
+                        .radius(l.getRadius())
+                        .name(l.getName())
+                        .description(l.getDescription())
+                        .events(events != null ? events.getOrDefault(l.getId(), List.of()) : List.of())
+                        .build()
+                ).collect(Collectors.toList());
     }
 }

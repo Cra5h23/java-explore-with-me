@@ -10,6 +10,7 @@ import ru.practicum.event.dto.EventState;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.Location;
 import ru.practicum.event.repository.EventRepository;
+import ru.practicum.event.repository.projection.EventShortProjection;
 import ru.practicum.user.dto.UserShortDto;
 import ru.practicum.user.model.User;
 
@@ -93,6 +94,23 @@ public class EventMapper {
         return list;
     }
 
+    public List<EventShortDto> toListEventShortDtoaa(List<EventShortProjection> eventShortList,
+                                                   Map<Long, Long> viewsMap) {
+        if (eventShortList.isEmpty()) {
+            return List.of();
+        }
+
+        List<EventShortDto> list = new ArrayList<>();
+
+        for (EventShortProjection eventShort : eventShortList) {
+            Long l = viewsMap.getOrDefault(eventShort.getId(), 0L);
+
+            list.add(toEventShortDto(eventShort, l));
+        }
+        return list;
+    }
+
+
     public List<EventShortDto> toListEventShortDtos(List<Event> eventList, Map<Long, Long> viewsMap) {
         if (eventList.isEmpty()) {
             return List.of();
@@ -149,6 +167,25 @@ public class EventMapper {
                 .build();
     }
 
+    public EventShortDto toEventShortDto(EventShortProjection event, Long views) {
+        return EventShortDto.builder()
+                .id(event.getId())
+                .title(event.getTitle())
+                .confirmedRequests(event.getConfirmedRequests())
+                .eventDate(event.getEventDate().toLocalDateTime())
+                .annotation(event.getAnnotation())
+                .category(CategoryDtoResponse.builder()
+                        .id(event.getCategory().getId())
+                        .name(event.getCategory().getName())
+                        .build())
+                .initiator(UserShortDto.builder()
+                        .id(event.getInitiator().getId())
+                        .name(event.getInitiator().getName())
+                        .build())
+                .paid(event.isPaid())
+                .views(views)
+                .build();
+    }
 
     public List<EventFullDtoResponse> toListEventFullDto(List<Event> collect, Map<Long, Long> viewsMap) {
         if (collect == null) {

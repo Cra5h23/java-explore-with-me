@@ -1,6 +1,6 @@
 package ru.practicum.location.service;
 
-import ru.practicum.dto.AdminLocationDtoResponse;
+import ru.practicum.location.dto.AdminLocationDtoResponse;
 import ru.practicum.location.dto.LocationDtoRequest;
 
 /**
@@ -11,4 +11,8 @@ public interface AdminLocationService {
     AdminLocationDtoResponse addLocation(LocationDtoRequest locationDto);
 
     Object getLocation(Long locId);
+
+    Object updateLocation(Long locId, LocationDtoRequest locationDto);
+
+    void deleteLocation(Long locId);
 }

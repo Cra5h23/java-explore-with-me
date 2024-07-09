@@ -37,4 +37,5 @@ public class Location {
      */
     @Column(name = "lon")
     private float lon;
+    // Todo добавить остальные поля перенести в свой пакет
 }
