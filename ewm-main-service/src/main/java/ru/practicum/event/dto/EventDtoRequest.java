@@ -60,7 +60,7 @@ public class EventDtoRequest {
      * Координаты локации.
      */
     @NotNull
-    private Location location;
+    private EventLocationDtoRequest location;
 
     /**
      * Флаг требования оплаты.

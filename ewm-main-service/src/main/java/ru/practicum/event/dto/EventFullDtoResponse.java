@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.category.dto.CategoryDtoResponse;
+import ru.practicum.location.dto.EventUserLocationDtoResponse;
 import ru.practicum.user.dto.UserShortDto;
 import ru.practicum.json.CustomLocalDateTimeSerializer;
 
@@ -80,7 +81,7 @@ public class EventFullDtoResponse {
     /**
      * Координаты локации.
      */
-    private Location location;
+    private EventUserLocationDtoResponse location;
 
     /**
      * Ограничение на количество участников. (Значение 0 - означает отсутствие ограничения)
