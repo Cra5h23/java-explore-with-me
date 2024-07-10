@@ -1,13 +1,13 @@
 package ru.practicum.event.repository;
 
+import org.springframework.data.domain.Page;
 import ru.practicum.event.repository.projection.EventShortProjection;
-
-import java.util.List;
+import ru.practicum.event.service.PublicEventService;
 
 /**
  * @author Nikolay Radzivon
  * @Date 08.07.2024
  */
 public interface CustomEventRepository {
-    List<EventShortProjection> findEventsWithinRadius(double lat, double lon, double radius);
+    Page<EventShortProjection> findEventsWithinRadius(PublicEventService.GetSearchParams params);
 }
