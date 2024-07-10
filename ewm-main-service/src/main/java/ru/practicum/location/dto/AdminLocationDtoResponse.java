@@ -1,22 +1,19 @@
 package ru.practicum.location.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author Nikolay Radzivon
- * @Date 07.07.2024
+ * @Date 08.07.2024
  */
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminLocationDtoResponse {
-    private Long id;
-    private Float lat;
-    private Float lon;
+@SuperBuilder
+public class AdminLocationDtoResponse extends UserLocationDtoResponse {
     private Float radius;
     private String name;
     private String description;
