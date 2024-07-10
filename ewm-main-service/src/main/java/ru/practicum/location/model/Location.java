@@ -1,12 +1,11 @@
-package ru.practicum.event.model;
+package ru.practicum.location.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import ru.practicum.event.model.Event;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author Nikolay Radzivon
@@ -38,5 +37,22 @@ public class Location {
      */
     @Column(name = "lon")
     private float lon;
-    // Todo добавить остальные поля перенести в свой пакет
+
+    @Column(name = "radius")
+    private Float radius;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "type", nullable = false, length = 9)
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private TypeLocation type = TypeLocation.USERS;
+
+    @OneToMany(mappedBy = "location", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Event> events;
 }
