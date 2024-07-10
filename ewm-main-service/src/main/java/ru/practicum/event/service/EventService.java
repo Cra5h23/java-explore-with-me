@@ -2,6 +2,7 @@ package ru.practicum.event.service;
 
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.model.Event;
+import ru.practicum.event.repository.projection.EventShortProjection;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -30,5 +31,5 @@ public interface EventService {
 
     Map<Long, List<EventShortDto>> getEvents(Map<Long, List<Long>> compilationsEvents);
 
-    List<EventShortDto> getEventsByLocation(double lat, double lon, double radius);
+    List<EventShortDto> getListEventShortDto(List<EventShortProjection> events);
 }
