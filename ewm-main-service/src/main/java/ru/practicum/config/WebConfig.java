@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.practicum.converter.CustomStringToLocalDateTimeConverter;
+import ru.practicum.converter.StringToEventSortTypeConverter;
 
 /**
  * @author Nikolay Radzivon
@@ -17,8 +18,14 @@ public class WebConfig implements WebMvcConfigurer {
         return new CustomStringToLocalDateTimeConverter();
     }
 
+    @Bean
+    public StringToEventSortTypeConverter stringToEventSortTypeConverter() {
+        return new StringToEventSortTypeConverter();
+    }
+
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(customStringToLocalDateTimeConverter());
+        registry.addConverter(stringToEventSortTypeConverter());
     }
 }
