@@ -50,8 +50,7 @@ public class UpdateEventUserRequest {
     /**
      * Новые координаты локации.
      */
-    private Location location;
-
+    private EventLocationDtoRequest location;
     /**
      * Новое значение флага платности мероприятия.
      */
