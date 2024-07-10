@@ -27,19 +27,24 @@ public class AdminLocationServiceImpl implements AdminLocationService {
     @Override
     @Transactional
     public AdminLocationDtoCreated addLocation(AdminLocationDtoRequest locationDto) {
+        log.info("Попытка администратором добавить локацию с данными {}", locationDto);
         var location = locationMapper.toLocation(locationDto, TypeLocation.ADMINS);
         var save = locationRepository.save(location);
+
+        log.info("Добавлена локация {}", save);
         return locationMapper.toAdminLocationDtoResponse(save);
     }
 
     @Override
     @Transactional
     public AdminLocationDtoCreated updateLocation(Long locId, AdminLocationDtoRequest locationDto) {
+        log.info("Попытка администратора обновить локацию с id {} новые данные {}", locId, locationDto);
         if (locationDto == null || locId == null) {
             return null;
         }
 
         var location = locationService.checkLocation(locId);
+        log.info("Старые данные {}", location);
 
         var lon = locationDto.getLon();
         if (lon != null) {
@@ -68,14 +73,16 @@ public class AdminLocationServiceImpl implements AdminLocationService {
             }
         }
         var save = locationRepository.save(location);
-
+        log.info("Локация успешно обновлена");
         return locationMapper.toAdminLocationDtoResponse(save);
     }
 
     @Override
     @Transactional
     public void deleteLocation(Long locId) {
+        log.info("Попытка удалить локацию с id {}", locId);
         var adminLocation = locationService.checkLocation(locId);
         locationRepository.delete(adminLocation);
+        log.info("Локация удалена");
     }
 }
