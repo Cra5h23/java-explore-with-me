@@ -25,15 +25,19 @@ public class LocationServiceImpl implements LocationService {
     @Override
     @Transactional(readOnly = true)
     public Location checkLocation(Long locId) {
+        log.info("Проверка на то что локация с id {} существует", locId);
         return locationRepository.findById(locId)
-                .orElseThrow(() -> new NotFoundLocationException(String.format("Локация с id %d не существует или не доступна", locId)));
+                .orElseThrow(() -> new NotFoundLocationException(
+                        String.format("Локация с id %d не существует или не доступна", locId)));
     }
 
     @Override
     @Transactional
     public Location addUserLocation(Float lon, Float lat) {
+        log.info("Попытка добавить пользовательскую локацию с параметрами lon={}, lat={}", lon, lat);
         if (lon == null || lat == null) {
-            throw new BadRequestLocationException(String.format("Нельзя добавить локацию параметрами lon=%s, lat=%s", lon, lat));
+            throw new BadRequestLocationException(String.format(
+                    "Нельзя добавить локацию параметрами lon=%s, lat=%s", lon, lat));
         }
 
         var build = Location.builder()
@@ -58,10 +62,13 @@ public class LocationServiceImpl implements LocationService {
     @Override
     @Transactional
     public Location updateUserLocation(Long locId, Float lon, Float lat) {
+        log.info("Попытка обновить пользовательскую локацию с id {} новые данные lon={}, lat={}", locId, lon, lat);
         Location location = checkLocation(locId);
+        log.info("Старые данные {}", location);
 
         if (location.getType() != TypeLocation.USERS) {
-            throw new ConflictLocationException(String.format("Нельзя обновить локацию с id %d она не является пользовательской", locId));
+            throw new ConflictLocationException(String.format(
+                    "Нельзя обновить локацию с id %d она не является пользовательской", locId));
         }
 
         if (lon != null) {
