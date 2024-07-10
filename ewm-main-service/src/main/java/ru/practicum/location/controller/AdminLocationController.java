@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.Marker;
-import ru.practicum.location.dto.LocationDtoRequest;
+import ru.practicum.location.dto.AdminLocationDtoRequest;
 import ru.practicum.location.service.AdminLocationService;
 
 import javax.validation.Valid;
@@ -29,7 +29,7 @@ public class AdminLocationController {
 
     @PostMapping
     @Validated(Marker.OnCreate.class)
-    public ResponseEntity<Object> addLocation(@RequestBody @Valid LocationDtoRequest locationDto) {
+    public ResponseEntity<Object> addLocation(@RequestBody @Valid AdminLocationDtoRequest locationDto) {
         log.info("Получен запрос: POST /admin/locations body={}", locationDto);
 
         return ResponseEntity
@@ -40,7 +40,7 @@ public class AdminLocationController {
 
     @PatchMapping("/{locId}")
     @Validated(Marker.OnUpdate.class)
-    public ResponseEntity<Object> updateLocation(@RequestBody @Valid LocationDtoRequest locationDto,
+    public ResponseEntity<Object> updateLocation(@RequestBody @Valid AdminLocationDtoRequest locationDto,
                                                  @PathVariable @NotNull @Positive Long locId) {
         log.info("Получен запрос: PATCH /admin/locations/{} body={}", locId, locationDto);
 
