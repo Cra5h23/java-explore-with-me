@@ -80,7 +80,7 @@ public class StatsClientImpl extends RestTemplate implements StatsClient {
         }
         log.info("Создан запрос: GET {}/stats?start={}&end={}&uris={}&unique={}",
                 ewmStatsServiceUrl, uriVariables.get("start"), uriVariables.get("end"),
-                uriVariables.get("uris"), uriVariables.get("unique"));
+                uriVariables.get("uris").toString(), uriVariables.get("unique"));
 
         return exchange(url.toString(), HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<ResponseStatsDto>>() {
