@@ -3,21 +3,19 @@ package ru.practicum.event.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import ru.practicum.category.model.Category;
 import ru.practicum.event.model.Event;
 import ru.practicum.user.model.User;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 import java.util.Optional;
 
 /**
  * @author Nikolay Radzivon
  * @Date 25.06.2024
  */
-public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPredicateExecutor<Event> , CustomEventRepository{
+public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPredicateExecutor<Event>, CustomEventRepository {
 
     Page<EventShort> findAllByInitiatorId(Long initiatorId, Pageable page);
 
@@ -42,8 +40,4 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
 
         ZonedDateTime getPublishedOn();
     }
-
-//    @Query("SELECT e FROM Event e WHERE distance(:lat, :lon, e.location.lat, e.location.lon) <= :radius " +
-//            "AND e.state = PUBLISHED")
-//    List<EventShort> findEventsWithinRadius(double lat, double lon, double radius);
 }
