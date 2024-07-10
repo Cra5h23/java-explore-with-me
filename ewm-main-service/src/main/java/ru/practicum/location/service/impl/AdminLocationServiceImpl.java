@@ -4,18 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.event.dto.EventShortDto;
-import ru.practicum.event.service.EventService;
-import ru.practicum.location.dto.AdminLocationDtoResponse;
-import ru.practicum.location.dto.LocationDtoRequest;
+import ru.practicum.location.dto.AdminLocationDtoCreated;
+import ru.practicum.location.dto.AdminLocationDtoRequest;
 import ru.practicum.location.mapper.LocationMapper;
-import ru.practicum.location.model.AdminLocation;
+import ru.practicum.location.model.TypeLocation;
 import ru.practicum.location.repository.LocationRepository;
 import ru.practicum.location.service.AdminLocationService;
 import ru.practicum.location.service.LocationService;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Nikolay Radzivon
@@ -27,69 +22,52 @@ import java.util.Optional;
 public class AdminLocationServiceImpl implements AdminLocationService {
     private final LocationRepository locationRepository;
     private final LocationMapper locationMapper;
-    private final EventService eventService;
     private final LocationService locationService;
 
     @Override
     @Transactional
-    public AdminLocationDtoResponse addLocation(LocationDtoRequest locationDto) {
-        AdminLocation location = locationMapper.toLocation(locationDto);
-        AdminLocation save = locationRepository.save(location);
+    public AdminLocationDtoCreated addLocation(AdminLocationDtoRequest locationDto) {
+        var location = locationMapper.toLocation(locationDto, TypeLocation.ADMINS);
+        var save = locationRepository.save(location);
         return locationMapper.toAdminLocationDtoResponse(save);
     }
 
     @Override
-    public Object getLocation(Long locId) {// todo delete method
-        Optional<AdminLocation> byId = locationRepository.findById(locId);
-
-
-        AdminLocation adminLocation = byId.get();
-
-
-        List<EventShortDto> eventsByLocation = eventService.getEventsByLocation(adminLocation.getLat(), adminLocation.getLon(), adminLocation.getRadius());
-
-
-        System.out.println(eventsByLocation);
-
-        return null;
-    }
-
-    @Override
     @Transactional
-    public AdminLocationDtoResponse updateLocation(Long locId, LocationDtoRequest locationDto) {
+    public AdminLocationDtoCreated updateLocation(Long locId, AdminLocationDtoRequest locationDto) {
         if (locationDto == null || locId == null) {
             return null;
         }
 
-        AdminLocation location = locationService.checkLocation(locId);
+        var location = locationService.checkLocation(locId);
 
-        Float lon = locationDto.getLon();
+        var lon = locationDto.getLon();
         if (lon != null) {
             location.setLon(lon);
         }
 
-        Float lat = locationDto.getLat();
+        var lat = locationDto.getLat();
         if (lat != null) {
             location.setLat(lat);
         }
 
-        Float radius = locationDto.getRadius();
-        if (radius != null) {
-            location.setRadius(radius);
+        if (location.getType() == TypeLocation.ADMINS) {
+            var radius = locationDto.getRadius();
+            if (radius != null) {
+                location.setRadius(radius);
+            }
+
+            var description = locationDto.getDescription();
+            if (description != null) {
+                location.setDescription(description);
+            }
+
+            var name = locationDto.getName();
+            if (name != null) {
+                location.setName(name);
+            }
         }
-
-        String description = locationDto.getDescription();
-        if (description != null) {
-            location.setDescription(description);
-        }
-
-        String name = locationDto.getName();
-
-        if (name != null) {
-            location.setName(name);
-        }
-
-        AdminLocation save = locationRepository.save(location);
+        var save = locationRepository.save(location);
 
         return locationMapper.toAdminLocationDtoResponse(save);
     }
@@ -97,7 +75,7 @@ public class AdminLocationServiceImpl implements AdminLocationService {
     @Override
     @Transactional
     public void deleteLocation(Long locId) {
-        AdminLocation adminLocation = locationService.checkLocation(locId);
+        var adminLocation = locationService.checkLocation(locId);
         locationRepository.delete(adminLocation);
     }
 }
