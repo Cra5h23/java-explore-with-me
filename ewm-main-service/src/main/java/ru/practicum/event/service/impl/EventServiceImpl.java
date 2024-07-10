@@ -131,27 +131,21 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EventShortDto> getEventsByLocation(double lat, double lon, double radius) {
-        List<EventShortProjection> eventsWithinRadius = eventRepository.findEventsWithinRadius(lat, lon, radius);
+    public List<EventShortDto> getListEventShortDto(List<EventShortProjection> events) {
+        return eventMapper.toListEventShortDtoaa(events, getViewsMap(events));
+    }
+
+    @Transactional(readOnly = true)
+    private Map<Long, Long> getViewsMap(List<EventShortProjection> events) {
         List<String> uris = new ArrayList<>();
 
-        Optional<ZonedDateTime> rangeStart = eventsWithinRadius.stream()
+        Optional<ZonedDateTime> rangeStart = events.stream()
                 .peek(event -> uris.add(URI_PATCH + event.getId()))
                 .filter(e -> e.getPublishedOn() != null)
                 .min(Comparator.comparing(EventShortProjection::getPublishedOn))
                 .map(EventShortProjection::getPublishedOn);
 
-        Map<Long, Long> views = rangeStart.isPresent() ? getViews(rangeStart.get().toLocalDateTime(),
+        return rangeStart.isPresent() ? getViews(rangeStart.get().toLocalDateTime(),
                 LocalDateTime.now(), uris) : Map.of();
-
-        return eventMapper.toListEventShortDtoaa(eventsWithinRadius, views);
-
-        // todo Добавить при создании события возможность вводить вместо lat lon , id созданной админом локации
-        //  сделать вместо двух таблиц одну путём добавления флага кем создана локация администратором или пользователем
-        //  сделать проверку что id локации соответствует админской локации. Добавить отсутствующие поля в таблицу локаций из таблицы admin_locations
-        //  сделать чтобы при возвращении ответа выдавался разный ответ в Событии локации в зависимости от типа локации
-        //  (пользовательская только lat lon; админская полностью) сделать постраничный вывод всех админских? локаций
-        //  со списком будующих/ прошедших событий, поиск по названию/ описанию локации.
-        //  Поиск событий в конкретной локации (передаём lat, lon, radius, флаг будующие/прошедшие)
     }
 }
