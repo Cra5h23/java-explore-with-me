@@ -14,12 +14,12 @@ import ru.practicum.event.dto.EventState;
 import ru.practicum.event.dto.UpdateEventAdminRequest;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.model.Location;
 import ru.practicum.event.model.QEvent;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.event.service.AdminEventService;
 import ru.practicum.event.service.EventService;
 import ru.practicum.exception.ConflictEventException;
+import ru.practicum.location.service.LocationService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -42,6 +42,7 @@ public class AdminEventServiceImpl implements AdminEventService {
     private final EventService eventService;
     private final EventMapper eventMapper;
     private static final String URI_PATCH = "/events/";
+    private final LocationService locationService;
 
     /**
      * @param params
@@ -171,10 +172,17 @@ public class AdminEventServiceImpl implements AdminEventService {
         }
 
         if (event.getLocation() != null) {
-            updatedEvent.setLocation(Location.builder()
-                    .lon(event.getLocation().getLon())
-                    .lat(event.getLocation().getLat())
-                    .build());
+            if (event.getLocation().getId() != null) {
+                var location = locationService.checkAdminLocation(event.getLocation().getId());
+                updatedEvent.setLocation(location);
+            } else {
+                var lon = event.getLocation().getLon();
+                var lat = event.getLocation().getLat();
+                var location = updatedEvent.getLocation();
+                var l = locationService.updateUserLocation(location.getId(), lon, lat);
+
+                updatedEvent.setLocation(l);
+            }
         }
 
         if (event.getPaid() != null && updatedEvent.isPaid() != event.getPaid()) {
