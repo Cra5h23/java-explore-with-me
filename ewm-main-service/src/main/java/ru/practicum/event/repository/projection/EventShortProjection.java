@@ -18,26 +18,6 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @Builder
 public class EventShortProjection {
-
-//    private long confirmedRequests;
-//
-//    private String title;
-//
-//    private String annotation;
-//
-//    private Category category;
-//
-//    private Long id;
-//
-//    private ZonedDateTime eventDate;
-//
-//    private User initiator;
-//
-//    private boolean paid;
-//
-//    private ZonedDateTime publishedOn;
-
-
     private long id;
     private String title;
     private String annotation;
