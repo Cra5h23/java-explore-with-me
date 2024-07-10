@@ -1,14 +1,17 @@
 package ru.practicum.location.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import ru.practicum.location.model.AdminLocation;
+import ru.practicum.location.model.Location;
 
 /**
  * @author Nikolay Radzivon
  * @Date 07.07.2024
  */
 public interface LocationService {
-    AdminLocation checkLocation(Long locId);
+    Location checkLocation(Long locId);
+
+    Location addUserLocation(Float lon, Float lat);
+
+    Location checkAdminLocation(Long id);
+
+    Location updateUserLocation(Long id, Float lon, Float lat);
 }
