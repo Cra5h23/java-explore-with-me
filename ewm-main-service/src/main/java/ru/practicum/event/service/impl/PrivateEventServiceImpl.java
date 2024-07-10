@@ -13,6 +13,8 @@ import ru.practicum.event.repository.EventRepository;
 import ru.practicum.event.service.EventService;
 import ru.practicum.event.service.PrivateEventService;
 import ru.practicum.exception.ConflictEventException;
+import ru.practicum.location.model.Location;
+import ru.practicum.location.service.LocationService;
 import ru.practicum.participation.dto.ParticipationRequestDto;
 import ru.practicum.participation.service.ParticipationRequestService;
 import ru.practicum.user.service.UserService;
@@ -37,6 +39,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
     private final CategoryService categoryService;
     private final EventService eventService;
     private final ParticipationRequestService participationRequestService;
+    private final LocationService locationService;
     private static final String URI_PATCH = "/events/";
 
     /**
@@ -87,11 +90,24 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         log.info("Попытка добавить новое событие {} для пользователя с id {}", dto, userId);
         var user = userService.checkUser(userId);
         var category = categoryService.checkCategory(dto.getCategory());
-        var event = eventMapper.toEvent(user, category, dto);
+        var location = dto.getLocation();
+        var event = eventMapper.toEvent(user, category, dto, getLocation(location));
         var save = eventRepository.save(event);
         log.info("Добавлено событие {}", save);
 
         return eventMapper.toEventFullDtoResponse(save, 0);
+    }
+
+    private Location getLocation(EventLocationDtoRequest location) {
+        var id = location.getId();
+        if (id != null) {
+            return locationService.checkAdminLocation(id);
+        } else {
+            var lon = location.getLon();
+            var lat = location.getLat();
+
+            return locationService.addUserLocation(lon, lat);
+        }
     }
 
     /**
@@ -122,59 +138,77 @@ public class PrivateEventServiceImpl implements PrivateEventService {
     @Transactional
     public EventFullDtoResponse updateUserEvent(Long userId, Long eventId, UpdateEventUserRequest dto) {
         log.info("Попытка обновить событие с id {} для пользователя с id {} , новые данные {}", eventId, userId, dto);
-        var event = eventService.checkEvent(eventId, userId);
-        log.info("Старые данные {}", event);
+        var updatedEvent = eventService.checkEvent(eventId, userId);
+        log.info("Старые данные {}", updatedEvent);
 
-        if (event.getState().equals(EventState.PUBLISHED)) {
+        if (updatedEvent.getState().equals(EventState.PUBLISHED)) {
             throw new ConflictEventException(String.format(
                     "Нельзя обновить событие, событие с id %d уже опубликовано", eventId));
         }
 
         if (dto.getAnnotation() != null) {
-            event.setAnnotation(dto.getAnnotation());
+            updatedEvent.setAnnotation(dto.getAnnotation());
         }
 
         if (dto.getEventDate() != null) {
-            event.setEventDate(dto.getEventDate().atZone(ZoneId.systemDefault()));
+            updatedEvent.setEventDate(dto.getEventDate().atZone(ZoneId.systemDefault()));
         }
 
         if (dto.getDescription() != null) {
-            event.setDescription(dto.getDescription());
+            updatedEvent.setDescription(dto.getDescription());
         }
 
         if (dto.getPaid() != null) {
-            event.setPaid(dto.getPaid());
+            updatedEvent.setPaid(dto.getPaid());
         }
 
         if (dto.getCategory() != null) {
-            event.setCategory(Category.builder()
+            updatedEvent.setCategory(Category.builder()
                     .id(dto.getCategory())
                     .build());
         }
 
         if (dto.getRequestModeration() != null) {
-            event.setRequestModeration(dto.getRequestModeration());
+            updatedEvent.setRequestModeration(dto.getRequestModeration());
         }
 
         if (dto.getTitle() != null) {
-            event.setTitle(dto.getTitle());
+            updatedEvent.setTitle(dto.getTitle());
         }
 
         if (dto.getStateAction() != null) {
             switch (dto.getStateAction()) {
                 case CANCEL_REVIEW:
-                    event.setState(EventState.CANCELED);
+                    updatedEvent.setState(EventState.CANCELED);
                     break;
                 case SEND_TO_REVIEW:
-                    event.setState(EventState.PENDING);
+                    updatedEvent.setState(EventState.PENDING);
                     break;
             }
         }
 
-        if (dto.getParticipantLimit() != null) {
-            event.setParticipantLimit(dto.getParticipantLimit());
+        var location = dto.getLocation();
+        if (location != null) {
+            var locId = location.getId();
+
+            if (locId != null) {
+                var l = locationService.checkAdminLocation(locId);
+                updatedEvent.setLocation(l);
+            } else {
+                var id = updatedEvent.getLocation().getId();
+                var lat = location.getLat();
+                var lon = location.getLon();
+
+                var updateLocation = locationService.updateUserLocation(id, lon, lat);
+
+                updatedEvent.setLocation(updateLocation);
+            }
         }
-        var save = eventRepository.save(event);
+
+        if (dto.getParticipantLimit() != null) {
+            updatedEvent.setParticipantLimit(dto.getParticipantLimit());
+        }
+        var save = eventRepository.save(updatedEvent);
         long views = 0;
         if (save.getState().equals(EventState.PUBLISHED)) {
             views = eventService.getViews(save.getPublishedOn().toLocalDateTime(), LocalDateTime.now(), URI_PATCH + eventId);
