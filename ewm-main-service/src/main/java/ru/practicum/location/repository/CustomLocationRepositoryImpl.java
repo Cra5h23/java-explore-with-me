@@ -154,7 +154,7 @@ public class CustomLocationRepositoryImpl implements CustomLocationRepository {
         Predicate statusPredicate = cb.equal(eventRoot.get("state"), EventState.PUBLISHED);
         Predicate equal = cb.equal(eventRoot.get("location").get("id"), locId);
         Predicate eventDate = cb.conjunction();
-        ;
+
         switch (eventStatus) {
             case ALL:
                 break;
