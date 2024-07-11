@@ -3694,11 +3694,6 @@
 			"key": "locId",
 			"value": "",
 			"type": "string"
-		},
-		{
-			"value": "",
-			"type": "string",
-			"disabled": true
 		}
 	]
 }
