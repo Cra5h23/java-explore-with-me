@@ -3231,6 +3231,42 @@
 							"name": "Поиск локации в заданых координатах с радиусом",
 							"event": [
 								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать статус 200 и совпадающие данные\",function() {\r",
+											"pm.response.to.have.status(200);\r",
+											"pm.response.to.be.withBody;\r",
+											"pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Локация должна содержать поля: id, lat, lon, radius, name, description, events\", function () {\r",
+											"pm.expect(target[0]).to.have.property('id');\r",
+											"pm.expect(target[0]).to.have.property('lat');\r",
+											"pm.expect(target[0]).to.have.property('lon');\r",
+											"pm.expect(target[0]).to.have.property('radius');\r",
+											"pm.expect(target[0]).to.have.property('name');\r",
+											"pm.expect(target[0]).to.have.property('description');\r",
+											"pm.expect(target[0]).to.have.property('events');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+											"    pm.expect(target[0].id.toString()).equal(pm.collectionVariables.get(\"locId\"));\r",
+											"    pm.expect(target[0].lat.toString()).equal(pm.environment.get(\"testLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"    pm.expect(target[0].lon.toString()).equal(pm.environment.get(\"testLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"    pm.expect(target[0].radius.toString()).equal(pm.environment.get(\"testRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"    pm.expect(target[0].name).equal(pm.environment.get(\"testName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"    pm.expect(target[0].description).equal(pm.environment.get(\"testDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"    pm.expect(target[0].events).to.be.empty;\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
 									"listen": "prerequest",
 									"script": {
 										"exec": [
@@ -3281,42 +3317,6 @@
 											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
 											"        }\r",
 											"    }\r",
-											"});"
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Ответ должен содержать статус 200 и совпадающие данные\",function() {\r",
-											"pm.response.to.have.status(200);\r",
-											"pm.response.to.be.withBody;\r",
-											"pm.response.to.be.json;\r",
-											"});\r",
-											"\r",
-											"const target = pm.response.json();\r",
-											"\r",
-											"pm.test(\"Локация должна содержать поля: id, lat, lon, radius, name, description, events\", function () {\r",
-											"pm.expect(target[0]).to.have.property('id');\r",
-											"pm.expect(target[0]).to.have.property('lat');\r",
-											"pm.expect(target[0]).to.have.property('lon');\r",
-											"pm.expect(target[0]).to.have.property('radius');\r",
-											"pm.expect(target[0]).to.have.property('name');\r",
-											"pm.expect(target[0]).to.have.property('description');\r",
-											"pm.expect(target[0]).to.have.property('events');\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
-											"    pm.expect(target[0].id.toString()).equal(pm.collectionVariables(\"locId\"));\r",
-											"    pm.expect(target[0].lat.toString()).equal(pm.environment.get(\"testLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
-											"    pm.expect(target[0].lon.toString()).equal(pm.environment.get(\"testLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
-											"    pm.expect(target[0].radius.toString()).equal(pm.environment.get(\"testRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
-											"    pm.expect(target[0].name).equal(pm.environment.get(\"testName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
-											"    pm.expect(target[0].description).equal(pm.environment.get(\"testDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
-											"    pm.expect(target[0].events).to.be.empty;\r",
 											"});"
 										],
 										"type": "text/javascript",
@@ -3451,7 +3451,7 @@
 											"\r",
 											"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
 											"    pm.expect(target[0].id.toString()).equal(pm.collectionVariables.get(\"locId\"));\r",
-											"    pm.expect(target[0].lat.toString()).equal(pm.environment.get(\"testLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"    pm.expect(target[0].lat).equal(pm.environment.get(\"testLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
 											"    pm.expect(target[0].lon.toString()).equal(pm.environment.get(\"testLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
 											"    pm.expect(target[0].radius.toString()).equal(pm.environment.get(\"testRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
 											"    pm.expect(target[0].name).equal(pm.environment.get(\"testName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
@@ -3593,6 +3593,7 @@
 											"\r",
 											"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
 											"    pm.expect(target[0].id.toString()).equal(pm.collectionVariables.get(\"locId\"));\r",
+											"    // pm.expect(target[0].id).to.not.be.null;\r",
 											"    pm.expect(target[0].lat.toString()).equal(pm.environment.get(\"testLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
 											"    pm.expect(target[0].lon.toString()).equal(pm.environment.get(\"testLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
 											"    pm.expect(target[0].radius.toString()).equal(pm.environment.get(\"testRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
