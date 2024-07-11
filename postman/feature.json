@@ -3885,7 +3885,7 @@
 											"    pm.expect(target.category.name.toString()).equal(pm.environment.get(\"categoryName\"), 'Название категории должно соответствовать названию категории в запросе');\r",
 											"    pm.expect(target.confirmedRequests).to.eql(0), 'Должно быть равно 0';\r",
 											"    pm.expect(target.eventDate).equal(pm.environment.get(\"eventEventDate\"));\r",
-											"    pm.expect(target.initiator.id).equal(pm.collectionVariables.get(\"userId\"));\r",
+											"    pm.expect(target.initiator.id.toString()).equal(pm.collectionVariables.get(\"userId\"));\r",
 											"    pm.expect(target.initiator.name).equal(pm.environment.get(\"userName\"));\r",
 											"    pm.expect(target.paid).equal(true);\r",
 											"    pm.expect(target.title).equal(pm.environment.get(\"eventTitle\"));\r",
