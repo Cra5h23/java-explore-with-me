@@ -3881,7 +3881,7 @@
 											"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
 											"    pm.expect(target.id).to.not.be.null;\r",
 											"    pm.expect(target.annotation.toString()).equal(pm.environment.get(\"eventAnnotation\"), 'Краткое описание должно соответствовать краткому описанию в запросе');\r",
-											"    pm.expect(target.category.id).equal(pm.collectionVariables.get(\"catId\"), 'Идентификационный номер категории должен соответствовать идентификационному номеру категории в запросе');\r",
+											"    pm.expect(target.category.id.toString()).equal(pm.collectionVariables.get(\"catId\"), 'Идентификационный номер категории должен соответствовать идентификационному номеру категории в запросе');\r",
 											"    pm.expect(target.category.name.toString()).equal(pm.environment.get(\"categoryName\"), 'Название категории должно соответствовать названию категории в запросе');\r",
 											"    pm.expect(target.confirmedRequests).to.eql(0), 'Должно быть равно 0';\r",
 											"    pm.expect(target.eventDate).equal(pm.environment.get(\"eventEventDate\"));\r",
