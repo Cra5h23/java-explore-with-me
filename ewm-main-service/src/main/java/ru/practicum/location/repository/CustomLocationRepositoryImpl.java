@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.dto.EventState;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.repository.projection.EventShortProjection;
@@ -30,6 +31,7 @@ public class CustomLocationRepositoryImpl implements CustomLocationRepository {
     EntityManager entityManager;
 
     @Override
+    @Transactional(readOnly = true)
     public Page<LocationFullProjection> findLocations(Pageable pageable) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Location> cq = cb.createQuery(Location.class);
@@ -58,6 +60,7 @@ public class CustomLocationRepositoryImpl implements CustomLocationRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<LocationFullProjection> findByLocId(Long locId, EventSortType eventStatus) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Location> cq = cb.createQuery(Location.class);
@@ -84,6 +87,7 @@ public class CustomLocationRepositoryImpl implements CustomLocationRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<LocationFullProjection> searchLocations(PublicLocationService.SearchParams params) {
         int from = params.getFrom();
         int size = params.getSize();

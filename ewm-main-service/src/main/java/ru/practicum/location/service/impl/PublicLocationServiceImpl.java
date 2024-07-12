@@ -30,7 +30,6 @@ public class PublicLocationServiceImpl implements PublicLocationService {
     private final EventService eventService;
 
     @Override
-    @Transactional(readOnly = true)
     public List<? extends UserLocationDtoResponse> getLocations(GetLocationsParams params) {
         log.info("Запрос списка локаций с параметрами {}", params);
         if (params == null) {
