@@ -3,11 +3,13 @@ package ru.practicum.event.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.dto.EventState;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.repository.projection.EventShortProjection;
 import ru.practicum.event.service.PublicEventService;
 import ru.practicum.location.dto.EventSortType;
+import ru.practicum.location.model.Location;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,6 +25,7 @@ public class CustomEventRepositoryImpl implements CustomEventRepository {
     EntityManager entityManager;
 
     @Override
+    @Transactional(readOnly = true)
     public Page<EventShortProjection> findEventsWithinRadius(PublicEventService.GetSearchParams params) {
         Double lat = params.getLat();
         Double lon = params.getLon();
@@ -31,7 +34,6 @@ public class CustomEventRepositoryImpl implements CustomEventRepository {
         int from = params.getFrom();
 
         PageRequest pageable = PageRequest.of(from / size, size);
-
 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<EventShortProjection> cq = cb.createQuery(EventShortProjection.class);
@@ -71,13 +73,28 @@ public class CustomEventRepositoryImpl implements CustomEventRepository {
                         eventRoot.get("initiator").alias("initiator"),
                         eventRoot.get("paid").alias("paid"),
                         eventRoot.get("publishedOn").alias("publishedOn"),
-                        eventRoot.get("confirmedRequests").alias("confirmedRequests") // Прямое использование поля с аннотацией @Formula
+                        eventRoot.get("confirmedRequests").alias("confirmedRequests")
                 )
                 .where(cb.and(distancePredicate, statusPredicate, eventDate));
 
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-        countQuery.select(cb.count(countQuery.from(Event.class)))
-                .where(cb.and(distancePredicate, statusPredicate));
+        Root<Event> countRoot = countQuery.from(Event.class);
+        Join<Event, Location> locationJoin = countRoot.join("location", JoinType.LEFT);
+        Predicate distancePredicateForCount = cb.lessThanOrEqualTo(
+                cb.function(
+                        "distance",
+                        Double.class,
+                        cb.literal(lat),
+                        cb.literal(lon),
+                        locationJoin.get("lat"),
+                        locationJoin.get("lon")
+                ),
+                radius
+        );
+        Predicate statusPredicateForCount = cb.equal(countRoot.get("state"), EventState.PUBLISHED);
+
+        countQuery.select(cb.count(countRoot))
+                .where(cb.and(distancePredicateForCount, statusPredicateForCount));
         Long count = entityManager.createQuery(countQuery).getSingleResult();
 
         TypedQuery<EventShortProjection> typedQuery = entityManager.createQuery(cq);
