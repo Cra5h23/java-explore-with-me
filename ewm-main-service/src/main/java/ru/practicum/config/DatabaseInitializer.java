@@ -24,9 +24,9 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        try (Connection conn = dataSource.getConnection();
-             Statement stmt = conn.createStatement()) {
-            String sql = "CREATE OR REPLACE FUNCTION distance(lat1 double precision, lon1 double precision, lat2 double precision, lon2 double precision)\n" +
+        try (Connection conn = dataSource.getConnection(); Statement stmt = conn.createStatement()) {
+            String sql = "CREATE OR REPLACE FUNCTION distance(" +
+                    "lat1 double precision, lon1 double precision, lat2 double precision, lon2 double precision)\n" +
                     "    RETURNS double precision\n" +
                     "AS $$\n" +
                     "DECLARE\n" +
