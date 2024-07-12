@@ -4,7 +4,7 @@ package ru.practicum;
  * @author Nikolay Radzivon
  * @Date 07.07.2024
  */
-public interface Marker {
+public interface ActionType {
     interface OnCreate {
     }
 
