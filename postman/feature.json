@@ -3969,6 +3969,8 @@
 											"        pm.environment.set(\"updateLocationDescription\", location.description);\r",
 											"        event2.stateAction = \"PUBLISH_EVENT\"\r",
 											"        event2.location.id = location.id;\r",
+											"        event2.location.lat = null;\r",
+											"        event2.location.lon = null;\r",
 											"        pm.collectionVariables.set('response', event2);\r",
 											"        pm.collectionVariables.set(\"eid\", event.id)\r",
 											"        pm.request.body.update({\r",
