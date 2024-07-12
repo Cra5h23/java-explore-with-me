@@ -46,7 +46,9 @@ public class LocationServiceImpl implements LocationService {
                 .type(TypeLocation.USERS)
                 .build();
 
-        return locationRepository.save(build);
+        Location save = locationRepository.save(build);
+        log.info("Сохранена локация {}", save);
+        return save;
     }
 
     @Override
