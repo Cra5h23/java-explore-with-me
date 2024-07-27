@@ -10,6 +10,7 @@ import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.repository.EventRepository;
+import ru.practicum.event.repository.projection.EventShortProjection;
 import ru.practicum.event.service.EventService;
 import ru.practicum.exception.NotFoundEventException;
 
@@ -126,5 +127,25 @@ public class EventServiceImpl implements EventService {
         }
 
         return eventsMap;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<EventShortDto> getListEventShortDto(List<EventShortProjection> events) {
+        return eventMapper.toListEventShortDtoaa(events, getViewsMap(events));
+    }
+
+    @Transactional(readOnly = true)
+    private Map<Long, Long> getViewsMap(List<EventShortProjection> events) {
+        List<String> uris = new ArrayList<>();
+
+        Optional<ZonedDateTime> rangeStart = events.stream()
+                .peek(event -> uris.add(URI_PATCH + event.getId()))
+                .filter(e -> e.getPublishedOn() != null)
+                .min(Comparator.comparing(EventShortProjection::getPublishedOn))
+                .map(EventShortProjection::getPublishedOn);
+
+        return rangeStart.isPresent() ? getViews(rangeStart.get().toLocalDateTime(),
+                LocalDateTime.now(), uris) : Map.of();
     }
 }

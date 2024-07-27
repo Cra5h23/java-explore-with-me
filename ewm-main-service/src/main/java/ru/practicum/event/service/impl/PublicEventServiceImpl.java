@@ -12,6 +12,7 @@ import ru.practicum.event.mapper.EventMapper;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.QEvent;
 import ru.practicum.event.repository.EventRepository;
+import ru.practicum.event.repository.projection.EventShortProjection;
 import ru.practicum.event.service.EventService;
 import ru.practicum.event.service.PublicEventService;
 import ru.practicum.exception.NotFoundEventException;
@@ -141,5 +142,14 @@ public class PublicEventServiceImpl implements PublicEventService {
             throw new NotFoundEventException(
                     String.format("Событие с id %d не найдено или не доступно", id));
         }
+    }
+
+    @Override
+    public List<EventShortDto> searchEventsByLocation(GetSearchParams params) {
+        log.info("Поиск событий по локации с параметрами поиска from={}, size={}, lon={}, lat={}, radius={}, eventStatus={}",
+                params.getFrom(), params.getSize(), params.getLon(), params.getLat(), params.getRadius(), params.getEventStatus());
+
+        List<EventShortProjection> content = eventRepository.findEventsWithinRadius(params).getContent();
+        return eventService.getListEventShortDto(content);
     }
 }

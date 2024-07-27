@@ -1,0 +1,4509 @@
+{
+	"info": {
+		"_postman_id": "2f653a6b-8475-4955-b350-b51499ba2ae5",
+		"name": "Проверки для 3 части диплома",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32584181"
+	},
+	"item": [
+		{
+			"name": "Locations",
+			"item": [
+				{
+					"name": "Создание локации",
+					"item": [
+						{
+							"name": "Создание Локации от Администратора",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"generatedLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedName\", randomName);\r",
+											"pm.environment.set(\"generatedDescription\", randomDescription);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать статус 201 и совпадающие данные\",function() {\r",
+											"pm.response.to.have.status(201);\r",
+											"pm.response.to.be.withBody;\r",
+											"pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Локация должна содержать поля: id, lat, lon, radius, name, description\", function () {\r",
+											"pm.expect(target).to.have.property('id');\r",
+											"pm.expect(target).to.have.property('lat');\r",
+											"pm.expect(target).to.have.property('lon');\r",
+											"pm.expect(target).to.have.property('radius');\r",
+											"pm.expect(target).to.have.property('name');\r",
+											"pm.expect(target).to.have.property('description');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+											"    pm.expect(target.id).to.not.be.null;\r",
+											"    pm.expect(target.lat.toString()).equal(pm.environment.get(\"generatedLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"    pm.expect(target.lon.toString()).equal(pm.environment.get(\"generatedLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"    pm.expect(target.radius.toString()).equal(pm.environment.get(\"generatedRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"    pm.expect(target.name).equal(pm.environment.get(\"generatedName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"    pm.expect(target.description).equal(pm.environment.get(\"generatedDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{requestBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создание локации с пустым lon",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"let requestBody = {\r",
+											"   \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});\r",
+											"\r",
+											"// pm.test(\"Данные в ответе должны соответствовать данным\", function () {\r",
+											"//     pm.expect(target.times).to.not.be.null;\r",
+											"//     pm.expect(target.lat.toString()).equal(pm.environment.get(\"generatedLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"//     pm.expect(target.lon.toString()).equal(pm.environment.get(\"generatedLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"//     pm.expect(target.radius.toString()).equal(pm.environment.get(\"generatedRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"//     pm.expect(target.name).equal(pm.environment.get(\"generatedName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"//     pm.expect(target.description).equal(pm.environment.get(\"generatedDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"// });"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{requestBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создание локации с пустым lat",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"let requestBody = {\r",
+											"   \"lon\": parseFloat(randomLon),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{requestBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создание локации с пустым radius",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"let requestBody = {\r",
+											"   \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{requestBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создание локации с пустым radius -1",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"let requestBody = {\r",
+											"   \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"name\": randomName,\r",
+											"    \"radius\": - 1,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{requestBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создание локации с пустым name",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"let requestBody = {\r",
+											"   \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{requestBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создание локации с name равным 51 символ",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(51);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"let requestBody = {\r",
+											"   \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{requestBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создание локации с Пробелами в поле  name",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"let requestBody = {\r",
+											"   \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": \"   \",\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{requestBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создание локации с name равным 2 символа",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(2);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"let requestBody = {\r",
+											"   \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{requestBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создание локации с пустым description",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"let requestBody = {\r",
+											"   \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{requestBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создание локации с пробелами в description",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"let requestBody = {\r",
+											"   \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": \"                                                      \" \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{requestBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создание локации с пустым description меньше 20 символов",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(18);\r",
+											"\r",
+											"let requestBody = {\r",
+											"   \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{requestBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Создание локации с пустым description больше 2000 символов Copy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(2001);\r",
+											"\r",
+											"let requestBody = {\r",
+											"   \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{requestBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Обновление локации администратора",
+					"item": [
+						{
+							"name": "Обновление локации",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"generatedLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedName\", randomName);\r",
+											"pm.environment.set(\"generatedDescription\", randomDescription);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"let updateLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let updateLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let updateRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let updateName = generateRandomString(10);\r",
+											"let updateDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"updateLon\", updateLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateLat\", updateLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateRadius\", updateRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateName\", updateName);\r",
+											"pm.environment.set(\"updateDescription\", updateDescription);\r",
+											"\r",
+											"let updateRequestBody = {\r",
+											"    \"lon\": parseFloat(updateLon),\r",
+											"    \"lat\": parseFloat(updateLat),\r",
+											"    \"radius\": parseFloat(updateRadius),\r",
+											"    \"name\": updateName,\r",
+											"    \"description\": updateDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"updateBody\", JSON.stringify(updateRequestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать статус 200 и совпадающие данные\",function() {\r",
+											"pm.response.to.have.status(200);\r",
+											"pm.response.to.be.withBody;\r",
+											"pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Локация должна содержать поля: id, lat, lon, radius, name, description\", function () {\r",
+											"pm.expect(target).to.have.property('id');\r",
+											"pm.expect(target).to.have.property('lat');\r",
+											"pm.expect(target).to.have.property('lon');\r",
+											"pm.expect(target).to.have.property('radius');\r",
+											"pm.expect(target).to.have.property('name');\r",
+											"pm.expect(target).to.have.property('description');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+											"    pm.expect(target.id).to.not.be.null;\r",
+											"    pm.expect(target.lat.toString()).equal(pm.environment.get(\"updateLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"    pm.expect(target.lon.toString()).equal(pm.environment.get(\"updateLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"    pm.expect(target.radius.toString()).equal(pm.environment.get(\"updateRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"    pm.expect(target.name).equal(pm.environment.get(\"updateName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"    pm.expect(target.description).equal(pm.environment.get(\"updateDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{updateBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations/::locId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations",
+										"::locId"
+									],
+									"query": [
+										{
+											"key": "locationId",
+											"value": null,
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": ":locId",
+											"value": "{{locId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление локации поле name содержит только пробелы",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"generatedLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedName\", randomName);\r",
+											"pm.environment.set(\"generatedDescription\", randomDescription);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"let updateLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let updateLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let updateRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let updateName = generateRandomString(10);\r",
+											"let updateDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"updateLon\", updateLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateLat\", updateLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateRadius\", updateRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateName\", updateName);\r",
+											"pm.environment.set(\"updateDescription\", updateDescription);\r",
+											"\r",
+											"let updateRequestBody = {\r",
+											"    \"lon\": parseFloat(updateLon),\r",
+											"    \"lat\": parseFloat(updateLat),\r",
+											"    \"radius\": parseFloat(updateRadius),\r",
+											"    // \"name\": updateName,\r",
+											"    \"name\": \"           \",\r",
+											"    \"description\": updateDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"updateBody\", JSON.stringify(updateRequestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});\r",
+											"\r",
+											"// pm.test(\"Данные в ответе должны соответствовать данным\", function () {\r",
+											"//     pm.expect(target.times).to.not.be.null;\r",
+											"//     pm.expect(target.lat.toString()).equal(pm.environment.get(\"generatedLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"//     pm.expect(target.lon.toString()).equal(pm.environment.get(\"generatedLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"//     pm.expect(target.radius.toString()).equal(pm.environment.get(\"generatedRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"//     pm.expect(target.name).equal(pm.environment.get(\"generatedName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"//     pm.expect(target.description).equal(pm.environment.get(\"generatedDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"// });"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{updateBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations/::locId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations",
+										"::locId"
+									],
+									"query": [
+										{
+											"key": "locationId",
+											"value": null,
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": ":locId",
+											"value": "{{locId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление локации поле name содержит 2 символа",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"generatedLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedName\", randomName);\r",
+											"pm.environment.set(\"generatedDescription\", randomDescription);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"let updateLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let updateLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let updateRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let updateName = generateRandomString(2);\r",
+											"let updateDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"updateLon\", updateLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateLat\", updateLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateRadius\", updateRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateName\", updateName);\r",
+											"pm.environment.set(\"updateDescription\", updateDescription);\r",
+											"\r",
+											"let updateRequestBody = {\r",
+											"    \"lon\": parseFloat(updateLon),\r",
+											"    \"lat\": parseFloat(updateLat),\r",
+											"    \"radius\": parseFloat(updateRadius),\r",
+											"     \"name\": updateName,\r",
+											"    \"description\": updateDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"updateBody\", JSON.stringify(updateRequestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});\r",
+											"\r",
+											"// pm.test(\"Данные в ответе должны соответствовать данным\", function () {\r",
+											"//     pm.expect(target.times).to.not.be.null;\r",
+											"//     pm.expect(target.lat.toString()).equal(pm.environment.get(\"generatedLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"//     pm.expect(target.lon.toString()).equal(pm.environment.get(\"generatedLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"//     pm.expect(target.radius.toString()).equal(pm.environment.get(\"generatedRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"//     pm.expect(target.name).equal(pm.environment.get(\"generatedName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"//     pm.expect(target.description).equal(pm.environment.get(\"generatedDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"// });"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{updateBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations/::locId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations",
+										"::locId"
+									],
+									"query": [
+										{
+											"key": "locationId",
+											"value": null,
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": ":locId",
+											"value": "{{locId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление локации поле name содержит 51 символ",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"generatedLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedName\", randomName);\r",
+											"pm.environment.set(\"generatedDescription\", randomDescription);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"let updateLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let updateLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let updateRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let updateName = generateRandomString(51);\r",
+											"let updateDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"updateLon\", updateLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateLat\", updateLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateRadius\", updateRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateName\", updateName);\r",
+											"pm.environment.set(\"updateDescription\", updateDescription);\r",
+											"\r",
+											"let updateRequestBody = {\r",
+											"    \"lon\": parseFloat(updateLon),\r",
+											"    \"lat\": parseFloat(updateLat),\r",
+											"    \"radius\": parseFloat(updateRadius),\r",
+											"    \"name\": updateName,\r",
+											"    \"description\": updateDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"updateBody\", JSON.stringify(updateRequestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});\r",
+											"\r",
+											"// pm.test(\"Данные в ответе должны соответствовать данным\", function () {\r",
+											"//     pm.expect(target.times).to.not.be.null;\r",
+											"//     pm.expect(target.lat.toString()).equal(pm.environment.get(\"generatedLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"//     pm.expect(target.lon.toString()).equal(pm.environment.get(\"generatedLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"//     pm.expect(target.radius.toString()).equal(pm.environment.get(\"generatedRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"//     pm.expect(target.name).equal(pm.environment.get(\"generatedName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"//     pm.expect(target.description).equal(pm.environment.get(\"generatedDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"// });"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{updateBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations/::locId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations",
+										"::locId"
+									],
+									"query": [
+										{
+											"key": "locationId",
+											"value": null,
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": ":locId",
+											"value": "{{locId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление локации поле radius содержит -1",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"generatedLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedName\", randomName);\r",
+											"pm.environment.set(\"generatedDescription\", randomDescription);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"let updateLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let updateLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let updateRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let updateName = generateRandomString(10);\r",
+											"let updateDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"updateLon\", updateLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateLat\", updateLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateRadius\", updateRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateName\", updateName);\r",
+											"pm.environment.set(\"updateDescription\", updateDescription);\r",
+											"\r",
+											"let updateRequestBody = {\r",
+											"    \"lon\": parseFloat(updateLon),\r",
+											"    \"lat\": parseFloat(updateLat),\r",
+											"    \"radius\": -1,\r",
+											"    \"name\": updateName,\r",
+											"    \"description\": updateDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"updateBody\", JSON.stringify(updateRequestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});\r",
+											"\r",
+											"// pm.test(\"Данные в ответе должны соответствовать данным\", function () {\r",
+											"//     pm.expect(target.times).to.not.be.null;\r",
+											"//     pm.expect(target.lat.toString()).equal(pm.environment.get(\"generatedLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"//     pm.expect(target.lon.toString()).equal(pm.environment.get(\"generatedLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"//     pm.expect(target.radius.toString()).equal(pm.environment.get(\"generatedRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"//     pm.expect(target.name).equal(pm.environment.get(\"generatedName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"//     pm.expect(target.description).equal(pm.environment.get(\"generatedDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"// });"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{updateBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations/::locId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations",
+										"::locId"
+									],
+									"query": [
+										{
+											"key": "locationId",
+											"value": null,
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": ":locId",
+											"value": "{{locId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление локации поле description содержит только пробелы",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"generatedLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedName\", randomName);\r",
+											"pm.environment.set(\"generatedDescription\", randomDescription);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"let updateLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let updateLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let updateRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let updateName = generateRandomString(10);\r",
+											"let updateDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"updateLon\", updateLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateLat\", updateLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateRadius\", updateRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateName\", updateName);\r",
+											"pm.environment.set(\"updateDescription\", updateDescription);\r",
+											"\r",
+											"let updateRequestBody = {\r",
+											"    \"lon\": parseFloat(updateLon),\r",
+											"    \"lat\": parseFloat(updateLat),\r",
+											"    \"radius\": parseFloat(updateRadius),\r",
+											"    \"name\": updateName,\r",
+											"    \"description\": \"                        \",\r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"updateBody\", JSON.stringify(updateRequestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});\r",
+											"\r",
+											"// pm.test(\"Данные в ответе должны соответствовать данным\", function () {\r",
+											"//     pm.expect(target.times).to.not.be.null;\r",
+											"//     pm.expect(target.lat.toString()).equal(pm.environment.get(\"generatedLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"//     pm.expect(target.lon.toString()).equal(pm.environment.get(\"generatedLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"//     pm.expect(target.radius.toString()).equal(pm.environment.get(\"generatedRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"//     pm.expect(target.name).equal(pm.environment.get(\"generatedName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"//     pm.expect(target.description).equal(pm.environment.get(\"generatedDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"// });"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{updateBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations/::locId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations",
+										"::locId"
+									],
+									"query": [
+										{
+											"key": "locationId",
+											"value": null,
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": ":locId",
+											"value": "{{locId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление локации поле description содержит 19 символа",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"generatedLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedName\", randomName);\r",
+											"pm.environment.set(\"generatedDescription\", randomDescription);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"let updateLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let updateLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let updateRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let updateName = generateRandomString(10);\r",
+											"let updateDescription = generateRandomString(19);\r",
+											"\r",
+											"pm.environment.set(\"updateLon\", updateLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateLat\", updateLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateRadius\", updateRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateName\", updateName);\r",
+											"pm.environment.set(\"updateDescription\", updateDescription);\r",
+											"\r",
+											"let updateRequestBody = {\r",
+											"    \"lon\": parseFloat(updateLon),\r",
+											"    \"lat\": parseFloat(updateLat),\r",
+											"    \"radius\": parseFloat(updateRadius),\r",
+											"     \"name\": updateName,\r",
+											"    \"description\": updateDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"updateBody\", JSON.stringify(updateRequestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});\r",
+											"\r",
+											"// pm.test(\"Данные в ответе должны соответствовать данным\", function () {\r",
+											"//     pm.expect(target.times).to.not.be.null;\r",
+											"//     pm.expect(target.lat.toString()).equal(pm.environment.get(\"generatedLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"//     pm.expect(target.lon.toString()).equal(pm.environment.get(\"generatedLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"//     pm.expect(target.radius.toString()).equal(pm.environment.get(\"generatedRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"//     pm.expect(target.name).equal(pm.environment.get(\"generatedName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"//     pm.expect(target.description).equal(pm.environment.get(\"generatedDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"// });"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{updateBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations/::locId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations",
+										"::locId"
+									],
+									"query": [
+										{
+											"key": "locationId",
+											"value": null,
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": ":locId",
+											"value": "{{locId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Обновление локации поле description содержит 2001 символ Copy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"generatedLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedName\", randomName);\r",
+											"pm.environment.set(\"generatedDescription\", randomDescription);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"let updateLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let updateLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let updateRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let updateName = generateRandomString(10);\r",
+											"let updateDescription = generateRandomString(2001);\r",
+											"\r",
+											"pm.environment.set(\"updateLon\", updateLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateLat\", updateLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateRadius\", updateRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"updateName\", updateName);\r",
+											"pm.environment.set(\"updateDescription\", updateDescription);\r",
+											"\r",
+											"let updateRequestBody = {\r",
+											"    \"lon\": parseFloat(updateLon),\r",
+											"    \"lat\": parseFloat(updateLat),\r",
+											"    \"radius\": parseFloat(updateRadius),\r",
+											"    \"name\": updateName,\r",
+											"    \"description\": updateDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"updateBody\", JSON.stringify(updateRequestBody));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});\r",
+											"\r",
+											"// pm.test(\"Данные в ответе должны соответствовать данным\", function () {\r",
+											"//     pm.expect(target.times).to.not.be.null;\r",
+											"//     pm.expect(target.lat.toString()).equal(pm.environment.get(\"generatedLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"//     pm.expect(target.lon.toString()).equal(pm.environment.get(\"generatedLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"//     pm.expect(target.radius.toString()).equal(pm.environment.get(\"generatedRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"//     pm.expect(target.name).equal(pm.environment.get(\"generatedName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"//     pm.expect(target.description).equal(pm.environment.get(\"generatedDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"// });"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{updateBody}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations/::locId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations",
+										"::locId"
+									],
+									"query": [
+										{
+											"key": "locationId",
+											"value": null,
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": ":locId",
+											"value": "{{locId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Удаление локации администратора",
+					"item": [
+						{
+							"name": "Удаление локации администратора",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"generatedLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedName\", randomName);\r",
+											"pm.environment.set(\"generatedDescription\", randomDescription);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать статус 204 и совпадающие данные\",function() {\r",
+											"pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations/::locId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations",
+										"::locId"
+									],
+									"variable": [
+										{
+											"key": ":locId",
+											"value": "{{locId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Удаление локации администратора Copy",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"generatedLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedName\", randomName);\r",
+											"pm.environment.set(\"generatedDescription\", randomDescription);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId + 1);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.notFound;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/admin/locations/::locId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"locations",
+										"::locId"
+									],
+									"variable": [
+										{
+											"key": ":locId",
+											"value": "{{locId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Получение локаций",
+					"item": [
+						{
+							"name": "Получение  списка локаций",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"generatedLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedName\", randomName);\r",
+											"pm.environment.set(\"generatedDescription\", randomDescription);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать статус 200\",function() {\r",
+											"pm.response.to.have.status(200);\r",
+											"pm.response.to.be.withBody;\r",
+											"pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Список не пустой\", function() {\r",
+											"    var responseData = pm.response.json();\r",
+											"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/locations/?from=0&size=2",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations",
+										""
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Получение  списка локаций from=-1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/locations/?from=-1&size=2",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations",
+										""
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "-1"
+										},
+										{
+											"key": "size",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Получение  списка локаций size=-1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/locations/?from=0&size=-1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations",
+										""
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "-1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Получение  списка локаций size=101",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 400 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.badRequest;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/locations/?from=0&size=101",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations",
+										""
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "101"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Получение локации",
+					"item": [
+						{
+							"name": "Получение локации по id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"generatedLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedName\", randomName);\r",
+											"pm.environment.set(\"generatedDescription\", randomDescription);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать статус 200 и совпадающие данные\",function() {\r",
+											"pm.response.to.have.status(200);\r",
+											"pm.response.to.be.withBody;\r",
+											"pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Локация должна содержать поля: id, lat, lon, radius, name, description, events\", function () {\r",
+											"pm.expect(target).to.have.property('id');\r",
+											"pm.expect(target).to.have.property('lat');\r",
+											"pm.expect(target).to.have.property('lon');\r",
+											"pm.expect(target).to.have.property('radius');\r",
+											"pm.expect(target).to.have.property('name');\r",
+											"pm.expect(target).to.have.property('description');\r",
+											"pm.expect(target).to.have.property('events');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+											"    pm.expect(target.id.toString()).equal(pm.collectionVariables.get(\"locId\"));\r",
+											"    pm.expect(target.lat.toString()).equal(pm.environment.get(\"generatedLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"    pm.expect(target.lon.toString()).equal(pm.environment.get(\"generatedLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"    pm.expect(target.radius.toString()).equal(pm.environment.get(\"generatedRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"    pm.expect(target.name).equal(pm.environment.get(\"generatedName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"    pm.expect(target.description).equal(pm.environment.get(\"generatedDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"    pm.expect(target.events).to.be.empty;\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/locations/::locId?eventStatus=upcoming",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations",
+										"::locId"
+									],
+									"query": [
+										{
+											"key": "eventStatus",
+											"value": "upcoming"
+										}
+									],
+									"variable": [
+										{
+											"key": ":locId",
+											"value": "{{locId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Получение не существующей локации по id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"generatedLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"generatedName\", randomName);\r",
+											"pm.environment.set(\"generatedDescription\", randomDescription);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId + 1);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.notFound;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Ответ должен содержать поля: reason, status, message, timestamp, path\", function () {\r",
+											"pm.expect(target).to.have.property('reason');\r",
+											"pm.expect(target).to.have.property('status');\r",
+											"pm.expect(target).to.have.property('message');\r",
+											"pm.expect(target).to.have.property('timestamp');\r",
+											"pm.expect(target).to.have.property('path');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/locations/::locId?eventStatus=upcoming",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations",
+										"::locId"
+									],
+									"query": [
+										{
+											"key": "eventStatus",
+											"value": "upcoming"
+										}
+									],
+									"variable": [
+										{
+											"key": ":locId",
+											"value": "{{locId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Поиск локаций",
+					"item": [
+						{
+							"name": "Поиск локации в заданых координатах с радиусом",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать статус 200 и совпадающие данные\",function() {\r",
+											"pm.response.to.have.status(200);\r",
+											"pm.response.to.be.withBody;\r",
+											"pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Локация должна содержать поля: id, lat, lon, radius, name, description, events\", function () {\r",
+											"pm.expect(target[0]).to.have.property('id');\r",
+											"pm.expect(target[0]).to.have.property('lat');\r",
+											"pm.expect(target[0]).to.have.property('lon');\r",
+											"pm.expect(target[0]).to.have.property('radius');\r",
+											"pm.expect(target[0]).to.have.property('name');\r",
+											"pm.expect(target[0]).to.have.property('description');\r",
+											"pm.expect(target[0]).to.have.property('events');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+											"    pm.expect(target[0].id.toString()).equal(pm.collectionVariables.get(\"locId\"));\r",
+											"    pm.expect(target[0].lat).equal(pm.environment.get(\"testLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"    pm.expect(target[0].lon).equal(pm.environment.get(\"testLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"    pm.expect(target[0].radius).equal(pm.environment.get(\"testRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"    pm.expect(target[0].name).equal(pm.environment.get(\"testName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"    pm.expect(target[0].description).equal(pm.environment.get(\"testDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"    pm.expect(target[0].events).to.be.empty;\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"\r",
+											"let lon = 55.34;\r",
+											"let lat = 39.42;\r",
+											"let radius = 10;\r",
+											"let name = \"postmanTestname\";\r",
+											"let description = \"postmanTestDescription\"\r",
+											"\r",
+											"pm.environment.set(\"testLon\", lon);\r",
+											"pm.environment.set(\"testLat\", lat);\r",
+											"pm.environment.set(\"testRadius\", radius);\r",
+											"pm.environment.set(\"testName\", name);\r",
+											"pm.environment.set(\"testDescription\", description);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(lon),\r",
+											"    \"lat\": parseFloat(lat),\r",
+											"    \"radius\": parseFloat(radius),\r",
+											"    \"name\": name,\r",
+											"    \"description\": description \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/locations/search?from=0&size=2&lat=39.40&lon=55.30&radius=10",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations",
+										"search"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "2"
+										},
+										{
+											"key": "lat",
+											"value": "39.40"
+										},
+										{
+											"key": "lon",
+											"value": "55.30"
+										},
+										{
+											"key": "radius",
+											"value": "10"
+										},
+										{
+											"key": "text",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Поиск локации по тексту в названии",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"\r",
+											"let lon = 1.32;\r",
+											"let lat = 40.89;\r",
+											"let radius = 10;\r",
+											"let name = \"Парк развлечений\";\r",
+											"let description = \"Красивый сквер в самом центре города\"\r",
+											"\r",
+											"pm.environment.set(\"testLon\", lon);\r",
+											"pm.environment.set(\"testLat\", lat);\r",
+											"pm.environment.set(\"testRadius\", radius);\r",
+											"pm.environment.set(\"testName\", name);\r",
+											"pm.environment.set(\"testDescription\", description);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(lon),\r",
+											"    \"lat\": parseFloat(lat),\r",
+											"    \"radius\": parseFloat(radius),\r",
+											"    \"name\": name,\r",
+											"    \"description\": description \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать статус 200 и совпадающие данные\",function() {\r",
+											"pm.response.to.have.status(200);\r",
+											"pm.response.to.be.withBody;\r",
+											"pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Локация должна содержать поля: id, lat, lon, radius, name, description, events\", function () {\r",
+											"pm.expect(target[0]).to.have.property('id');\r",
+											"pm.expect(target[0]).to.have.property('lat');\r",
+											"pm.expect(target[0]).to.have.property('lon');\r",
+											"pm.expect(target[0]).to.have.property('radius');\r",
+											"pm.expect(target[0]).to.have.property('name');\r",
+											"pm.expect(target[0]).to.have.property('description');\r",
+											"pm.expect(target[0]).to.have.property('events');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+											"    pm.expect(target[0].id.toString()).equal(pm.collectionVariables.get(\"locId\"));\r",
+											"    pm.expect(target[0].lat).equal(pm.environment.get(\"testLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"    pm.expect(target[0].lon).equal(pm.environment.get(\"testLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"    pm.expect(target[0].radius).equal(pm.environment.get(\"testRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"    pm.expect(target[0].name).equal(pm.environment.get(\"testName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"    pm.expect(target[0].description).equal(pm.environment.get(\"testDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"    pm.expect(target[0].events).to.be.empty;\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/locations/search?from=0&size=2&text=Парк",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations",
+										"search"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "2"
+										},
+										{
+											"key": "lat",
+											"value": "39.40",
+											"disabled": true
+										},
+										{
+											"key": "lon",
+											"value": "55.30",
+											"disabled": true
+										},
+										{
+											"key": "radius",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "text",
+											"value": "Парк"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Поиск локации по тексту в описании",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"\r",
+											"let lon = 1.32;\r",
+											"let lat = 40.89;\r",
+											"let radius = 10;\r",
+											"let name = \"Автодром\";\r",
+											"let description = \"Загородный автодром расположенный на территории бывшего аэропорта\"\r",
+											"\r",
+											"pm.environment.set(\"testLon\", lon);\r",
+											"pm.environment.set(\"testLat\", lat);\r",
+											"pm.environment.set(\"testRadius\", radius);\r",
+											"pm.environment.set(\"testName\", name);\r",
+											"pm.environment.set(\"testDescription\", description);\r",
+											"\r",
+											"let requestBody = {\r",
+											"    \"lon\": parseFloat(lon),\r",
+											"    \"lat\": parseFloat(lat),\r",
+											"    \"radius\": parseFloat(radius),\r",
+											"    \"name\": name,\r",
+											"    \"description\": description \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestBody\", JSON.stringify(requestBody));\r",
+											"\r",
+											"pm.sendRequest({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestBody\")\r",
+											"    }\r",
+											"}, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locationId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locationId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать статус 200 и совпадающие данные\",function() {\r",
+											"pm.response.to.have.status(200);\r",
+											"pm.response.to.be.withBody;\r",
+											"pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Локация должна содержать поля: id, lat, lon, radius, name, description, events\", function () {\r",
+											"pm.expect(target[0]).to.have.property('id');\r",
+											"pm.expect(target[0]).to.have.property('lat');\r",
+											"pm.expect(target[0]).to.have.property('lon');\r",
+											"pm.expect(target[0]).to.have.property('radius');\r",
+											"pm.expect(target[0]).to.have.property('name');\r",
+											"pm.expect(target[0]).to.have.property('description');\r",
+											"pm.expect(target[0]).to.have.property('events');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+											"    pm.expect(target[0].id.toString()).equal(pm.collectionVariables.get(\"locId\"));\r",
+											"    pm.expect(target[0].lat).equal(pm.environment.get(\"testLat\"), 'Широта локации должна соответствовать широте локации в запросе');\r",
+											"    pm.expect(target[0].lon).equal(pm.environment.get(\"testLon\"), 'Долгота локации должна соответствовать долготе локации в запросе');\r",
+											"    pm.expect(target[0].radius).equal(pm.environment.get(\"testRadius\"), 'Радиус события должен соответствовать радиусу локации в запросе');\r",
+											"    pm.expect(target[0].name).equal(pm.environment.get(\"testName\"), 'Имя локации должно соответствовать имени локации в запросе');\r",
+											"    pm.expect(target[0].description).equal(pm.environment.get(\"testDescription\"), 'Описание локации должно соответствовать описанию локации в запросе');\r",
+											"    pm.expect(target[0].events).to.be.empty;\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/locations/search?from=0&size=2&text=аэроп",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"locations",
+										"search"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "2"
+										},
+										{
+											"key": "lat",
+											"value": "39.40",
+											"disabled": true
+										},
+										{
+											"key": "lon",
+											"value": "55.30",
+											"disabled": true
+										},
+										{
+											"key": "radius",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "text",
+											"value": "аэроп"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "Создание локации",
+					"item": [
+						{
+							"name": "Создание события с локацией администратора",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"function generateRandomString(length) {\r",
+											"    let result = '';\r",
+											"    while (result.length < length) {\r",
+											"        result += Math.random().toString(36).substring(2);\r",
+											"    }\r",
+											"    return result.substring(0, length);\r",
+											"}\r",
+											"\r",
+											"function getFutureDateTime(hourShift = 5, minuteShift=0, yearShift=0) {\r",
+											"    let moment = require('moment');\r",
+											"\r",
+											"    let m = moment();\r",
+											"    m.add(hourShift, 'hour');\r",
+											"    m.add(minuteShift, 'minute');\r",
+											"    m.add(yearShift, 'year');\r",
+											"\r",
+											"    return m.format('YYYY-MM-DD HH:mm:ss');\r",
+											"}\r",
+											"\r",
+											"function sendRequestWithDelay(request, delay, callback) {\r",
+											"    setTimeout(() => {\r",
+											"        pm.sendRequest(request, callback);\r",
+											"    }, delay);\r",
+											"}\r",
+											"\r",
+											"let randomUserName = generateRandomString(7);\r",
+											"let randomUserEmail = generateRandomString(5) + '@test.com';\r",
+											"\r",
+											"pm.environment.set('userName', randomUserName);\r",
+											"pm.environment.set('userEmail', randomUserEmail);\r",
+											"\r",
+											"let requestUser = {\r",
+											"    \"name\": randomUserName,\r",
+											"    \"email\": randomUserEmail\r",
+											"}\r",
+											"\r",
+											"pm.environment.set(\"requestUser\", JSON.stringify(requestUser));\r",
+											"\r",
+											"sendRequestWithDelay({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/users'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestUser\")\r",
+											"    }\r",
+											"}, 1, function (err, response) { // Задержка 2 секунды\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        if (response && response.code === 201) {\r",
+											"            console.log('Пользователь успешно создан:', response.json());\r",
+											"            let userId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"userId\", userId);\r",
+											"        } else {\r",
+											"            console.error('Ошибка при создании пользователя: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"let randomCategoryName = generateRandomString(10);\r",
+											"\r",
+											"pm.environment.set(\"categoryName\", randomCategoryName);\r",
+											"\r",
+											"let requestCategory = {\r",
+											"    \"name\": randomCategoryName\r",
+											"}\r",
+											"\r",
+											"pm.environment.set(\"requestCategory\", JSON.stringify(requestCategory));\r",
+											"\r",
+											"sendRequestWithDelay({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/categories'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestCategory\")\r",
+											"    }\r",
+											"}, 1000, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Категория успешно создана:', response.json());\r",
+											"            let catId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"catId\", catId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании категории: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"let randomLon = (Math.random() * 180 - 90).toFixed(3); // Долгота от -90 до 90\r",
+											"let randomLat = (Math.random() * 360 - 180).toFixed(3); // Широта от -180 до 180\r",
+											"let randomRadius = (Math.random() * 50).toFixed(3); // Радиус до 50\r",
+											"let randomName = generateRandomString(10);\r",
+											"let randomDescription = generateRandomString(21);\r",
+											"\r",
+											"pm.environment.set(\"locationLon\", randomLon.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"locationLat\", randomLat.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"locationRadius\", randomRadius.replace(/\\.?0+$/, ''));\r",
+											"pm.environment.set(\"locationName\", randomName);\r",
+											"pm.environment.set(\"locationDescription\", randomDescription);\r",
+											"\r",
+											"let requestLocation = {\r",
+											"    \"lon\": parseFloat(randomLon),\r",
+											"    \"lat\": parseFloat(randomLat),\r",
+											"    \"radius\": parseFloat(randomRadius),\r",
+											"    \"name\": randomName,\r",
+											"    \"description\": randomDescription \r",
+											"};\r",
+											"\r",
+											"pm.environment.set(\"requestLocation\", JSON.stringify(requestLocation));\r",
+											"\r",
+											"sendRequestWithDelay({\r",
+											"    url: pm.variables.replaceIn('{{baseUrl}}/admin/locations'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json',\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: pm.environment.get(\"requestLocation\")\r",
+											"    }\r",
+											"}, 2000, function (err, response) {\r",
+											"\r",
+											"    if (err) {\r",
+											"        console.error('Ошибка при отправке запроса:', err);\r",
+											"    } else {\r",
+											"        \r",
+											"    if (response && response.code === 201) {\r",
+											"            console.log('Локация успешно создана:', response.json());\r",
+											"            let locId = response.json().id;\r",
+											"            pm.collectionVariables.set(\"locId\", locId);\r",
+											"    } else {\r",
+											"            console.error('Ошибка при создании локации: HTTP статус', response ? response.code : 'неизвестен');\r",
+											"        }\r",
+											"    }\r",
+											"});\r",
+											"\r",
+											"let randomAnnotation = generateRandomString(21);\r",
+											"let randomEventDescription = generateRandomString(28);\r",
+											"let randomEventDate = getFutureDateTime();\r",
+											"let randomTitle = generateRandomString(15);\r",
+											"\r",
+											"pm.environment.set(\"eventAnnotation\", randomAnnotation);\r",
+											"pm.environment.set(\"eventDescription\", randomEventDescription);\r",
+											"pm.environment.set(\"eventEventDate\", randomEventDate);\r",
+											"pm.environment.set(\"eventTitle\", randomTitle);\r",
+											"\r",
+											"setTimeout(() => {\r",
+											"    let requestEvent = {\r",
+											"      \"annotation\": pm.environment.get(\"eventAnnotation\"),\r",
+											"      \"category\":  pm.collectionVariables.get(\"catId\"),\r",
+											"      \"description\": pm.environment.get(\"eventDescription\"),\r",
+											"      \"eventDate\": pm.environment.get(\"eventEventDate\"),\r",
+											"      \"location\": {\r",
+											"        \"id\": pm.collectionVariables.get(\"locId\")\r",
+											"      },\r",
+											"      \"paid\": true,\r",
+											"      \"participantLimit\": 10,\r",
+											"      \"requestModeration\": false,\r",
+											"      \"title\": pm.environment.get(\"eventTitle\")\r",
+											"    };\r",
+											"\r",
+											"    pm.environment.set(\"requestEvent\", JSON.stringify(requestEvent));\r",
+											"}, 3000);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"pm.test(\"Ответ должен содержать статус 201 и совпадающие данные\",function() {\r",
+											"pm.response.to.have.status(201);\r",
+											"pm.response.to.be.withBody;\r",
+											"pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = JSON.parse(pm.request.body.raw);\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Событие должно содержать поля: annotation, category, confirmedRequests, eventDate, id, description, initiator, paid, title, views, createdOn,location, participantLimit,publishedOn, requestModeration,state \", function () {\r",
+											"pm.expect(target).to.have.property('annotation');\r",
+											"pm.expect(target).to.have.property('category');\r",
+											"pm.expect(target).to.have.property('confirmedRequests');\r",
+											"pm.expect(target).to.have.property('eventDate');\r",
+											"pm.expect(target).to.have.property('id');\r",
+											"pm.expect(target).to.have.property('description');\r",
+											"pm.expect(target).to.have.property('initiator');\r",
+											"pm.expect(target).to.have.property('paid');\r",
+											"pm.expect(target).to.have.property('title');\r",
+											"pm.expect(target).to.have.property('views');\r",
+											"pm.expect(target).to.have.property('createdOn');\r",
+											"pm.expect(target).to.have.property('location');\r",
+											"pm.expect(target).to.have.property('participantLimit');\r",
+											"pm.expect(target).to.have.property('publishedOn');\r",
+											"pm.expect(target).to.have.property('requestModeration');\r",
+											"pm.expect(target).to.have.property('state');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+											"    pm.expect(target.id).to.not.be.null;\r",
+											"pm.expect(target.annotation.toString()).equal(pm.environment.get(\"eventAnnotation\"), 'Краткое описание должно соответствовать краткому описанию в запросе');\r",
+											"pm.expect(target.category.id.toString()).equal(pm.collectionVariables.get(\"catId\"), 'Идентификационный номер категории должен соответствовать идентификационному номеру категории в запросе');\r",
+											"pm.expect(target.category.name.toString()).equal(pm.environment.get(\"categoryName\"), 'Название категории должно соответствовать названию категории в запросе');\r",
+											"pm.expect(target.confirmedRequests).to.eql(0, 'Должно быть равно 0');\r",
+											"pm.expect(target.eventDate).equal(pm.environment.get(\"eventEventDate\"), 'Дата события должна соответствовать дате события в запросе');\r",
+											"pm.expect(target.initiator.id.toString()).equal(pm.collectionVariables.get(\"userId\"), 'Идентификатор инициатора должен соответствовать идентификатору пользователя в запросе');\r",
+											"pm.expect(target.initiator.name).equal(pm.environment.get(\"userName\"), 'Имя инициатора должно соответствовать имени пользователя в запросе');\r",
+											"pm.expect(target.paid).equal(true, 'Событие должно быть платным');\r",
+											"pm.expect(target.title).equal(pm.environment.get(\"eventTitle\"), 'Название события должно соответствовать названию в запросе');\r",
+											"pm.expect(target.views).equal(0, 'Количество просмотров должно быть равно 0');\r",
+											"pm.expect(target.createdOn).to.not.be.null, 'Дата создания не должна быть пустой';\r",
+											"pm.expect(target.description).equal(pm.environment.get(\"eventDescription\"), 'Описание события должно соответствовать описанию в запросе');\r",
+											"pm.expect(target.location.lat.toString()).equal(pm.environment.get(\"locationLat\"), 'Широта должна соответствовать широте в запросе');\r",
+											"pm.expect(target.location.lon.toString()).equal(pm.environment.get(\"locationLon\"), 'Долгота должна соответствовать долготе в запросе');\r",
+											"pm.expect(target.location.name).equal(pm.environment.get(\"locationName\"), 'Название места должно соответствовать названию в запросе');\r",
+											"pm.expect(target.location.description).equal(pm.environment.get(\"locationDescription\"), 'Описание места должно соответствовать описанию в запросе');\r",
+											"pm.expect(target.location.radius.toString()).equal(pm.environment.get(\"locationRadius\"), 'Радиус должен соответствовать радиусу в запросе');\r",
+											"pm.expect(target.participantLimit).equal(10, 'Лимит участников должен быть равен 10');\r",
+											"pm.expect(target.publishedOn).to.be.null, 'Дата публикации должна быть пустой';\r",
+											"pm.expect(target.requestModeration).equal(false, 'Модерация запросов должна быть отключена');\r",
+											"pm.expect(target.state).equal(\"PENDING\", 'Состояние должно быть \"PENDING\"');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{requestEvent}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/::userId/events",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"::userId",
+										"events"
+									],
+									"variable": [
+										{
+											"key": ":userId",
+											"value": "{{userId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Обновление локации",
+					"item": [
+						{
+							"name": "Обноврение локации события на локацию созданную администратором",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const main = async () => {\r",
+											"    const api = new API(pm);\r",
+											"    const rnd = new RandomUtils();\r",
+											"\r",
+											"    try {\r",
+											"        const user = await api.addUser(rnd.getUser());\r",
+											"        const category = await api.addCategory(rnd.getCategory());\r",
+											"        let event = await api.addEvent(user.id, rnd.getEvent(category.id));\r",
+											"        let event2 = rnd.getEvent(category.id)\r",
+											"        const location = await api.addAdminLocation(rnd.getAdminLocation());\r",
+											"        pm.environment.set(\"updateLocationLat\", location.lat);\r",
+											"        pm.environment.set(\"updateLocationLon\", location.lon);\r",
+											"        pm.environment.set(\"updateLocationRadius\", location.radius);\r",
+											"        pm.environment.set(\"updateLocationNmae\", location.name);\r",
+											"        pm.environment.set(\"updateLocationDescription\", location.description);\r",
+											"        event2.stateAction = \"PUBLISH_EVENT\"\r",
+											"        event2.location.id = location.id;\r",
+											"        event2.location.lat = null;\r",
+											"        event2.location.lon = null;\r",
+											"        pm.collectionVariables.set('response', event2);\r",
+											"        pm.collectionVariables.set(\"eid\", event.id)\r",
+											"        pm.request.body.update({\r",
+											"            mode: 'raw',\r",
+											"            raw: event2,\r",
+											"            options: { raw: { language: 'json' } }\r",
+											"        });\r",
+											"    } catch(err) {\r",
+											"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+											"    }\r",
+											"};\r",
+											"\r",
+											"const interval = setInterval(() => {}, 1000);\r",
+											"\r",
+											"setTimeout(async () => \r",
+											"    {\r",
+											"        try {\r",
+											"            // выполняем наш скрипт\r",
+											"            await main();\r",
+											"        } catch (e) {\r",
+											"            console.error(e);\r",
+											"        } finally {\r",
+											"            clearInterval(interval);\r",
+											"        }\r",
+											"    },  \r",
+											"    100 \r",
+											");"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.ok;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = pm.collectionVariables.get('response');\r",
+											"const target = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Событие должно содержать поля: id, title, annotation, category, paid, eventDate, initiator, description, participantLimit, state, createdOn, publishedOn, location, requestModeration\", function () {\r",
+											"pm.expect(target).to.have.property('id');\r",
+											"pm.expect(target).to.have.property('title');\r",
+											"pm.expect(target).to.have.property('annotation');\r",
+											"pm.expect(target).to.have.property('category');\r",
+											"pm.expect(target).to.have.property('paid');\r",
+											"pm.expect(target).to.have.property('eventDate');\r",
+											"pm.expect(target).to.have.property('initiator');\r",
+											"pm.expect(target).to.have.property('description');\r",
+											"pm.expect(target).to.have.property('participantLimit');\r",
+											"pm.expect(target).to.have.property('state');\r",
+											"pm.expect(target).to.have.property('createdOn');\r",
+											"pm.expect(target).to.have.property('publishedOn');\r",
+											"pm.expect(target).to.have.property('location');\r",
+											"pm.expect(target).to.have.property('requestModeration');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+											"    pm.expect(source.annotation).equal(target.annotation, 'Аннотация события должна соответствовать искомому событию');\r",
+											"    pm.expect(source.paid.toString()).equal(target.paid.toString(), 'Стоимость события должна соответствовать искомому событию');\r",
+											"    pm.expect(source.eventDate).equal(target.eventDate, 'Дата проведения события должна соответствовать искомому событию');\r",
+											"    pm.expect(source.description).equal(target.description, 'Описание события должно соответствовать искомому событию');\r",
+											"    pm.expect(source.title).equal(target.title, 'Название события должно соответствовать искомому событию');\r",
+											"    pm.expect(source.participantLimit.toString()).equal(target.participantLimit.toString(), 'Лимит участников события должен соответствовать искомому событию');\r",
+											"    pm.expect(target.location.lat).equal(pm.environment.get(\"updateLocationLat\"), 'Поле lat должно соответствовать полю lat созданой администратором локации');\r",
+											"    pm.expect(target.location.lon).equal(pm.environment.get(\"updateLocationLon\"), 'Поле lon должно соответствовать полю lon созданой администратором локации');\r",
+											"    pm.expect(target.location.radius).equal(pm.environment.get(\"updateLocationRadius\"), 'Поле radius должно соответствовать полю radius созданой администратором локации');\r",
+											"    pm.expect(target.location.name).equal(pm.environment.get(\"updateLocationNmae\"), 'Поле name должно соответствовать полю name созданой администратором локации');\r",
+											"    pm.expect(target.location.description).equal(pm.environment.get(\"updateLocationDescription\"), 'Поле description должно соответствовать полю description созданой администратором локации');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{request_body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/admin/events/:eventId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"admin",
+										"events",
+										":eventId"
+									],
+									"variable": [
+										{
+											"key": "eventId",
+											"value": "{{eid}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Получение локаций по координатам",
+					"item": [
+						{
+							"name": "Получение события в конкретной локации",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const main = async () => {\r",
+											"    const api = new API(pm);\r",
+											"    const rnd = new RandomUtils();\r",
+											"\r",
+											"    try {\r",
+											"        const user = await api.addUser(rnd.getUser());\r",
+											"        const category = await api.addCategory(rnd.getCategory());\r",
+											"        let event = await api.addEvent(user.id, rnd.getEvent(category.id));\r",
+											"        event = await api.publishEvent(event.id);\r",
+											"        pm.request.removeQueryParams(['lat', 'lon']);\r",
+											"        pm.request.addQueryParams([`lat=` + event.location.lat, 'lon=' + event.location.lon]);\r",
+											"        pm.collectionVariables.set('response', event);\r",
+											"    } catch(err) {\r",
+											"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+											"    }\r",
+											"};\r",
+											"\r",
+											"const interval = setInterval(() => {}, 1000);\r",
+											"\r",
+											"setTimeout(async () => \r",
+											"    {\r",
+											"        try {\r",
+											"            // выполняем наш скрипт\r",
+											"            await main();\r",
+											"        } catch (e) {\r",
+											"            console.error(e);\r",
+											"        } finally {\r",
+											"            clearInterval(interval);\r",
+											"        }\r",
+											"    },  \r",
+											"    100 \r",
+											");\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+											"    pm.response.to.be.ok;    \r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const source = pm.collectionVariables.get('response');\r",
+											"const target = pm.response.json()[0];\r",
+											"\r",
+											"pm.test(\"Событие должно содержать поля: id, title, annotation, category, paid, eventDate, initiator, views, confirmedRequests\", function () {\r",
+											"pm.expect(target).to.have.property('id');\r",
+											"pm.expect(target).to.have.property('title');\r",
+											"pm.expect(target).to.have.property('annotation');\r",
+											"pm.expect(target).to.have.property('category');\r",
+											"pm.expect(target).to.have.property('paid');\r",
+											"pm.expect(target).to.have.property('eventDate');\r",
+											"pm.expect(target).to.have.property('initiator');\r",
+											"pm.expect(target).to.have.property('views');\r",
+											"pm.expect(target).to.have.property('confirmedRequests');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+											"    pm.expect(source.annotation).equal(target.annotation, 'Аннотация события должна соответствовать аннотации события с указанным идентификатором');\r",
+											"    pm.expect(source.category.id).equal(target.category.id, 'Категория события должна соответствовать категории события с указанным идентификатором');\r",
+											"    pm.expect(source.paid.toString()).equal(target.paid.toString(), 'Стоимость события должна соответствовать стоимости события с указанным идентификатором');\r",
+											"    pm.expect(source.eventDate).equal(target.eventDate, 'Дата проведения события должна соответствовать дате проведения события с указанным идентификатором');\r",
+											"    pm.expect(source.title).equal(target.title, 'Название события должно соответствовать названию события с указанным идентификатором');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/events/locations?lat=125&lon=124&radius=10",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"events",
+										"locations"
+									],
+									"query": [
+										{
+											"key": "lat",
+											"value": "125"
+										},
+										{
+											"key": "lon",
+											"value": "124"
+										},
+										{
+											"key": "radius",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"function generateRandomString(length) {\r",
+					"    let result = '';\r",
+					"    while (result.length < length) {\r",
+					"        result += Math.random().toString(36).substring(2);\r",
+					"    }\r",
+					"    return result.substring(0, length);\r",
+					"}\r",
+					"\r",
+					"const variablesToReset = ['locId', 'userId', 'catId'];\r",
+					"\r",
+					"variablesToReset.forEach((variableName) => {\r",
+					"    pm.collectionVariables.set(variableName, null);\r",
+					"});\r",
+					"\r",
+					"\r",
+					"\r",
+					"\r",
+					"\r",
+					"API = class {\r",
+					"    constructor(postman, verbose = false, baseUrl = \"http://localhost:8080\") {\r",
+					"        this.baseUrl = baseUrl;\r",
+					"        this.pm = postman;\r",
+					"        this._verbose = verbose;\r",
+					"    }\r",
+					"\r",
+					"    async addUser(user, verbose=null) {\r",
+					"        return this.post(\"/admin/users\", user, \"Ошибка при добавлении нового пользователя: \", verbose);\r",
+					"    }\r",
+					"\r",
+					"    async addCategory(category, verbose=null) {\r",
+					"        return this.post(\"/admin/categories\", category, \"Ошибка при добавлении новой категории: \", verbose);\r",
+					"    }\r",
+					"\r",
+					"    async addEvent(userId, event, verbose=null) {\r",
+					"        return this.post(\"/users/\" + userId + \"/events\", event, \"Ошибка при добавлении нового события: \", verbose);\r",
+					"    }\r",
+					"\r",
+					"    async addCompilation(compilation, verbose=null) {\r",
+					"        return this.post(\"/admin/compilations\", compilation, \"Ошибка при добавлении новой подборки: \", verbose);\r",
+					"    }\r",
+					"\r",
+					"    async publishParticipationRequest(eventId, userId, verbose=null) {\r",
+					"        return this.post('/users/' + userId + '/requests?eventId=' + eventId, null, \"Ошибка при добавлении нового запроса на участие в событии\", verbose);\r",
+					"    }\r",
+					"\r",
+					"    async publishEvent(eventId, verbose=null) {\r",
+					"        return this.patch('/admin/events/' + eventId, {stateAction: \"PUBLISH_EVENT\"}, \"Ошибка при публикации события\", verbose);\r",
+					"    }\r",
+					"    \r",
+					"    async rejectEvent(eventId, verbose=null) {\r",
+					"        return this.patch('/admin/events/' + eventId, {stateAction: \"REJECT_EVENT\"}, \"Ошибка при отмене события\", verbose);\r",
+					"    }\r",
+					"\r",
+					"    async acceptParticipationRequest(eventId, userId, reqId, verbose=null) {\r",
+					"        return this.patch('/users/' + userId + '/events/' + eventId + '/requests/', {requestIds:[reqId], status: \"CONFIRMED\"}, \"Ошибка при принятии заявки на участие в событии\", verbose);\r",
+					"    }\r",
+					"\r",
+					"    async findCategory(catId, verbose=null) {\r",
+					"        return this.get('/categories/' + catId, null, \"Ошибка при поиске категории по id\", verbose);\r",
+					"    }\r",
+					"\r",
+					"    async findCompilation(compId, verbose=null) {\r",
+					"        return this.get('/compilations/' + compId, null, \"Ошибка при поиске подборки по id\", verbose);\r",
+					"    }\r",
+					"\r",
+					"    async findEvent(eventId, verbose=null) {\r",
+					"        return this.get('/events/' + eventId, null, \"Ошибка при поиске события по id\", verbose);\r",
+					"    }\r",
+					"\r",
+					"    async findUser(userId, verbose=null) {\r",
+					"        return this.get('/admin/users?ids=' + userId, null, \"Ошибка при поиске пользователя по id\", verbose);\r",
+					"    }\r",
+					"\r",
+					"    async post(path, body, errorText = \"Ошибка при выполнении post-запроса: \", verbose=null) {\r",
+					"        return this.sendRequest(\"POST\", path, body, errorText, verbose);\r",
+					"    }\r",
+					"\r",
+					"    async patch(path, body = null, errorText = \"Ошибка при выполнении patch-запроса: \", verbose=null) {\r",
+					"        return this.sendRequest(\"PATCH\", path, body, errorText, verbose);\r",
+					"    }\r",
+					"\r",
+					"    async get(path, body = null, errorText = \"Ошибка при выполнении get-запроса: \", verbose=null) {\r",
+					"        return this.sendRequest(\"GET\", path, body, errorText, verbose);\r",
+					"    }\r",
+					"\r",
+					"\r",
+					"    async addAdminLocation(location, verbose=null) {\r",
+					"        return this.post('/admin/locations', location, \"Ошибка при добавлении локации локации\", verbose);\r",
+					"    }\r",
+					"\r",
+					"\r",
+					"    async sendRequest(method, path, body=null, errorText = \"Ошибка при выполнении запроса: \", verbose=null) {\r",
+					"        return new Promise((resolve, reject) => {\r",
+					"            verbose = verbose == null ? this._verbose : verbose;\r",
+					"            const request = {\r",
+					"                url: this.baseUrl + path,\r",
+					"                method: method,\r",
+					"                body: body == null ? \"\" : JSON.stringify(body),\r",
+					"                header: { \"Content-Type\": \"application/json\" },\r",
+					"            };\r",
+					"            if(verbose) {\r",
+					"                console.log(\"Отправляю запрос: \", request);\r",
+					"            }\r",
+					"\r",
+					"            try {\r",
+					"                this.pm.sendRequest(request, (error, response) => {\r",
+					"                    if(error || (response.code >= 400 && response.code <= 599)) {\r",
+					"                        let err = error ? error : JSON.stringify(response.json());\r",
+					"                        console.error(\"При выполнении запроса к серверу возникла ошика.\\n\", err,\r",
+					"                             \"\\nДля отладки проблемы повторите такой же запрос к вашей программе \" + \r",
+					"                             \"на локальном компьютере. Данные запроса:\\n\", JSON.stringify(request));\r",
+					"\r",
+					"                        reject(new Error(errorText + err));\r",
+					"                    }\r",
+					"                    if(verbose) {\r",
+					"                        console.log(\"Результат обработки запроса: код состояния - \", response.code, \", тело: \", response.json());\r",
+					"                    }\r",
+					"                    if (response.stream.length === 0){\r",
+					"                        reject(new Error('Отправлено пустое тело ответа'))\r",
+					"                    }else{\r",
+					"                        resolve(response.json());\r",
+					"                    }\r",
+					"                });\r",
+					"                \r",
+					"            } catch(err) {\r",
+					"                if(verbose) {\r",
+					"                    console.error(errorText, err);\r",
+					"                }\r",
+					"                return Promise.reject(err);\r",
+					"            }\r",
+					"        });\r",
+					"    }\r",
+					"};\r",
+					"\r",
+					"RandomUtils = class {\r",
+					"    constructor() {}\r",
+					"\r",
+					"    getUser() {\r",
+					"        return {\r",
+					"            name: pm.variables.replaceIn('{{$randomFullName}}'),\r",
+					"            email: pm.variables.replaceIn('{{$randomEmail}}')\r",
+					"        };\r",
+					"    }\r",
+					"\r",
+					"    getCategory() {\r",
+					"        return {\r",
+					"            name: pm.variables.replaceIn('{{$randomWord}}') + Math.floor(Math.random() * 10000 * Math.random()).toString()\r",
+					"        };\r",
+					"    }\r",
+					"\r",
+					"    getEvent(categoryId) {\r",
+					"        return {\r",
+					"            annotation: pm.variables.replaceIn('{{$randomLoremParagraph}}'),\r",
+					"            category: categoryId,\r",
+					"            description: pm.variables.replaceIn('{{$randomLoremParagraphs}}'),\r",
+					"            eventDate: this.getFutureDateTime(),\r",
+					"            location: {\r",
+					"                lat: parseFloat(pm.variables.replaceIn('{{$randomLatitude}}')),\r",
+					"                lon: parseFloat(pm.variables.replaceIn('{{$randomLongitude}}')),\r",
+					"            },\r",
+					"            paid: pm.variables.replaceIn('{{$randomBoolean}}'),\r",
+					"            participantLimit: pm.variables.replaceIn('{{$randomInt}}'),\r",
+					"            requestModeration: pm.variables.replaceIn('{{$randomBoolean}}'),\r",
+					"            title: pm.variables.replaceIn('{{$randomLoremSentence}}'),\r",
+					"        }\r",
+					"    }\r",
+					"\r",
+					"    getCompilation(...eventIds) {\r",
+					"        return {\r",
+					"            title: pm.variables.replaceIn('{{$randomLoremSentence}}').slice(0, 50),\r",
+					"            pinned: pm.variables.replaceIn('{{$randomBoolean}}'),\r",
+					"            events: eventIds\r",
+					"        };\r",
+					"    }\r",
+					"\r",
+					"    getEventLocationId(categoryId, adminLocationId) {\r",
+					"        return {\r",
+					"            annotation: pm.variables.replaceIn('{{$randomLoremParagraph}}'),\r",
+					"            category: categoryId,\r",
+					"            description: pm.variables.replaceIn('{{$randomLoremParagraphs}}'),\r",
+					"            eventDate: this.getFutureDateTime(),\r",
+					"            location: {\r",
+					"                id: adminLocationId\r",
+					"            },\r",
+					"            paid: pm.variables.replaceIn('{{$randomBoolean}}'),\r",
+					"            participantLimit: pm.variables.replaceIn('{{$randomInt}}'),\r",
+					"            requestModeration: pm.variables.replaceIn('{{$randomBoolean}}'),\r",
+					"            title: pm.variables.replaceIn('{{$randomLoremSentence}}'),\r",
+					"        }\r",
+					"    }\r",
+					"\r",
+					"    getAdminLocation(){\r",
+					"        return {\r",
+					"            lat: parseFloat(pm.variables.replaceIn('{{$randomLatitude}}')),\r",
+					"            lon: parseFloat(pm.variables.replaceIn('{{$randomLongitude}}')),\r",
+					"            name: pm.variables.replaceIn('{{$randomFullName}}'),\r",
+					"            description: pm.variables.replaceIn('{{$randomLoremParagraphs}}'),\r",
+					"            radius: 10\r",
+					"        }\r",
+					"    }\r",
+					"\r",
+					"\r",
+					"    getFutureDateTime(hourShift = 5, minuteShift=0, yearShift=0) {\r",
+					"        let moment = require('moment');\r",
+					"\r",
+					"        let m = moment();\r",
+					"        m.add(hourShift, 'hour');\r",
+					"        m.add(minuteShift, 'minute');\r",
+					"        m.add(yearShift, 'year');\r",
+					"\r",
+					"        return m.format('YYYY-MM-DD HH:mm:ss');\r",
+					"    }\r",
+					"\r",
+					"    getWord(length = 1) {\r",
+					"        let result = '';\r",
+					"        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\r",
+					"        const charactersLength = characters.length;\r",
+					"        let counter = 0;\r",
+					"        while (counter < length) {\r",
+					"            result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+					"            counter += 1;\r",
+					"        }\r",
+					"        return result;\r",
+					"    }\r",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "locId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "catId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "eventId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "request_body",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "response",
+			"value": ""
+		},
+		{
+			"key": "eid",
+			"value": ""
+		}
+	]
+}

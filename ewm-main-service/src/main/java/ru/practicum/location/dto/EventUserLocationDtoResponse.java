@@ -1,9 +1,9 @@
-package ru.practicum.event.dto;
+package ru.practicum.location.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 /**
  * Dto для локации.
@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Location {
+@SuperBuilder
+public class EventUserLocationDtoResponse {
     /**
      * Широта.
      */

@@ -7,11 +7,14 @@ import lombok.NoArgsConstructor;
 import ru.practicum.event.dto.EventFullDtoResponse;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.EventSort;
+import ru.practicum.location.dto.EventSortType;
 import ru.practicum.validator.ValidDateRange;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,6 +26,27 @@ public interface PublicEventService {
     List<EventShortDto> getEvents(GetEventsParams params, HttpServletRequest request);
 
     EventFullDtoResponse getEvent(Long id, HttpServletRequest request);
+
+    List<EventShortDto> searchEventsByLocation(GetSearchParams params);
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    class GetSearchParams {
+        @Min(value = 0, message = "Параметр from не может быть меньше {value}")
+        private int from = 0;
+        @Min(value = 1, message = "Параметр size не может быть меньше {value}")
+        @Max(value = 1000, message = "Параметр size не может быть больше {value}")
+        private int size = 10;
+        @NotNull
+        private Double lat;
+        @NotNull
+        private Double lon;
+        @Positive
+        private Double radius;
+
+        private EventSortType eventStatus = EventSortType.UPCOMING;
+    }
 
     @Builder
     @Data

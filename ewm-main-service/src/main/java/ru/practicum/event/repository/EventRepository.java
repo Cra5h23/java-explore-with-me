@@ -15,7 +15,7 @@ import java.util.Optional;
  * @author Nikolay Radzivon
  * @Date 25.06.2024
  */
-public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPredicateExecutor<Event> {
+public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPredicateExecutor<Event>, CustomEventRepository {
 
     Page<EventShort> findAllByInitiatorId(Long initiatorId, Pageable page);
 

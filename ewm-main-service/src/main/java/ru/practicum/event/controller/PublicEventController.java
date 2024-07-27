@@ -53,5 +53,16 @@ public class PublicEventController {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(publicEventService.getEvent(id, request));
     }
+
+    @GetMapping("/locations")
+    public ResponseEntity<Object> searchEventsByLocation(@ModelAttribute @Valid PublicEventService.GetSearchParams params) {
+        log.info("Получен запрос: GET /events/locations?from={}&size={}&lat={}&lon={}&radius={}&eventStatus={}",
+                params.getFrom(), params.getSize(), params.getLat(), params.getLon(), params.getRadius(), params.getEventStatus());
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(publicEventService.searchEventsByLocation(params));
+    }
 }
 

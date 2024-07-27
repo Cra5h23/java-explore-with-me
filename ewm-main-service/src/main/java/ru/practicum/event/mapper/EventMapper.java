@@ -8,8 +8,12 @@ import ru.practicum.event.dto.EventFullDtoResponse;
 import ru.practicum.event.dto.EventShortDto;
 import ru.practicum.event.dto.EventState;
 import ru.practicum.event.model.Event;
-import ru.practicum.event.model.Location;
 import ru.practicum.event.repository.EventRepository;
+import ru.practicum.event.repository.projection.EventShortProjection;
+import ru.practicum.location.dto.EventAdminLocationDtoResponse;
+import ru.practicum.location.dto.EventUserLocationDtoResponse;
+import ru.practicum.location.model.Location;
+import ru.practicum.location.model.TypeLocation;
 import ru.practicum.user.dto.UserShortDto;
 import ru.practicum.user.model.User;
 
@@ -25,34 +29,28 @@ import java.util.Map;
  */
 @Component
 public class EventMapper {
+    private EventUserLocationDtoResponse makeLocation(Location location) {
+        TypeLocation type = location.getType();
 
-    public Event toEvent(User user, Category category, EventDtoRequest dto) {
-        return Event.builder()
-                .annotation(dto.getAnnotation())
-                .category(category)
-                .title(dto.getTitle())
-                .description(dto.getDescription())
-                .eventDate(dto.getEventDate().atZone(ZoneId.systemDefault()))
-                .paid(dto.isPaid())
-                .location(Location.builder()
-                        .lat(dto.getLocation().getLat())
-                        .lon(dto.getLocation().getLon())
-                        .build())
-                .participantLimit(dto.getParticipantLimit())
-                .requestModeration(dto.isRequestModeration())
-                .initiator(user)
-                .createdOn(ZonedDateTime.now())
-                .state(EventState.PENDING)
-                .publishedOn(null)
-                .build();
+        if (type == TypeLocation.USERS) {
+            return EventUserLocationDtoResponse.builder()
+                    .lat(location.getLat())
+                    .lon(location.getLon())
+                    .build();
+        } else {
+            return EventAdminLocationDtoResponse.builder()
+                    .lat(location.getLat())
+                    .lon(location.getLon())
+                    .name(location.getName())
+                    .radius(location.getRadius())
+                    .description(location.getDescription())
+                    .build();
+        }
     }
 
     public EventFullDtoResponse toEventFullDtoResponse(Event event, long views) {
         return EventFullDtoResponse.builder()
-                .location(ru.practicum.event.dto.Location.builder()
-                        .lat(event.getLocation().getLat())
-                        .lon(event.getLocation().getLon())
-                        .build())
+                .location(makeLocation(event.getLocation()))
                 .id(event.getId())
                 .participantLimit(event.getParticipantLimit())
                 .description(event.getDescription())
@@ -92,6 +90,23 @@ public class EventMapper {
         }
         return list;
     }
+
+    public List<EventShortDto> toListEventShortDtoaa(List<EventShortProjection> eventShortList,
+                                                     Map<Long, Long> viewsMap) {
+        if (eventShortList.isEmpty()) {
+            return List.of();
+        }
+
+        List<EventShortDto> list = new ArrayList<>();
+
+        for (EventShortProjection eventShort : eventShortList) {
+            Long l = viewsMap.getOrDefault(eventShort.getId(), 0L);
+
+            list.add(toEventShortDto(eventShort, l));
+        }
+        return list;
+    }
+
 
     public List<EventShortDto> toListEventShortDtos(List<Event> eventList, Map<Long, Long> viewsMap) {
         if (eventList.isEmpty()) {
@@ -149,6 +164,25 @@ public class EventMapper {
                 .build();
     }
 
+    public EventShortDto toEventShortDto(EventShortProjection event, Long views) {
+        return EventShortDto.builder()
+                .id(event.getId())
+                .title(event.getTitle())
+                .confirmedRequests(event.getConfirmedRequests())
+                .eventDate(event.getEventDate().toLocalDateTime())
+                .annotation(event.getAnnotation())
+                .category(CategoryDtoResponse.builder()
+                        .id(event.getCategory().getId())
+                        .name(event.getCategory().getName())
+                        .build())
+                .initiator(UserShortDto.builder()
+                        .id(event.getInitiator().getId())
+                        .name(event.getInitiator().getName())
+                        .build())
+                .paid(event.isPaid())
+                .views(views)
+                .build();
+    }
 
     public List<EventFullDtoResponse> toListEventFullDto(List<Event> collect, Map<Long, Long> viewsMap) {
         if (collect == null) {
@@ -162,5 +196,23 @@ public class EventMapper {
             list.add(toEventFullDtoResponse(event, views));
         }
         return list;
+    }
+
+    public Event toEvent(User user, Category category, EventDtoRequest dto, Location location) {
+        return Event.builder()
+                .annotation(dto.getAnnotation())
+                .category(category)
+                .title(dto.getTitle())
+                .description(dto.getDescription())
+                .eventDate(dto.getEventDate().atZone(ZoneId.systemDefault()))
+                .paid(dto.isPaid())
+                .location(location)
+                .participantLimit(dto.getParticipantLimit())
+                .requestModeration(dto.isRequestModeration())
+                .initiator(user)
+                .createdOn(ZonedDateTime.now())
+                .state(EventState.PENDING)
+                .publishedOn(null)
+                .build();
     }
 }
